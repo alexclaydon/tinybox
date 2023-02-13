@@ -1,3 +1,35 @@
+# Note that subfolders also have their own .gitignore files where that makes sense
+
+# Syncthing
+
+.DS_Store
+.stignore
+.stfolder
+
+# Node
+
+node_modules
+
+# Temp folders
+
+tmp*
+
+# Working and tutorial folders
+
+working
+output
+tutorial
+
+# web_tools
+
+web_tools/geckodriver
+
+# Other
+
+git-sim_media
+
+# The following is from https://github.com/github/gitignore/blob/main/Python.gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -103,6 +135,7 @@ celerybeat.pid
 
 # Environments
 .env
+.envrc
 .venv
 env/
 venv/

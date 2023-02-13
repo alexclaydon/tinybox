@@ -1,0 +1,8 @@
+# Data dirs
+data/history
+data/schedules
+data/storage
+data/logs
+data/.telemetry
+data/.logs_queue
+data/.nux
