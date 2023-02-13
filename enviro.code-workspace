@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "src/etl"
+    },
+    {
+      "path": "src/web"
+    }
+  ]
+}
