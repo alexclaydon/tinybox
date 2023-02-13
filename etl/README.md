@@ -30,17 +30,21 @@ Next, install `dagster` and `dagit` as follows:
 
 `pip install dagster dagit --find-links=https://github.com/dagster-io/build-grpcio/wiki/Wheels`
 
-Then install other dependencies:
+Then install any module-specific Python dependencies (these will change over time as you write new Dagster modules to handle different pipelines):
 
 `pip install -r requirements.txt`
 
-If using VS Code, hit Cmd + P and select your new venv with `Python: Select Interpreter`.
+Ensure you are in the project root directory (`etl`) then `pip install -e .`.  As the `etl` project uses a Python [`src-layout`](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/), it will automatically locate and install all Dagster (Python) modules under the `src` subdirectory in development mode.
 
-Also for VS Code, you'll need ensure that the following environment variable (included in `.envrc.sample`) is set to prevent `malloc` errors on launching the server: `MallocNanoZone=1`.
-
-Ensure you are in the project root directory (`etl`). For each Dagster module (at present, there's only one - `general`), pip install it in development mode with: `pip install -e <module_name>`.  Every new module added to the project this way needs to also be added to the `[tool.dagster]` section of `pyproject.toml` in the project root.  All modules can then be run together.
+Note that every new module installed in this manner also needs to also be added (module name only, not relative path) to the `[tool.dagster]` section of `pyproject.toml` in the project root.  This allows Dagster find and run all modules at once.
 
 You can now run all modules and the scheduling daemon from the project root directory (`etl`) using `dagster dev`.
+
+### VS Code setup
+
+Hit Cmd + P and select your new venv with `Python: Select Interpreter`.
+
+You'll also need to ensure that the following environment variable (included in `.envrc.sample`) is set to prevent `malloc` errors on launch: `MallocNanoZone=1`.
 
 ### Structuring more complicated projects
 

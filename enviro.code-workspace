@@ -4,10 +4,10 @@
       "path": "."
     },
     {
-      "path": "src/etl"
+      "path": "etl"
     },
     {
-      "path": "src/web"
+      "path": "web"
     }
   ]
 }
