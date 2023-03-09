@@ -56,20 +56,21 @@ dependencies = [
 [tool.hatch.envs.default.env-vars]
 PIP_FIND_LINKS = "https://github.com/dagster-io/build-grpcio/wiki/Wheels"
 PIP_VERBOSE="2"
-DAGSTER_HOME="/Users/alexclaydon/dev/dev-projects/enviro/src/etl/data"
+DAGSTER_HOME="/Users/alexclaydon/dev/dev-projects/enviro/tools/etl/data"
 MallocNanoZone="1"
 
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/enviro --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
-dd = "dagster dev"
-
-[tool.dagster]
-module_name = "src.etl.general"
-# Add each new pipeline module to this list
+dagdev = "dagster dev"
+djdev = "python tools/web/manage.py runserver"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["39", "310", "311"]
+
+[tool.dagster]
+module_name = "tools.etl.general"
+# Add each new pipeline module to this list
 
 [tool.coverage.run]
 branch = true
