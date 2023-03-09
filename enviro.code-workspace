@@ -2,12 +2,26 @@
   "folders": [
     {
       "path": "."
-    },
-    {
-      "path": "etl"
-    },
-    {
-      "path": "web"
     }
-  ]
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": ".hatch/enviro/bin/python3.9",
+    "python.analysis.typeCheckingMode": "off",
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter",
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+      }
+    },
+    "isort.args": [
+      "--profile",
+      "black"
+    ],
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.egg-info": true,
+      "**/*.ipynb_checkpoints": true
+    }
+  }
 }

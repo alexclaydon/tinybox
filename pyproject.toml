@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "enviro"
+description = ''
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Alex Claydon", email = "alexclaydon@gmail.com" },
+  { name = "Liam Gilchrist", email = "liamgilchrist@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "black",
+  "isort",
+  "rich",
+  "python-dotenv",
+  "python-dateutil",
+  "requests",
+  "Django",
+  "pandas",
+  "beautifulsoup4",
+  "dagster",
+  "dagit",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/alexclaydon/enviro#readme"
+Issues = "https://github.com/alexclaydon/enviro/issues"
+Source = "https://github.com/alexclaydon/enviro"
+
+[tool.hatch.version]
+path = "src/enviro/__about__.py"
+
+[tool.hatch.envs.default]
+python = "3.9"
+type = "virtual"
+dependencies = [
+  "pytest",
+  "pytest-cov",
+]
+
+[tool.hatch.envs.default.env-vars]
+PIP_FIND_LINKS = "https://github.com/dagster-io/build-grpcio/wiki/Wheels"
+PIP_VERBOSE="2"
+DAGSTER_HOME="/Users/alexclaydon/dev/dev-projects/enviro/src/etl/data"
+MallocNanoZone="1"
+
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/enviro --cov=tests {args}"
+no-cov = "cov --no-cov {args}"
+dd = "dagster dev"
+
+[tool.dagster]
+module_name = "src.etl.general"
+# Add each new pipeline module to this list
+
+[[tool.hatch.envs.test.matrix]]
+python = ["39", "310", "311"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "src/enviro/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

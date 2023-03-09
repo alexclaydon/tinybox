@@ -6,15 +6,13 @@ from dagster import (
     define_asset_job,
     load_assets_from_modules,
 )
-from github import Github
 
-from . import assets, gitstars
+from . import assets
 
 defs = Definitions(
     assets=load_assets_from_modules(
         [
             assets,
-            gitstars,
         ]
     ),
     schedules=[
@@ -23,5 +21,4 @@ defs = Definitions(
             cron_schedule="@daily",
         )
     ],
-    resources={"github_api": Github(os.environ["GITHUB_ACCESS_TOKEN"])},
 )
