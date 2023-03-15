@@ -62,8 +62,8 @@ MallocNanoZone="1"
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/enviro --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
-dagdev = "dagster dev"
-djdev = "python tools/web/manage.py runserver"
+etldev = "dagster dev"
+webdev = "python tools/web/manage.py runserver"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["39", "310", "311"]
