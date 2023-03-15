@@ -1,26 +1,9 @@
 # Note that subfolders also have their own .gitignore files where that makes sense
 
-# Dagster data dirs
-tools/etl/data/history
-tools/etl/data/schedules
-tools/etl/data/storage
-tools/etl/data/logs
-tools/etl/data/.telemetry
-tools/etl/data/.logs_queue
-tools/etl/data/.nux
-
-# Dagster temp dirs
-tools/etl/general/hackernews.py
-tools/etl/general/hn_dagster.py
-tools/etl/general/gitstars.py
-
 # Syncthing
 .DS_Store
 .stignore
 .stfolder
-
-# Node
-node_modules
 
 # Temp folders
 tmp*

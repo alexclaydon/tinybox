@@ -1,0 +1,13 @@
+# Dagster data dirs
+data/history
+data/schedules
+data/storage
+data/logs
+data/.telemetry
+data/.logs_queue
+data/.nux
+
+# Dagster temp dirs
+general/hackernews.py
+general/hn_dagster.py
+general/gitstars.py
