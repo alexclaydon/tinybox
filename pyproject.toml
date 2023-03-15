@@ -30,6 +30,7 @@ dependencies = [
   "python-dateutil",
   "requests",
   "Django",
+  "django-tailwind",
   "pandas",
   "beautifulsoup4",
   "dagster",
@@ -63,7 +64,7 @@ MallocNanoZone="1"
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/enviro --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
 etldev = "dagster dev"
-webdev = "python tools/web/manage.py runserver"
+webdev = "(trap 'kill 0' SIGINT; python tools/web/manage.py tailwind start & python tools/web/manage.py runserver)"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["39", "310", "311"]
