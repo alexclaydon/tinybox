@@ -55,6 +55,8 @@ Ensure you are in the project root directory, then:
 - for the ETL pipeline server, call `hatch run etldev`.
 - for the web app development server, call `hatch run webdev`.
 
+(Note that, to avoid conflicts with other Django projects, our entrypoint launches the development server on non-default port 8080, instead of 8000; accordingly, it can be accessed at: `http://localhost:8080/`).
+
 Each time Hatch is called (in any capacity) from the command line, it will automatically ensure that any changes to Python dependencies in the `pyproject.toml` file are automatically synced to the project Python interpreter.
 
 Each of the `etldev` and `webdev` arguments passed to `hatch run` are known as "entrypoints", and they are defined in the `pyproject.toml` file (under `[tool.hatch.envs.default.scripts]`).  Should you need to add new entrypoints, feel free to do so there.  For example, you might like to add new Django migration entrypoints as follows:
