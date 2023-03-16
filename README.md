@@ -22,13 +22,16 @@ For development purposes, the following assumes local installation on macOS (run
 
 ### External dependencies
 
-Ensure that the following required dependencies are installed and on path:
+Ensure that the following required dependencies are installed and on path.
 
 - [Postgres.app](https://postgresapp.com/): Download and install the latest macOS Universal binary.  Note that Postgres.app comes with PostGIS pre-installed, which is very helpful.
 - [Homebrew](https://brew.sh/): `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+- [Postgresql](https://www.postgresql.org/): `brew install postgresql@14`
 - [Hatch](https://github.com/pypa/hatch): `brew install hatch`
 - [nvm](https://github.com/nvm-sh/nvm): `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash`
 - Using nvm, the latest Node and NPM: `nvm install node`
+
+Note that Postgres _correctly_ appears twice: once as an app download and once via Brew.  This is because while we are using Postgres.app for local development, installing the `psycopg2` Python package requires the `pg_config` binary to be on path, which - on macOS - is available when Postgres is installed via Homebrew.  The alternative would be to export a `PATH` variable pointing to the Postgres.app install in the `pyproject.toml` file, but I'm concerned if I do that then this will be forgotten when the project is deployed and we will have a hard-to-diagnose production bug to deal with.  On the other hand: a much cleaner way to handle this would be (i) to cleanly separate development and production environments in the `pyproject.toml` file and then let Hatch handle the rest; and/or (ii) move to Docker devcontainers sooner rather than later, to minimise eventual differences between development and production environments.  This is something to look into in due course.
 
 Optionally, we also recommend installing [Direnv](https://direnv.net/) (`brew install direnv`) to handle auto-loading of environment variables.  Don't forget to [hook Direnv into your (zsh) shell](https://direnv.net/docs/hook.html).  Once install, call `direnv allow` from the repo root to enable automatic sourcing of environment variables from the `.envrc` file.
 
@@ -66,6 +69,8 @@ webmakemigrations = "python tools/web/manage.py makemigrations"
 webmigrate = "python tools/web/manage.py migrate"
 ```
 
+(Note that when constructing entrypoints, you don't prepend `hatch run` - just use the raw Python command).
+
 You can then call these from the root directory to run the Django migrations for the web app.
 
 Essentially, you should use `hatch run` to run any command that you would normally run from the command line, but which requires the project Python interpreter to be activated and the project root directory to be on the Python path.  This includes running the Django development server, running the Dagster development server, running the Dagster CLI, running the Django CLI, running the Django test suite, etc.
@@ -73,6 +78,10 @@ Essentially, you should use `hatch run` to run any command that you would normal
 ## VS Code debugger setup
 
 If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/enviro/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
+
+## Create Django admin user
+
+You might also like to add yourself as a Django admin user: `hatch run python tools/web/manage.py createsuperuser`, then follow the prompts.
 
 ## Footnotes
 
