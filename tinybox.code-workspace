@@ -22,6 +22,11 @@
       "**/__pycache__": true,
       "**/*.egg-info": true,
       "**/*.ipynb_checkpoints": true
-    }
+    },
+    "[git-commit]": {
+      "rewrap.autoWrap.enabled": true,
+      "rewrap.wrappingColumn": 72
+    },
+    "git.useEditorAsCommitInput": true,
   }
 }
