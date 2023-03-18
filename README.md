@@ -1,20 +1,24 @@
-# enviro
+# tinybox
 
 ## Introduction
 
-Monorepo for an as-yet-unnamed renter data platform, currently referred to herein as "enviro".
+Monorepo for an as-yet-unnamed renter data platform, working title "tinybox".
 
 There are two main "applications" in this repo: the ETL pipeline (`tools/etl`), and the web app (`tools/web`).  The ETL pipeline uses the [Dagster](https://dagster.io/) framework; the web app uses the [Django](https://www.djangoproject.com/) framework.
 
-Currently, the purposes of this `README.md` file are to (i) sketch out the structure of the repo at a high level; and (ii) describe how to set up a local development environment.  Note that it is entirely possible to work on the web app without touching the ETL pipeline, and vice versa - they are independent of each other (although they currently share a single project Python interpreter).
+Currently, the purposes of this `README.md` file are to (i) sketch out the structure of the repo at a high level; and (ii) describe how to set up a local development environment, which of necessity includes (iii) some instruction on how to use our Python package manager, Hatch and (iv) establish some development conventions.  Note that it is entirely possible to work on the web app without touching the ETL pipeline, and vice versa - they are independent of each other (although they currently share a single project Python interpreter).
 
-In due course, this `README.md` will also contain (i) a more complete introduction to the project, (ii) instructions for deploying the application to a production environment, and (iii) contribution guidelines.
+In due course, this `README.md` will also contain (i) a more complete introduction to the project and (ii) instructions for deploying the application to a production environment.
 
 The `ARCHITECTURE.md` file will contain a high-level overview of the project architecture, including diagrams written in the D2 diagramming DSL, using the C4 paradigm (https://c4model.com/) for simplicty and clarity.
 
 On the other hand, comprehensive development documentation will live under the `docs` folder.  If you need to add documentation while developing, please do so there under the relevant application subfolder.
 
 This repo is structured using [src-layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/): local library code is in `src`, and the main applications are in `tools`.  Accordingly, if you need to write an _importable_ Python module, please do so in a subfolder under `src` and import it into the relevant application in `tools`.  This will allow us to keep the main applications as clean as possible.  When invoked, Hatch automatically ensures that all library code under `src` is installed in [development mode](https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#working-in-development-mode), rendering it callable from anywhere else in the project.  There is no need to do so manually.
+
+## Contributions
+
+This project uses [semantic versioning](https://semver.org/) and is currently in pre-release.  The `main` branch is protected and requires pull requests to be reviewed and approved before merging.  Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for your commit messages.  This will allow us to automatically generate changelog and release notes.
 
 ## Local development environment setup
 
@@ -24,14 +28,16 @@ For development purposes, the following assumes local installation on macOS (run
 
 Ensure that the following required dependencies are installed and on path.
 
-- [Postgres.app](https://postgresapp.com/): Download and install the latest macOS Universal binary.  Note that Postgres.app comes with PostGIS pre-installed, which is very helpful.
+- [Postgres.app](https://postgresapp.com/): Download and install the latest macOS Universal binary.  Note that Postgres.app comes with PostGIS pre-installed.
 - [Homebrew](https://brew.sh/): `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-- [Postgresql](https://www.postgresql.org/): `brew install postgresql@14`
 - [Hatch](https://github.com/pypa/hatch): `brew install hatch`
 - [nvm](https://github.com/nvm-sh/nvm): `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash`
 - Using nvm, the latest Node and NPM: `nvm install node`
+**Note: try _not_ manually installing `postgis` when setting up on Liam's machine.**
+<!-- - GeoDjango binary dependencies: `brew install postgis gdal libgeoip` -->
+- GeoDjango binary dependencies: `brew install gdal libgeoip`
 
-Note that Postgres _correctly_ appears twice: once as an app download and once via Brew.  This is because while we are using Postgres.app for local development, installing the `psycopg2` Python package requires the `pg_config` binary to be on path, which - on macOS - is available when Postgres is installed via Homebrew.  The alternative would be to export a `PATH` variable pointing to the Postgres.app install in the `pyproject.toml` file, but I'm concerned if I do that then this will be forgotten when the project is deployed and we will have a hard-to-diagnose production bug to deal with.  On the other hand: a much cleaner way to handle this would be (i) to cleanly separate development and production environments in the `pyproject.toml` file and then let Hatch handle the rest; and/or (ii) move to Docker devcontainers sooner rather than later, to minimise eventual differences between development and production environments.  This is something to look into in due course.
+Installing the `psycopg2` Python package requires a `pg_config` binary to be on path.  Such a binary is included with the Postgres.app install.  Accordingly, the project's `pyproject.toml` exports a `PATH` env pointing to the Postgres.app.  So this env will need to be updated any time there is a change in PostgreSQL configuration (including when it's deployed on Digital Ocean).  Alternatively, perhaps we should move to Docker devcontainers sooner rather than later to minimise differences between development and production environments.
 
 Optionally, we also recommend installing [Direnv](https://direnv.net/) (`brew install direnv`) to handle auto-loading of environment variables.  Don't forget to [hook Direnv into your (zsh) shell](https://direnv.net/docs/hook.html).  Once install, call `direnv allow` from the repo root to enable automatic sourcing of environment variables from the `.envrc` file.
 
@@ -44,6 +50,12 @@ Python dependencies (including the required 3.9.x Python interpreter itself) are
 If you need to add Python dependencies - be they runtime or development dependencies - add them to this file, under `[project]` -> `dependencies` for now (in due course we may end up specifying more than one interpreter for the project, but for now it's shared across tools for simplicity).  Hatch will ensure that dependencies are automatically synced with the contents of this `pyproject.toml` each time it's invoked, so there's no need to manually `pip install` any of your Python dependencies.
 
 We now need to install the Tailwind CSS framework and its Node dependencies.  From the repo root, call `hatch run python tools/web/manage.py tailwind install`.  Since this is the first time we are calling Hatch, it will also install and setup the project Python interpreter and all Python dependencies as specified in the `pyproject.toml` file, ensure that the project Python interpreter is activated in the current shell session, and that the project root directory is on the Python path.
+
+I also recommend adding the following line to your `.zshrc` file to make calling `hatch run` easier, since you'll be doing it a lot:
+
+`alias hr="hatch run"`
+
+You can then just use `hr` instead of `hatch run` (including in the following instructions).
 
 Once the install is complete, create an `.envrc` file (in the form set out in `.envrc.sample`) and a `.env` file (in the form set out in `.env.sample`); ensure that you update the values in `.env` to match your local environment.  That means (i) changing the `DAGSTER_HOME` environment variable to point to the correct path on your machine (unfortunately Dagster requires that this be an absolute - not relative - path); and (ii) Setting a `DJANGO_SECRET_KEY` environment variable to a random string of 50 characters or more.  You can generate a new key by calling the following from the project Python interpreter: `django.core.management.utils.get_random_secret_key()`.  Enter the output into the `DJANGO_SECRET_KEY` environment variable in your `.env` file.
 
@@ -62,14 +74,13 @@ Ensure you are in the project root directory, then:
 
 Each time Hatch is called (in any capacity) from the command line, it will automatically ensure that any changes to Python dependencies in the `pyproject.toml` file are automatically synced to the project Python interpreter.
 
-Each of the `etldev` and `webdev` arguments passed to `hatch run` are known as "entrypoints", and they are defined in the `pyproject.toml` file (under `[tool.hatch.envs.default.scripts]`).  Should you need to add new entrypoints, feel free to do so there.  For example, you might like to add new Django migration entrypoints as follows:
+Each of the `etldev` and `webdev` arguments passed to `hatch run` are known as "entrypoints", and they are defined in the `pyproject.toml` file (under `[tool.hatch.envs.default.scripts]`).  Should you need to add new entrypoints, feel free to do so there.  For instance, I've also added Django migration entrypoints as follows:
 
 ```toml
-webmakemigrations = "python tools/web/manage.py makemigrations"
+webmakemigrate = "python tools/web/manage.py makemigrations"
 webmigrate = "python tools/web/manage.py migrate"
+webshell = "python tools/web/manage.py shell"
 ```
-
-(Note that when constructing entrypoints, you don't prepend `hatch run` - just use the raw Python command).
 
 You can then call these from the root directory to run the Django migrations for the web app.
 
@@ -77,7 +88,7 @@ Essentially, you should use `hatch run` to run any command that you would normal
 
 ## VS Code debugger setup
 
-If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/enviro/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
+If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/tinybox/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
 
 ## Create Django admin user
 

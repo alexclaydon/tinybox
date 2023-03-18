@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.gis",
     "tailwind",
     "theme",
+    "world",
     "django_browser_reload",
 ]
 
@@ -87,7 +89,7 @@ WSGI_APPLICATION = "web.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": os.getenv("PGDB_NAME"),
         "USER": os.getenv("PGDB_USER"),
         "PASSWORD": os.getenv("PGDB_PASSWORD"),

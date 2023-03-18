@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "enviro"
+name = "tinybox"
 description = ''
 readme = "README.md"
 requires-python = ">=3.9"
@@ -32,7 +32,9 @@ dependencies = [
   "Django",
   "psycopg2",
   "django-tailwind",
+  "geojson",
   "pandas",
+  "Pillow",
   "beautifulsoup4",
   "dagster",
   "dagit",
@@ -40,12 +42,12 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/alexclaydon/enviro#readme"
-Issues = "https://github.com/alexclaydon/enviro/issues"
-Source = "https://github.com/alexclaydon/enviro"
+Documentation = "https://github.com/alexclaydon/tinybox#readme"
+Issues = "https://github.com/alexclaydon/tinybox/issues"
+Source = "https://github.com/alexclaydon/tinybox"
 
 [tool.hatch.version]
-path = "src/enviro/__about__.py"
+path = "src/tinybox/__about__.py"
 
 [tool.hatch.envs.default]
 python = "3.9"
@@ -57,15 +59,21 @@ dependencies = [
 
 [tool.hatch.envs.default.env-vars]
 PIP_FIND_LINKS = "https://github.com/dagster-io/build-grpcio/wiki/Wheels"
-PIP_VERBOSE="2"
-DAGSTER_HOME="/Users/alexclaydon/dev/dev-projects/enviro/tools/etl/data"
-MallocNanoZone="1"
+PIP_VERBOSE = "2"
+DAGSTER_HOME = "/Users/alexclaydon/dev/dev-projects/tinybox/tools/etl/data"
+MallocNanoZone = "1"
 
 [tool.hatch.envs.default.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/enviro --cov=tests {args}"
+# Tests
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/tinybox --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
+# ETL pipeline
 etldev = "dagster dev"
+# Web app
 webdev = "(trap 'kill 0' SIGINT; python tools/web/manage.py tailwind start & python tools/web/manage.py runserver 8080)"
+webmakemigrate = "python tools/web/manage.py makemigrations"
+webmigrate = "python tools/web/manage.py migrate"
+webshell = "python tools/web/manage.py shell"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["39", "310", "311"]
@@ -78,7 +86,7 @@ module_name = "tools.etl.general"
 branch = true
 parallel = true
 omit = [
-  "src/enviro/__about__.py",
+  "src/tinybox/__about__.py",
 ]
 
 [tool.coverage.report]
