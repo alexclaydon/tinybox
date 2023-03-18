@@ -18,7 +18,7 @@ This repo is structured using [src-layout](https://packaging.python.org/en/lates
 
 ## Contributions
 
-This project uses [semantic versioning](https://semver.org/) and is currently in pre-release.  The `main` branch is protected and requires pull requests to be reviewed and approved before merging.  Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for your commit messages.  This will allow us to automatically generate changelog and release notes.
+This project uses [semantic versioning](https://semver.org/) and is currently in pre-release.  The `main` branch is protected and requires pull requests to be reviewed and approved before merging.  Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for your commit messages.    This will allow us to automatically generate changelog and release notes.  Please also follow the [50/72] convention (https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) for commit messages to ensure they can be read from the terminal.
 
 ## Local development environment setup
 
