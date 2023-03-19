@@ -70,7 +70,7 @@ no-cov = "cov --no-cov {args}"
 # ETL pipeline
 etldev = "dagster dev"
 # Web app
-webdev = "(trap 'kill 0' SIGINT; python tools/web/manage.py tailwind start & python tools/web/manage.py runserver 8080)"
+webdev = "(trap 'kill 0' SIGINT; python tools/web/manage.py tailwind start & python tools/web/manage.py runserver 0.0.0.0:8080)"
 webmakemigrate = "python tools/web/manage.py makemigrations"
 webmigrate = "python tools/web/manage.py migrate"
 webshell = "python tools/web/manage.py shell"
