@@ -142,3 +142,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 TAILWIND_APP_NAME = "theme"
 
 STADIA_MAPS_API_KEY = os.getenv("STADIA_MAPS_API_KEY")
+
+MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")

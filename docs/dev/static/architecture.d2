@@ -1,0 +1,19 @@
+etl: ETL pipeline
+api1: 3rd Party API layer
+api2: Self-hosted API layer
+client: Client-side
+
+etl.data sources -> etl.dagster first pass
+etl.dagster first pass -> etl.tippecanoe: Extract, transform, load geojson
+etl.tippecanoe -> etl.maputchnik: Generate custom vector tiles
+etl.maputchnik -> etl.dagster second pass: Style custom vector tiles
+etl.dagster second pass -> api2.pm2tiles: Upload custom vector tiles to hosting
+
+api2.pm2tiles -> client.maplibre-gl-js: Completed custom tilesets
+api1.Stadia Maps -> client.maplibre-gl-js: Base layer vector tileset
+api1.MapBox -> client.mapbox-geocoder: Geocode result object
+
+client.mapbox-geocoder -> client.maplibre-gl-js: Geocode result coordinates
+
+client.maplibre-gl-js -> client.Complete Map: Cache and render
+client.django_template -> client.Complete Map: Styles and composes

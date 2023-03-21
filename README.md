@@ -10,7 +10,7 @@ Currently, the purposes of this `README.md` file are to (i) sketch out the struc
 
 In due course, this `README.md` will also contain (i) a more complete introduction to the project and (ii) instructions for deploying the application to a production environment.
 
-The `ARCHITECTURE.md` file will contain a high-level overview of the project architecture, including diagrams written in the D2 diagramming DSL, using the C4 paradigm (https://c4model.com/) for simplicty and clarity.
+The `ARCHITECTURE.md` file will contain a [high-level overview](https://matklad.github.io/2021/02/06/ARCHITECTURE.md.html) of the project architecture, including diagrams written in the D2 diagramming DSL, using the C4 paradigm (https://c4model.com/) for simplicty and clarity.
 
 On the other hand, comprehensive development documentation will live under the `docs` folder.  If you need to add documentation while developing, please do so there under the relevant application subfolder.
 
@@ -18,7 +18,9 @@ This repo is structured using [src-layout](https://packaging.python.org/en/lates
 
 ## Contributions
 
-This project uses [semantic versioning](https://semver.org/) and is currently in pre-release.  The `main` branch is protected and requires pull requests to be reviewed and approved before merging.  Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for your commit messages.    This will allow us to automatically generate changelog and release notes.  Please also follow the [50/72] convention (https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) for commit messages to ensure they can be read from the terminal.
+Contributions should follow the [Github Flow](https://docs.github.com/en/get-started/quickstart/github-flow) workflow model, with each feature or bugfix being developed on a separate branch (ideally called `dev-<contributor_initials>-<descriptive_name>`), and then merged into `main` via a pull request.  The `main` branch is protected and requires pull requests to be reviewed and approved before merging.  Note: please ensure that your development branch is up to date with `main` before creating the pull request. 
+
+This project uses [semantic versioning](https://semver.org/) and is currently in pre-release.  Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for your commit messages.  This will allow us to automatically generate changelog and release notes.  Please also follow the [50/72] convention (https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) for commit messages to ensure they can be read from the terminal.
 
 ## Local development environment setup
 
@@ -36,8 +38,12 @@ Ensure that the following required dependencies are installed and on path.
 **Note: try _not_ manually installing `postgis` when setting up on Liam's machine.**
 <!-- - GeoDjango binary dependencies: `brew install postgis gdal libgeoip` -->
 - GeoDjango binary dependencies: `brew install gdal libgeoip`
+- [Tippecanoe](https://github.com/felt/tippecanoe) for generating custom vector tilesets: `brew install tippecanoe`.
+- [Maputnik](https://github.com/maputnik/editor) for styling tilesets: `brew install kevinschaul/homebrew-core/maputnik`
 
 Installing the `psycopg2` Python package requires a `pg_config` binary to be on path.  Such a binary is included with the Postgres.app install.  Accordingly, the project's `pyproject.toml` exports a `PATH` env pointing to the Postgres.app.  So this env will need to be updated any time there is a change in PostgreSQL configuration (including when it's deployed on Digital Ocean).  Alternatively, perhaps we should move to Docker devcontainers sooner rather than later to minimise differences between development and production environments.
+
+Note that as of today, the `brew` formula for Tippecanoe is current (v2.24.0).  Should that change, you can install from source using the instructions on the repo.
 
 Optionally, we also recommend installing [Direnv](https://direnv.net/) (`brew install direnv`) to handle auto-loading of environment variables.  Don't forget to [hook Direnv into your (zsh) shell](https://direnv.net/docs/hook.html).  Once install, call `direnv allow` from the repo root to enable automatic sourcing of environment variables from the `.envrc` file.
 
