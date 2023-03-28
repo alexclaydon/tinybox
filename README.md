@@ -35,18 +35,27 @@ Ensure that the following required dependencies are installed and on path.
 - [Postgres.app](https://postgresapp.com/): Optionally, download and install the latest macOS Universal binary.  Note that Postgres.app comes with PostGIS pre-installed.  If you choose not to use Postgres.app, you will need to install Postgres and PostGIS separately and ensure that both are on path.
 - [Homebrew](https://brew.sh/): `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
   - Ensure that you also follow instructions to add Homebrew to your path.
+- Git: `brew install git`
+- Git-LFS: `brew install git-lfs`
 - [Hatch](https://github.com/pypa/hatch): `brew install hatch`
 - [nvm](https://github.com/nvm-sh/nvm): `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash`
 - Using nvm, the latest Node and NPM: `nvm install node`
 - GeoDjango binary dependencies: `brew install postgis gdal libgeoip`
 **#TODO: Note that _not_ installing `postgis` here appears to lead to a failure to find the `gdal` library; but presumably that library should already be available with the PostGIS binaries installed with Postgres.app, so is this a PATH issue?  Need to look into this more because it will affect deployment too.**
-- [Tippecanoe](https://github.com/felt/tippecanoe) for generating custom vector tilesets: `brew install tippecanoe`.
+- [Tippecanoe](https://github.com/felt/tippecanoe) fork, maintained by "Felt", for generating custom vector tilesets: `brew install tippecanoe`.
   - Note that as of today, the `brew` formula for Tippecanoe is current (v2.24.0).  Should that change, you can install from source using the instructions on the repo.
 - [Maputnik](https://github.com/maputnik/editor) for styling tilesets: `brew install kevinschaul/homebrew-core/maputnik`
 
 Optionally, we also recommend installing [Direnv](https://direnv.net/) (`brew install direnv`) to handle auto-loading of environment variables.  Don't forget to [hook Direnv into your (zsh) shell](https://direnv.net/docs/hook.html).  Once install, call `direnv allow` from the repo root to enable automatic sourcing of environment variables from the `.envrc` file.
 
 Note that if at any point any of the above commands fail, try closing and re-opening your terminal to ensure that your path is up to date before trying again.
+
+Finally, we need to tell Hatch to build its virtual environment in the repo itself, instaed of elsewhere - as is default.  Having the virtual environment local to the repo (excluded, of course, from version control) will allow you to tell VS Code to use it as the interpreter for debugging purposes.  Edit the `config.toml` file located at `~/Library/Preferences/hatch` and add the following under `[dirs.env]`:
+
+```toml
+[dirs.env]
+virtual = ".hatch"
+```
 
 ### Setup PostgreSQL for use with Django
 
@@ -103,6 +112,8 @@ get_random_secret_key()
 
 Copy the output into the `DJANGO_SECRET_KEY` environment variable in your `.env` file.
 
+Next, add yourself as a Django admin user: `hatch run python tools/web/manage.py createsuperuser` from the repo root, then follow the prompts.
+
 Note that if you are using VS Code, you should also ensure that `MallocNanoZone=1` (as specified in `.env.sample` file) is set in your `.env` file to prevent `malloc` errors on launching a Dagster development server.[^1]  This should be the case by default.
 
 ### Third Party API Keys
@@ -142,10 +153,6 @@ Each time Hatch is called (in any capacity) from the command line, it will autom
 ## VS Code debugger setup
 
 If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/tinybox/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
-
-## Create Django admin user
-
-You might also like to add yourself as a Django admin user: `hatch run python tools/web/manage.py createsuperuser`, then follow the prompts.
 
 ## Footnotes
 
