@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "092d93b2-3f49-490d-8167-23f41521b004",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://discover.data.vic.gov.au/api/3/action/datastore_search?resource_id=cb1a732d-739e-47c5-90a9-06a0585d56ed",
+    "url": "https://discover.data.vic.gov.au/api/3/action/datastore_search?resource_id=cb1a732d-739e-47c5-90a9-06a0585d56ed",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2023-03-29T06:44:49.070Z",
+    "modified": "2023-03-29T06:44:49.070Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "resource_id",
+        "value": "cb1a732d-739e-47c5-90a9-06a0585d56ed",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  }
+]
