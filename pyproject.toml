@@ -38,6 +38,8 @@ dependencies = [
   "beautifulsoup4",
   "dagster",
   "dagit",
+  "pydantic",
+  "datamodel-code-generator",
 ]
 dynamic = ["version"]
 
