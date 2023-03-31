@@ -17,8 +17,6 @@ classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -78,7 +76,7 @@ webmigrate = "python tools/web/manage.py migrate"
 webshell = "python tools/web/manage.py shell"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["39", "310", "311"]
+python = ["3.9"]
 
 [tool.dagster]
 module_name = "tools.etl.general"
