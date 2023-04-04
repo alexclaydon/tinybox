@@ -1,0 +1,41 @@
+[
+  {
+    "_id": "4a9645bf-43a9-48f2-9419-83e2b6fc6288",
+    "colName": "gateway.api.epa.vic.gov.au",
+    "created": "2023-03-22T03:57:39.735Z",
+    "sortNum": 10000,
+    "folders": [
+      {
+        "_id": "c59d3697-ad36-444a-bf83-d67bc0013cca",
+        "name": "example_folder",
+        "containerId": "",
+        "created": "2023-03-22T04:08:21.017Z",
+        "sortNum": 10000
+      }
+    ],
+    "settings": {
+      "headers": [
+        {
+          "name": "X-API-Key",
+          "value": "{{VIC_EPA_ENVIRONMENT_MONITORING_API_KEY}}"
+        }
+      ],
+      "tests": []
+    }
+  },
+  {
+    "_id": "9a90ac3e-69de-4372-ad3e-b864aa5da0a8",
+    "colName": "discover.data.vic.gov.au",
+    "created": "2023-03-29T06:45:27.561Z",
+    "sortNum": 20000,
+    "folders": [
+      {
+        "_id": "52bc1f68-5fc3-4b6d-8f30-37bb7b76bfa7",
+        "name": "Vic EPA",
+        "containerId": "",
+        "created": "2023-03-29T06:46:38.005Z",
+        "sortNum": 10000
+      }
+    ]
+  }
+]

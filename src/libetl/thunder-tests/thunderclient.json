@@ -1,0 +1,84 @@
+[
+  {
+    "_id": "4f63aa15-4c8e-42d6-9338-96d7308d7744",
+    "colId": "4a9645bf-43a9-48f2-9419-83e2b6fc6288",
+    "containerId": "",
+    "name": "all air monitoring sites",
+    "url": "https://gateway.api.epa.vic.gov.au/environmentMonitoring/v1/sites?environmentalSegment=air",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2023-03-22T03:59:22.815Z",
+    "modified": "2023-03-22T04:08:34.223Z",
+    "headers": [
+      {
+        "name": "Accept",
+        "value": "*/*",
+        "isDisabled": true
+      },
+      {
+        "name": "User-Agent",
+        "value": "Thunder Client (https://www.thunderclient.com)",
+        "isDisabled": true
+      }
+    ],
+    "params": [
+      {
+        "name": "environmentalSegment",
+        "value": "air",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "db296b41-ba8a-4553-aaea-4bc985fbe92f",
+    "colId": "4a9645bf-43a9-48f2-9419-83e2b6fc6288",
+    "containerId": "",
+    "name": "all air monitoring sites w sci params",
+    "url": "https://gateway.api.epa.vic.gov.au/environmentMonitoring/v1/sites/parameters?environmentalSegment=air",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2023-03-22T04:06:43.189Z",
+    "modified": "2023-03-22T04:07:06.777Z",
+    "headers": [
+      {
+        "name": "Accept",
+        "value": "*/*",
+        "isDisabled": true
+      },
+      {
+        "name": "User-Agent",
+        "value": "Thunder Client (https://www.thunderclient.com)",
+        "isDisabled": true
+      }
+    ],
+    "params": [
+      {
+        "name": "environmentalSegment",
+        "value": "air",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "08bbb74b-b3fa-4851-ae33-4e87e9cbbdd6",
+    "colId": "9a90ac3e-69de-4372-ad3e-b864aa5da0a8",
+    "containerId": "52bc1f68-5fc3-4b6d-8f30-37bb7b76bfa7",
+    "name": "Noise designated type rule",
+    "url": "https://discover.data.vic.gov.au/api/3/action/datastore_search?resource_id=cb1a732d-739e-47c5-90a9-06a0585d56ed",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2023-03-29T06:45:39.297Z",
+    "modified": "2023-03-29T06:46:39.983Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "resource_id",
+        "value": "cb1a732d-739e-47c5-90a9-06a0585d56ed",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  }
+]
