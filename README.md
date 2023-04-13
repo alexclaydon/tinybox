@@ -28,7 +28,7 @@ This project uses [semantic versioning](https://semver.org/) and is currently in
 
 For development purposes, the following assumes local installation on macOS (running on Apple Silicon), without containers.  In due course we'll move to a local Docker development pipeline (using VS Code's `devcontainer.json`).  MVP deployment will be using Docker on Digital Ocean VPS. 
 
-### External dependencies
+### System dependencies
 
 Ensure that the following required dependencies are installed and on path.
 
@@ -56,6 +56,8 @@ Finally, we need to tell Hatch to build its virtual environment in the repo itse
 [dirs.env]
 virtual = ".hatch"
 ```
+
+Then, in your repo root directory, create a `.env` file and ensure that the following env is present: `HATCH_CONFIG="/Users/<username>/Library/Preferences/hatch/config.toml"`
 
 ### Setup PostgreSQL for use with Django
 
@@ -153,6 +155,32 @@ Each time Hatch is called (in any capacity) from the command line, it will autom
 ## VS Code debugger setup
 
 If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/tinybox/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
+
+## Updating pinned dependencies
+
+Principal Python dependencies, as specified in `pyproject.toml`, should to the extent possible be pinned.  Unfortunately this is currently a manual process with Hatch.  We'll need to do it every couple of weeks or so.
+
+Use:
+
+`pip-compile --extra dev -o dev-requirements.txt pyproject.toml --resolver=backtracking`
+
+to export a list of currently installed dependencies, then adjust the pinned versions manually in `pyproject.toml` to match.
+
+## Deployment
+
+### Django web app
+
+The complete Digital Ocean App Platform Python buildpack documentation is [here](https://docs.digitalocean.com/products/app-platform/reference/buildpacks/python/).
+
+From the repo root:
+
+`pip freeze > tools/web/requirements.txt`
+
+Note that this file _must_ be called `requirements.txt` for the buildpack to work.
+
+Ensure that in the `tools/web` directory (i.e., the Django project root), the `runtime.txt` file - which tells the buildpack which version of Python to use - specifies the same Python version as the project Python interpreter (i.e., the one specified in `pyproject.toml`).
+
+If you are doing a fresh deploy, go [here](https://cloud.digitalocean.com/apps/new) and create a new app.  Select this GitHub repo.  As our Django web app code is _not_ located in the repo root, you'll need to specify the `tools/web` directory as the app root.
 
 ## Footnotes
 
