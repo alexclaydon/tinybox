@@ -1,45 +1,60 @@
 <!-- Adapted from Stadia Maps [docs](https://docs.stadiamaps.com/vector/) -->
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>tinybox prototype</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script
+      type="text/javascript"
+      src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"
+    ></script>
+    <script src="https://unpkg.com/pmtiles@2.5.0/dist/index.js"></script>
+    <link
+      href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <title>tinybox prototype</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script type="text/javascript" src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-  <script type="text/javascript" src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
-  <script src="https://unpkg.com/pmtiles@2.5.0/dist/index.js"></script>
-  <link href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
-</head>
+  <body>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'world/styles.css' %}"
+    />
 
-<body>
-  {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'world/styles.css' %}">
-
-  <div id="image-container">
-    <img src="{% static 'world/tinybox.jpg' %}" alt="tinybox logo">
-  </div>
-
-  <!-- Load the `mapbox-gl-geocoder` plugin. -->
-  <script
-    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-  <link rel="stylesheet"
-    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
-
-  <!-- Add page elements -->
-  <div id="map"></div>
-  <div id="layer-controls">
-    <div class="layer-control">
-      <input type="checkbox" id="layer1" checked>
-      <label for="layer1">Layer 1</label>
-      <input type="checkbox" id="layer2" checked>
-      <label for="layer2">Layer 2</label>
+    <div id="image-container">
+      <img src="{% static 'world/tinybox.jpg' %}" alt="tinybox logo" />
     </div>
-    <!-- Add more layer controls as needed -->
-  </div>
-  {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
-  <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
 
-</body>
+    <!-- Load the `mapbox-gl-geocoder` plugin. -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
 
+    <!-- Add page elements -->
+    <div id="map"></div>
+    <div id="layer-controls">
+      <div class="layer-control">
+        <input type="checkbox" id="layer1" checked />
+        <label for="layer1">Layer 1</label>
+        <input type="checkbox" id="layer2" checked />
+        <label for="layer2">Layer 2</label>
+      </div>
+      <!-- Add more layer controls as needed -->
+    </div>
+    {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
+    <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
+  </body>
 </html>
