@@ -1,213 +1,60 @@
 <!-- Adapted from Stadia Maps [docs](https://docs.stadiamaps.com/vector/) -->
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>tinybox prototype</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script
+      type="text/javascript"
+      src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"
+    ></script>
+    <script src="https://unpkg.com/pmtiles@2.5.0/dist/index.js"></script>
+    <link
+      href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <title>tinybox prototype</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script type="text/javascript" src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-  <script type="text/javascript" src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
-  <link href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
-</head>
+  <body>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'world/styles.css' %}"
+    />
 
-<body>
-  {% load static %}
-
-  <link rel="stylesheet" type="text/css" href="{% static 'world/styles.css' %}">
-
-  <div id="image-container">
-    <img src="{% static 'world/tinybox.jpg' %}" alt="tinybox logo">
-  </div>
-
-  <!-- Load the `mapbox-gl-geocoder` plugin. -->
-  <script
-    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-  <link rel="stylesheet"
-    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
-
-  <!-- Add page elements -->
-  <div id="map"></div>
-  <div id="layer-controls">
-    <div class="layer-control">
-      <input type="checkbox" id="layer1" checked>
-      <label for="layer1">Layer 1</label>
-      <input type="checkbox" id="layer2" checked>
-      <label for="layer2">Layer 2</label>
+    <div id="image-container">
+      <img src="{% static 'world/tinybox.jpg' %}" alt="tinybox logo" />
     </div>
-    <!-- Add more layer controls as needed -->
-  </div>
 
-  <script type="text/javascript">
+    <!-- Load the `mapbox-gl-geocoder` plugin. -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
 
-    // Show an alert if the browser does not support MapLibre GL
-    if (!maplibregl.supported()) {
-      alert('Your browser does not support MapLibre GL');
-    }
-
-    // Initialize the map
-    var map = new maplibregl.Map({
-      container: 'map',
-      style: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json',  // Style URL; see our documentation for more options
-      center: [144.946457, -37.840935],  // Initial focus coordinate (long, lat)
-      zoom: 9
-    });
-
-    // Add Mapbox geocoder to the map
-    var geocoder = new MapboxGeocoder({
-      accessToken: "{{ MAPBOX_API_KEY }}",
-      countries: 'au',
-      language: 'en-AU',
-      maplibregl: maplibregl
-    });
-
-    map.addControl(geocoder, 'bottom-right');
-
-    geocoder.on('result', async (event) => {
-      console.log(event.result)
-      // When the geocoder returns a result
-      const point = event.result.center; // Capture the result coordinates
-
-      var elem = document.createElement('div');
-      elem.className = 'marker';
-
-      var marker = new maplibregl.Marker(elem);
-
-      marker.setLngLat(point); // Add the marker to the map at the result coordinates
-
-      var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
-      popup.setHTML('<div>' + event.result.place_name + '</div>');
-
-      marker.setPopup(popup);
-
-      marker.addTo(map);
-    });
-
-    // Add zoom and rotation controls to the map.
-    map.addControl(new maplibregl.NavigationControl());
-
-    // Add geolocate control to the map.
-    var geolocate = new maplibregl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      trackUserLocation: true
-    });
-
-    map.addControl(geolocate);
-
-    // Set an event listener that fires
-    // when a trackuserlocationstart event occurs.
-    geolocate.on('trackuserlocationstart', function () {
-      console.log('A trackuserlocationstart event has occurred.')
-    });
-
-    // Add a scale control to the map.
-    var scale = new maplibregl.ScaleControl({
-      maxWidth: 100,
-      unit: 'metric'
-    });
-
-    map.addControl(scale);
-
-    scale.setUnit('metric');
-
-    // Add fullscreen control to the map.
-    map.addControl(new maplibregl.FullscreenControl({ container: document.querySelector('body') }));
-
-    // Fetch GeoJSON data from any Django API endpoint
-    async function fetchGeoJSONData(apiUrl) {
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        throw new Error(message);
-      }
-
-      const geojsonData = await response.json();
-      return JSON.parse(geojsonData);
-    }
-
-    async function addMarkers(apiUrl) {
-      try {
-        const PoIData = await fetchGeoJSONData(apiUrl);
-
-        console.log(PoIData); // Add this line to check the structure of the fetched data
-
-        // Replace the following line with your actual marker creation logic
-        PoIData.features.forEach(function (point) {
-          var elem = document.createElement('div');
-          elem.className = 'marker';
-
-          var marker = new maplibregl.Marker(elem);
-          marker.setLngLat(point.geometry.coordinates);
-
-          var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
-          popup.setHTML('<div>' + point.properties.name + '</div>');
-
-          marker.setPopup(popup);
-
-          marker.addTo(map);
-        });
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
-
-    addMarkers(apiUrl = "/world/poi_geojson/");
-
-    // async function addLineFeatures(apiUrl) { }
-
-    map.on('load', function () {
-      map.addSource('route', {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': [
-              [-122.48369693756104, 37.83381888486939],
-              [-122.48348236083984, 37.83317489144141],
-              [-122.48339653015138, 37.83270036637107],
-              [-122.48356819152832, 37.832056363179625],
-              [-122.48404026031496, 37.83114119107971],
-              [-122.48404026031496, 37.83049717427869],
-              [-122.48348236083984, 37.829920943955045],
-              [-122.48356819152832, 37.82954808664175],
-              [-122.48507022857666, 37.82944639795659],
-              [-122.48610019683838, 37.82880236636284],
-              [-122.48695850372314, 37.82931081282506],
-              [-122.48700141906738, 37.83080223556934],
-              [-122.48751640319824, 37.83168351665737],
-              [-122.48803138732912, 37.832158048267786],
-              [-122.48888969421387, 37.83297152392784],
-              [-122.48987674713133, 37.83263257682617],
-              [-122.49043464660643, 37.832937629287755],
-              [-122.49125003814696, 37.832429207817725],
-              [-122.49163627624512, 37.832564787218985],
-              [-122.49223709106445, 37.83337825839438],
-              [-122.49378204345702, 37.83368330777276]
-            ]
-          }
-        }
-      });
-      map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#888',
-          'line-width': 8
-        }
-      });
-    });
-
-  </script>
-</body>
-
+    <!-- Add page elements -->
+    <div id="map"></div>
+    <div id="layer-controls">
+      <div class="layer-control">
+        <input type="checkbox" id="layer1" checked />
+        <label for="layer1">Layer 1</label>
+        <input type="checkbox" id="layer2" checked />
+        <label for="layer2">Layer 2</label>
+      </div>
+      <!-- Add more layer controls as needed -->
+    </div>
+    {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
+    <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
+  </body>
 </html>
