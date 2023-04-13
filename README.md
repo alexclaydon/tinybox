@@ -164,6 +164,7 @@ On account of the way that string arguments containing spaces in `launch.json` a
 
 ## Updating pinned dependencies
 
+If you are doing a fresh deploy, go [here](https://cloud.digitalocean.com/apps/new) and create a new app.  Select this GitHub repo.  As our Django web app code is _not_ located in the repo root, you'll need to specify the `tools/web` directory as the app root.
 Principal Python dependencies, as specified in `pyproject.toml`, should to the extent possible be pinned.  Unfortunately this is currently a manual process with Hatch.  We'll need to do it every couple of weeks or so.
 
 Use:
@@ -176,7 +177,9 @@ to export a list of currently installed dependencies, then adjust the pinned ver
 
 ### Django web app
 
-The complete Digital Ocean App Platform Python buildpack documentation is [here](https://docs.digitalocean.com/products/app-platform/reference/buildpacks/python/).
+To deploy our Django web app to Digital Ocean's App Platform, I followed the [official tutorial](https://docs.digitalocean.com/tutorials/app-deploy-django-app/).
+
+The complete Digital Ocean App Platform Python [buildpack documentation](https://docs.digitalocean.com/products/app-platform/reference/buildpacks/python/) is also handy.
 
 From the repo root:
 
@@ -184,9 +187,40 @@ From the repo root:
 
 Note that this file _must_ be called `requirements.txt` for the buildpack to work.
 
-Ensure that in the `tools/web` directory (i.e., the Django project root), the `runtime.txt` file - which tells the buildpack which version of Python to use - specifies the same Python version as the project Python interpreter (i.e., the one specified in `pyproject.toml`).
+Ensure that in the `tools/web` directory (i.e., the Django project root), the `runtime.txt` file - which tells the buildpack which version of Python to use - specifies the same Python version as the project Python interpreter (i.e., the one specified in `pyproject.toml`).  In our case, this is `3.9.16`.  See available runtimes [here](https://devcenter.heroku.com/articles/python-support) - they appear to be using some part of the Heroku stack.
 
 If you are doing a fresh deploy, go [here](https://cloud.digitalocean.com/apps/new) and create a new app.  Select this GitHub repo.  As our Django web app code is _not_ located in the repo root, you'll need to specify the `tools/web` directory as the app root.
+
+Hit create.  On the next page, ensure the "Name" is set to "tinybox-app".  Next, edit the "Run Command" to append `web/wsgi.py`, which is the entrypoint for the Django web app, as follows:
+
+`gunicorn --worker-tmp-dir /dev/shm web/wsgi.py`.
+
+Next, hit the "Back" button so that we can add resources.
+
+Select the Plan first - I'm using "Basic" for our current test deploy.
+
+Click on "Add Resource (Optional)", then add a dev database and call it the default `db`.
+
+Click next and then set up the environment variables - as "Global" envs (I think) - as follows.  Ensure that for each one, you enable the "Encrypt" checkbox.
+
+`DJANGO_ALLOWED_HOSTS = ${APP_DOMAIN}`
+`DATABASE_URL -> ${<NAME_OF_YOUR_DATABASE>.DATABASE_URL}`
+  Note that as  we named our database `db` above, this should be `${db.DATABASE_URL}`
+`DEBUG -> True`
+`DJANGO_SECRET_KEY` -> create and store one in Bitwarden.
+
+Keep clicking the "Next" button until you reach the "Review" page.
+
+Click "Create Resources".  At this stage, even if the build fails, as far as I understand it, the app is live and so you can just make whatever changes you need to to the code, push it and it will try the build again.
+
+Assuming the build process completes successfully, we next need to perform Django first-time setup.  Go to the "Console" tab and running the following commands:
+
+`python manage.py migrate`
+`python manage.py createsuperuser`
+
+Create at least one superuser.
+
+That's it for now, but once everything is up and running, come back here and follow the next part of the [tutorial], which deals with serving static files.
 
 ## Footnotes
 
