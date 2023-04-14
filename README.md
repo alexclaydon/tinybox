@@ -181,6 +181,10 @@ From the repo root:
 
 Note that this file _must_ be called `requirements.txt` for the buildpack to work.
 
+You must then delete the log entries at the top of that file, along with the reference to the development install of this project itself, which should look something like this:
+
+`-e git+https://github.com/alexclaydon/tinybox.git@0018991471fd73c7b1e2fc953e61ddfd06e42253#egg=tinybox`
+
 Ensure that in the `tools/web` directory (i.e., the Django project root), the `runtime.txt` file - which tells the buildpack which version of Python to use - specifies the same Python version as the project Python interpreter (i.e., the one specified in `pyproject.toml`).  In our case, this is `3.9.16`.  See available runtimes [here](https://devcenter.heroku.com/articles/python-support) - they appear to be using some part of the Heroku stack.
 
 If you are doing a fresh deploy, go [here](https://cloud.digitalocean.com/apps/new) and create a new app.  Select this GitHub repo.  As our Django web app code is _not_ located in the repo root, you'll need to specify the `tools/web` directory as the app root.
