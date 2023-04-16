@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from world import views as world_views
 
 urlpatterns = [
+    path("", world_views.map_view, name="map"),
     path("admin/", admin.site.urls),
     path("world/", include("world.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
