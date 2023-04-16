@@ -18,7 +18,7 @@ from django.urls import include, path
 from world import views as world_views
 
 urlpatterns = [
-    path("", world_views.map_view, name="map"),
+    path("map", world_views.map_view, name="map"),
     path("admin/", admin.site.urls),
     path("world/", include("world.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
