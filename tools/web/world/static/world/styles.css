@@ -13,11 +13,11 @@ body {
 #image-container {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 0.5em;
   z-index: 1;
   /* make sure it's on top of the map */
-  width: 30px;
-  height: 30px;
+  width: 100px;
+  height: 40px;
 }
 
 #image-container img {

@@ -1,9 +1,11 @@
 <!-- Adapted from Stadia Maps [docs](https://docs.stadiamaps.com/vector/) -->
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <title>tinybox prototype</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
@@ -24,15 +26,56 @@
   </head>
 
   <body>
-    {% load static %}
     <link
       rel="stylesheet"
       type="text/css"
       href="{% static 'world/styles.css' %}"
     />
-
+    <style>
+      #layer-controls {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: 50px;
+        border-radius: 2px;
+        width: 120px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        font-family: 'Open Sans', sans-serif;
+      }
+       
+      #layer-controls a {
+      font-size: 10px;
+      color: #404040;
+      display: block;
+      margin: 0;
+      padding: 0;
+      padding: 5px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+      text-align: center;
+      }
+       
+      #layer-controls a:last-child {
+      border: none;
+      }
+       
+      #layer-controls a:hover {
+      background-color: #f8f8f8;
+      color: #404040;
+      }
+       
+      #layer-controls a.active {
+      background-color: #3887be;
+      color: #ffffff;
+      }
+       
+      #layer-controls a.active:hover {
+      background: #3074a4;
+      }
+    </style>
     <div id="image-container">
-      <img src="{% static 'world/tinybox.jpg' %}" alt="tinybox logo" />
+      <img src="{% static 'world/tb_Logo-Logotype.svg' %}" alt="tinybox logo"/>
     </div>
 
     <!-- Load the `mapbox-gl-geocoder` plugin. -->
@@ -46,16 +89,13 @@
     <!-- Add page elements -->
     <div id="map"></div>
     <div id="layer-controls">
-      <div class="layer-control">
-        <input type="checkbox" id="layer1" checked />
-        <label for="layer1">Layer 1</label>
-        <input type="checkbox" id="layer2" checked />
-        <label for="layer2">Layer 2</label>
-      </div>
-      <!-- Add more layer controls as needed -->
+
     </div>
     {{ STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key" }}
     {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
+    {{ SPACES_KEY|json_script:"spaces_api_key" }}
+    {{ SPACES_SECRET|json_script:"spaces_api_secret" }}
+    {{ SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint" }}
     <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
   </body>
 </html>

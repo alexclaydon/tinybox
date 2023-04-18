@@ -1,9 +1,22 @@
+// Import API keys: Note that it's not yet clear to me whether this is secure although I understand that it probably is
 const mapbox_api_key = JSON.parse(
   document.getElementById("mapbox_api_key").textContent
 );
 
 const stadiaMapsApiKey = JSON.parse(
   document.getElementById("stadia_maps_api_key").textContent
+);
+
+const spaces_api_key = JSON.parse(
+  document.getElementById("spaces_api_key").textContent
+);
+
+const spaces_api_secret = JSON.parse(
+  document.getElementById("spaces_api_secret").textContent
+);
+
+const spaces_cdn_endpoint = JSON.parse(
+  document.getElementById("spaces_cdn_endpoint").textContent
 );
 
 // Show an alert if the browser does not support MapLibre GL
@@ -16,8 +29,7 @@ let protocol = new pmtiles.Protocol();
 console.log("Initialized PMTiles protocol:", protocol);
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
-let PMTILES_URL =
-  "https://tinyboxtiles.sgp1.cdn.digitaloceanspaces.com/output.pmtiles";
+let PMTILES_URL = spaces_cdn_endpoint + "output.pmtiles";
 // If you remove the `http`, it will try to look for a flat out incorrect URL (it will actually apprend it directly to the url of the map itself.  So dont remove it)
 
 const p = new pmtiles.PMTiles(PMTILES_URL);
@@ -27,163 +39,241 @@ console.log("Created PMTiles instance:", p);
 protocol.add(p);
 
 // Initialize the base map
-const map = new maplibregl.Map({
-  container: "map",
-  center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
-  zoom: 9,
-  style:
-    "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json?api_key=${stadiaMapsApiKey}",
-});
-
-map.on("load", () => {
-  try {
-    // Add a vector source
-    map.addSource("vector-source", {
-      type: "vector",
-      url: "pmtiles://" + PMTILES_URL,
-    });
-
-    map.addLayer({
-      id: "vector-layer",
-      type: "circle",
-      source: "vector-source",
-      "source-layer": "testlayer02",
-      paint: {
-        "circle-radius": 10,
-        "circle-color": "#007cbf",
-        "circle-opacity": 0.8,
-        "circle-stroke-width": 1,
-        "circle-stroke-color": "#fff",
-      },
-    });
-
-    // Add a layer for the vector source
-    // map.addLayer({
-    //   id: "vector-layer",
-    //   type: "fill",
-    //   source: "vector-source",
-    //   "source-layer": "testlayer02",
-    //   paint: {
-    //     "fill-color": "#008000",
-    //     "fill-opacity": 0.5,
-    //   },
-    // });
-
-    // map.addLayer({
-    //   id: "polygon-layer",
-    //   type: "fill",
-    //   source: "vector-source",
-    //   "source-layer": "testlayer02",
-    //   paint: {
-    //     "fill-color": "#088",
-    //     "fill-opacity": 0.8,
-    //   },
-    // });
-    console.log("Added vector source and layer information");
-  } catch (error) {
-    console.error(
-      "An error occurred while adding vector source and layers:",
-      error
-    );
-  }
-});
-
-// map.on("load", () => {
-//   // Add a vector source
-//   map.addSource("vector-source", {
-//     type: "vector",
-//     url: "pmtiles://" + PMTILES_URL,
-//   });
-//   console.log("Added vector source");
-
-//   // Add a layer for the vector source
-//   map.addLayer({
-//     id: "vector-layer",
-//     type: "fill",
-//     source: "vector-source",
-//     "source-layer": "testlayer02",
-//     paint: {
-//       "fill-color": "#008000",
-//       "fill-opacity": 0.5,
-//     },
-//   });
-//   map.addLayer({
-//     id: "polygon-layer",
-//     type: "fill",
-//     source: "vector-source",
-//     "source-layer": "testlayer02",
-//     paint: {
-//       "fill-color": "#088", // Set the fill color for the polygons
-//       "fill-opacity": 0.8, // Set the fill opacity for the polygons
-//     },
-//   });
+// const map = new maplibregl.Map({
+//   container: "map",
+//   center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
+//   zoom: 9,
+//   style:
+//     "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json?api_key=${stadiaMapsApiKey}",
 // });
 
-// Add Mapbox geocoder to the map
-var geocoder = new MapboxGeocoder({
-  accessToken: mapbox_api_key,
-  countries: "au",
-  language: "en-AU",
-  maplibregl: maplibregl,
-});
+(async () => {
+  const mapStyle = await fetchMapStyle();
 
-map.addControl(geocoder, "bottom-right");
+  const map = new maplibregl.Map({
+    container: "map",
+    center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
+    zoom: 9,
+    style: mapStyle, // Replace the existing style URL with the fetched mapStyle object
+  });
 
-geocoder.on("result", async (event) => {
-  console.log(event.result);
-  // When the geocoder returns a result
-  const point = event.result.center; // Capture the result coordinates
+  map.on("load", () => {
+    try {
+      // Add a vector source
+      map.addSource("vector-source", {
+        type: "vector",
+        url: "pmtiles://" + PMTILES_URL,
+      });
 
-  var elem = document.createElement("div");
-  elem.className = "marker";
+      map.addLayer({
+        id: "vector-layer",
+        type: "circle",
+        source: "vector-source",
+        "source-layer": "testlayer02",
+        layout: {
+          // Make the layer visible by default.
+          visibility: "visible",
+        },
+        paint: {
+          "circle-radius": 5,
+          "circle-color": "#007cbf",
+          "circle-opacity": 0.8,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#fff",
+        },
+      });
 
-  var marker = new maplibregl.Marker(elem);
+      // Add a layer for the vector source
+      // map.addLayer({
+      //   id: "vector-layer",
+      //   type: "fill",
+      //   source: "vector-source",
+      //   "source-layer": "testlayer02",
+      //   paint: {
+      //     "fill-color": "#008000",
+      //     "fill-opacity": 0.5,
+      //   },
+      // });
 
-  marker.setLngLat(point); // Add the marker to the map at the result coordinates
+      // map.addLayer({
+      //   id: "polygon-layer",
+      //   type: "fill",
+      //   source: "vector-source",
+      //   "source-layer": "testlayer02",
+      //   paint: {
+      //     "fill-color": "#088",
+      //     "fill-opacity": 0.8,
+      //   },
+      // });
+      console.log("Added vector source and layer information");
+    } catch (error) {
+      console.error(
+        "An error occurred while adding vector source and layers:",
+        error
+      );
+    }
+  });
 
-  var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
-  popup.setHTML("<div>" + event.result.place_name + "</div>");
+  // map.on("load", () => {
+  //   // Add a vector source
+  //   map.addSource("vector-source", {
+  //     type: "vector",
+  //     url: "pmtiles://" + PMTILES_URL,
+  //   });
+  //   console.log("Added vector source");
 
-  marker.setPopup(popup);
+  //   // Add a layer for the vector source
+  //   map.addLayer({
+  //     id: "vector-layer",
+  //     type: "fill",
+  //     source: "vector-source",
+  //     "source-layer": "testlayer02",
+  //     paint: {
+  //       "fill-color": "#008000",
+  //       "fill-opacity": 0.5,
+  //     },
+  //   });
+  //   map.addLayer({
+  //     id: "polygon-layer",
+  //     type: "fill",
+  //     source: "vector-source",
+  //     "source-layer": "testlayer02",
+  //     paint: {
+  //       "fill-color": "#088", // Set the fill color for the polygons
+  //       "fill-opacity": 0.8, // Set the fill opacity for the polygons
+  //     },
+  //   });
+  // });
 
-  marker.addTo(map);
-});
+  map.on("idle", () => {
+    // If these two layers were not added to the map, abort
+    if (!map.getLayer("vector-layer")) {
+      return;
+    }
 
-// Add zoom and rotation controls to the map.
-map.addControl(new maplibregl.NavigationControl());
+    // Enumerate ids of the layers.
+    const toggleableLayerIds = ["vector-layer"];
 
-// Add geolocate control to the map.
-var geolocate = new maplibregl.GeolocateControl({
-  positionOptions: {
-    enableHighAccuracy: true,
-  },
-  trackUserLocation: true,
-});
+    // Set up the corresponding toggle button for each layer.
+    for (const id of toggleableLayerIds) {
+      // Skip layers that already have a button set up.
+      if (document.getElementById(id)) {
+        continue;
+      }
 
-map.addControl(geolocate);
+      // Create a link.
+      const link = document.createElement("a");
+      link.id = id;
+      link.href = "#";
+      link.textContent = id;
+      link.className = "active";
 
-// Set an event listener that fires
-// when a trackuserlocationstart event occurs.
-geolocate.on("trackuserlocationstart", function () {
-  console.log("A trackuserlocationstart event has occurred.");
-});
+      // Show or hide layer when the toggle is clicked.
+      link.onclick = function (e) {
+        const clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
 
-// Add a scale control to the map.
-var scale = new maplibregl.ScaleControl({
-  maxWidth: 100,
-  unit: "metric",
-});
+        const visibility = map.getLayoutProperty(clickedLayer, "visibility");
 
-map.addControl(scale);
+        // Toggle layer visibility by changing the layout object's visibility property.
+        if (visibility === "visible") {
+          map.setLayoutProperty(clickedLayer, "visibility", "none");
+          this.className = "";
+        } else {
+          this.className = "active";
+          map.setLayoutProperty(clickedLayer, "visibility", "visible");
+        }
+      };
 
-scale.setUnit("metric");
+      const layers = document.getElementById("layer-controls");
+      layers.appendChild(link);
+    }
+  });
 
-// Add fullscreen control to the map.
-map.addControl(
-  new maplibregl.FullscreenControl({
-    container: document.querySelector("body"),
-  })
-);
+  // Add Mapbox geocoder to the map
+  var geocoder = new MapboxGeocoder({
+    accessToken: mapbox_api_key,
+    countries: "au",
+    language: "en-AU",
+    maplibregl: maplibregl,
+  });
+
+  map.addControl(geocoder, "bottom-right");
+
+  geocoder.on("result", async (event) => {
+    console.log(event.result);
+    // When the geocoder returns a result
+    const point = event.result.center; // Capture the result coordinates
+
+    var elem = document.createElement("div");
+    elem.className = "marker";
+
+    var marker = new maplibregl.Marker(elem);
+
+    marker.setLngLat(point); // Add the marker to the map at the result coordinates
+
+    var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
+    popup.setHTML("<div>" + event.result.place_name + "</div>");
+
+    marker.setPopup(popup);
+
+    marker.addTo(map);
+  });
+
+  // Add zoom and rotation controls to the map.
+  map.addControl(new maplibregl.NavigationControl());
+
+  // Add geolocate control to the map.
+  var geolocate = new maplibregl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true,
+    },
+    trackUserLocation: true,
+  });
+
+  map.addControl(geolocate);
+
+  // Set an event listener that fires
+  // when a trackuserlocationstart event occurs.
+  geolocate.on("trackuserlocationstart", function () {
+    console.log("A trackuserlocationstart event has occurred.");
+  });
+
+  // Add a scale control to the map.
+  var scale = new maplibregl.ScaleControl({
+    maxWidth: 100,
+    unit: "metric",
+  });
+
+  map.addControl(scale);
+
+  scale.setUnit("metric");
+
+  // Add fullscreen control to the map.
+  map.addControl(
+    new maplibregl.FullscreenControl({
+      container: document.querySelector("body"),
+    })
+  );
+})();
+
+// Fetch custom map stylesheet
+async function fetchMapStyle() {
+  try {
+    const response = await fetch("/static/world/map_style.json");
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+
+    const mapStyle = await response.json();
+    return mapStyle;
+  } catch (error) {
+    console.error("Error fetching map_style.json:", error);
+  }
+}
 
 // Fetch GeoJSON data from any Django API endpoint
 async function fetchGeoJSONData(apiUrl) {
