@@ -20,6 +20,8 @@ Now that Tailwind CSS is installed - assuming it works correctly - you can now u
 
 ### Setup GeoDjango and Demonstration GIS app `world`
 
+First, consult the GeoDjango installation instructions for Mac [here](https://docs.djangoproject.com/en/4.1/ref/contrib/gis/install/#homebrew).  If you don't follow these, you're likely to get an error when you try to run the Django devserver saying that it can't find `GDAL`.
+
 From the [GeoDjango Tutorial](https://docs.djangoproject.com/en/4.1/ref/contrib/gis/tutorial/) I then followed the steps to configure GeoDjango and to create our map app, `world`.  This involves creating a model, adding the app to the `INSTALLED_APPS` list in `settings.py`, and running `makemigrations` and `migrate` to create the database tables in the now-GIS-enabled PostgreSQL backend.
 
 ### Import spatial data
@@ -30,3 +32,6 @@ I then, in concert with ChatGPT, tried to get to the bottom of the minimum numbe
 
 I then coded up a demo map page using HTML provided by our map provider, [Stadia Maps](https://stadiamaps.com/), which you can check out at `http://localhost:8080/world/map/`, assuming you've got the dev server running.  This hits the Django API endpoint `http://localhost:8080/world/api/` which returns a GeoJSON representation of points of interest data and then renders it out using the Stadia Maps API and the `map.html` template.
 
+## Source Map Errors
+
+It looks like you will inevitably have some source-map errors popping up in the developer tools if you are using Firefox.  See [this](https://bugzilla.mozilla.org/show_bug.cgi?id=1437937) open issue.  I guess we can just ignore this?

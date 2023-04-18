@@ -54,6 +54,7 @@
       </div>
       <!-- Add more layer controls as needed -->
     </div>
+    {{ STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key" }}
     {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
     <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
   </body>

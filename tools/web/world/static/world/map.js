@@ -1,3 +1,11 @@
+const mapbox_api_key = JSON.parse(
+  document.getElementById("mapbox_api_key").textContent
+);
+
+const stadiaMapsApiKey = JSON.parse(
+  document.getElementById("stadia_maps_api_key").textContent
+);
+
 // Show an alert if the browser does not support MapLibre GL
 if (!maplibregl.supported()) {
   alert("Your browser does not support MapLibre GL");
@@ -5,25 +13,111 @@ if (!maplibregl.supported()) {
 
 // Initialize tiling protocol
 let protocol = new pmtiles.Protocol();
+console.log("Initialized PMTiles protocol:", protocol);
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
-// let PMTILES_URL = "localhost:8081/output.pmtiles";
+let PMTILES_URL =
+  "https://tinyboxtiles.sgp1.cdn.digitaloceanspaces.com/output.pmtiles";
+// If you remove the `http`, it will try to look for a flat out incorrect URL (it will actually apprend it directly to the url of the map itself.  So dont remove it)
 
-// const p = new pmtiles.PMTiles(PMTILES_URL)
+const p = new pmtiles.PMTiles(PMTILES_URL);
+console.log("Created PMTiles instance:", p);
 
-// protocol.add(p);
+// This is so we share one instance across the JS code and the map renderer
+protocol.add(p);
 
 // Initialize the base map
-var map = new maplibregl.Map({
+const map = new maplibregl.Map({
   container: "map",
   center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
   zoom: 9,
-  style: "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json",
+  style:
+    "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json?api_key=${stadiaMapsApiKey}",
 });
 
-const mapbox_api_key = JSON.parse(
-  document.getElementById("mapbox_api_key").textContent
-);
+map.on("load", () => {
+  try {
+    // Add a vector source
+    map.addSource("vector-source", {
+      type: "vector",
+      url: "pmtiles://" + PMTILES_URL,
+    });
+
+    map.addLayer({
+      id: "vector-layer",
+      type: "circle",
+      source: "vector-source",
+      "source-layer": "testlayer02",
+      paint: {
+        "circle-radius": 10,
+        "circle-color": "#007cbf",
+        "circle-opacity": 0.8,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff",
+      },
+    });
+
+    // Add a layer for the vector source
+    // map.addLayer({
+    //   id: "vector-layer",
+    //   type: "fill",
+    //   source: "vector-source",
+    //   "source-layer": "testlayer02",
+    //   paint: {
+    //     "fill-color": "#008000",
+    //     "fill-opacity": 0.5,
+    //   },
+    // });
+
+    // map.addLayer({
+    //   id: "polygon-layer",
+    //   type: "fill",
+    //   source: "vector-source",
+    //   "source-layer": "testlayer02",
+    //   paint: {
+    //     "fill-color": "#088",
+    //     "fill-opacity": 0.8,
+    //   },
+    // });
+    console.log("Added vector source and layer information");
+  } catch (error) {
+    console.error(
+      "An error occurred while adding vector source and layers:",
+      error
+    );
+  }
+});
+
+// map.on("load", () => {
+//   // Add a vector source
+//   map.addSource("vector-source", {
+//     type: "vector",
+//     url: "pmtiles://" + PMTILES_URL,
+//   });
+//   console.log("Added vector source");
+
+//   // Add a layer for the vector source
+//   map.addLayer({
+//     id: "vector-layer",
+//     type: "fill",
+//     source: "vector-source",
+//     "source-layer": "testlayer02",
+//     paint: {
+//       "fill-color": "#008000",
+//       "fill-opacity": 0.5,
+//     },
+//   });
+//   map.addLayer({
+//     id: "polygon-layer",
+//     type: "fill",
+//     source: "vector-source",
+//     "source-layer": "testlayer02",
+//     paint: {
+//       "fill-color": "#088", // Set the fill color for the polygons
+//       "fill-opacity": 0.8, // Set the fill opacity for the polygons
+//     },
+//   });
+// });
 
 // Add Mapbox geocoder to the map
 var geocoder = new MapboxGeocoder({
@@ -133,21 +227,3 @@ async function addMarkers(apiUrl) {
 addMarkers((apiUrl = "/world/poi_geojson/"));
 
 // async function addLineFeatures(apiUrl) { }
-
-map.on("load", function () {
-  map.addSource("landuse", {
-    type: "vector",
-    url: "pmtiles://localhost:8081/output.pmtiles", // It's not clear to me whether this should be `url` or `tiles` but I'm going to experiment with both.  It's possible that it's tiles for local and url when we're hosting remotely.
-    // its also not clear to me whether the `pmtiles://` stem is required.  I get a different error when I remove it vs when it's present.
-  });
-  map.addLayer({
-    id: "polygon-layer",
-    type: "fill",
-    source: "landuse",
-    "source-layer": "testlayer01", // Replace this with the actual source layer name from your PMTiles
-    paint: {
-      "fill-color": "#088", // Set the fill color for the polygons
-      "fill-opacity": 0.8, // Set the fill opacity for the polygons
-    },
-  });
-});
