@@ -50,6 +50,7 @@ dependencies = [
   "pandas>=2.0.0",
   "Pillow>=9.5.0",
   "beautifulsoup4>=4.12.1",
+  "django-allauth",
 ]
 features = ["dev"]
 
