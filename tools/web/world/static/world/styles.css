@@ -34,3 +34,13 @@
   height: 42px;
   cursor: pointer;
 }
+
+#authDetails {
+  position: absolute !important;
+  top: 0px;
+  left: 50px;
+  z-index: 2; /* Higher z-index than #image-container and #layer-controls */
+  background: white;
+  padding: 5px;
+  border-radius: 3px;
+}

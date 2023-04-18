@@ -45,6 +45,7 @@ INTERNAL_IPS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "auth_app",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -53,6 +54,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "storages",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "tailwind",
     "theme",
     "django_browser_reload",
@@ -121,6 +125,8 @@ elif len(sys.argv) > 0 and sys.argv[1] != "collectstatic":
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
+AUTH_USER_MODEL = 'auth_app.CustomUser'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -135,6 +141,16 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+# settings.py
+AUTHENTICATION_BACKENDS = (
+    'auth_app.backends.CustomUserModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # or 'mandatory' if you want to require email verification
+ACCOUNT_APPROVAL_REQUIRED = True  # Enable account approval process
 
 
 # Internationalization
@@ -175,3 +191,5 @@ SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
 GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
 
 GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
+
+LOGIN_REDIRECT_URL = 'home'
