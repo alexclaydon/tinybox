@@ -1,4 +1,6 @@
+from auth_app.decorators import user_is_approved
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -13,6 +15,7 @@ from .models import (
 )
 
 
+@user_is_approved
 def map_view(request):
     context = {
         "STADIA_MAPS_API_KEY": settings.STADIA_MAPS_API_KEY,

@@ -1,0 +1,40 @@
+<!-- auth_app/templates/auth_app/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Project{% endblock %}</title>
+    <!-- Include any additional CSS or JS files here -->
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated %}
+            <div>Welcome, {{ user.username }}!</div>
+        {% endif %}
+        {% if not user.is_approved %}
+            <div>Awaiting approval</div>
+        {% endif %}
+
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'account_logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'account_login' %}">Login</a>
+                <a href="{% url 'account_signup' %}">Sign Up</a>
+            {% endif %}
+            {% if user.is_staff %}
+                <a href="{% url 'approve_users' %}">Approve Users</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; Tinybox - All rights reserved.</p>
+    </footer>
+</body>
+</html>
