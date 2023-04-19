@@ -46,8 +46,22 @@
 
     <!-- Add page elements -->
     <div id="map"></div>
-    <div id="layer-controls">
-
+    <div id="toggle-icon">LAYERS</div>
+      <div id="layer-controls">
+      <div class="close-btn">&times;</div>
+    </div>
+    <script>
+      document.getElementById('toggle-icon').addEventListener('click', function() {
+        document.getElementById('layer-controls').style.display = 'block';
+        this.style.display = 'none';
+      });
+    
+      document.querySelector('#layer-controls .close-btn').addEventListener('click', function() {
+        document.getElementById('layer-controls').style.display = 'none';
+        document.getElementById('toggle-icon').style.display = 'block';
+      });
+    </script>
+    
     {{ STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key" }}
     {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
     {{ SPACES_KEY|json_script:"spaces_api_key" }}

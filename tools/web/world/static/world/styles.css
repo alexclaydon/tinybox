@@ -67,6 +67,44 @@ body {
   background: #3ab2b0;
   }
 
+  /* Add this to your existing CSS */
+#layer-controls {
+  display: none; /* Add this to hide the layer-controls initially */
+}
+
+/* Add new styles for the toggle icon and close button */
+/* Add new styles for the toggle icon */
+#toggle-icon {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  right: 50px;
+  cursor: pointer;
+  padding: 4px 12px; /* Add padding around the text */
+  font-size: 12px;
+  font-weight: bold;
+  color: #404040;
+  background-color: #4bc8b7; /* Add a background color to the toggle button */
+  border-radius: 15px; /* Make the toggle button pill-shaped */
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3); /* Add a subtle shadow around the toggle button */
+}
+
+/* Update the close button style */
+#layer-controls .close-btn {
+  position: absolute;
+  top: -8px; /* Move the close button upwards */
+  left: -12px; /* Adjust the position to move the close button to the left of the layer-controls box */
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 16px;
+  color: #404040;
+  background-color: #fff; /* Add a background color to the close button */
+  border-radius: 50%; /* Make the close button circular */
+}
 
 /* We recommend using an icon that is 2x the intended display size, so that it renders nicely on retina displays. */
 .marker {
