@@ -1,13 +1,15 @@
 <!-- Adapted from Stadia Maps [docs](https://docs.stadiamaps.com/vector/) -->
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
     <title>tinybox prototype</title>
+    <meta charset="utf-8" />
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <script
       type="text/javascript"
       src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"
@@ -21,18 +23,17 @@
       href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
+    {% tailwind_css %}
   </head>
 
   <body>
-    {% load static %}
     <link
       rel="stylesheet"
       type="text/css"
       href="{% static 'world/styles.css' %}"
     />
-
     <div id="image-container">
-      <img src="{% static 'world/tinybox.jpg' %}" alt="tinybox logo" />
+      <img src="{% static 'world/tb_Logo-Logotype.svg' %}" alt="tinybox logo"/>
     </div>
 
     <!-- Load the `mapbox-gl-geocoder` plugin. -->
@@ -45,16 +46,27 @@
 
     <!-- Add page elements -->
     <div id="map"></div>
-    <div id="layer-controls">
-      <div class="layer-control">
-        <input type="checkbox" id="layer1" checked />
-        <label for="layer1">Layer 1</label>
-        <input type="checkbox" id="layer2" checked />
-        <label for="layer2">Layer 2</label>
-      </div>
-      <!-- Add more layer controls as needed -->
+    <div id="toggle-icon">LAYERS</div>
+      <div id="layer-controls">
+      <div class="close-btn">&times;</div>
     </div>
+    <script>
+      document.getElementById('toggle-icon').addEventListener('click', function() {
+        document.getElementById('layer-controls').style.display = 'block';
+        this.style.display = 'none';
+      });
+    
+      document.querySelector('#layer-controls .close-btn').addEventListener('click', function() {
+        document.getElementById('layer-controls').style.display = 'none';
+        document.getElementById('toggle-icon').style.display = 'block';
+      });
+    </script>
+    
+    {{ STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key" }}
     {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
+    {{ SPACES_KEY|json_script:"spaces_api_key" }}
+    {{ SPACES_SECRET|json_script:"spaces_api_secret" }}
+    {{ SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint" }}
     <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
   </body>
 </html>
