@@ -52,10 +52,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.gis",
+    "storages",
     "tailwind",
     "theme",
-    "world",
     "django_browser_reload",
+    "world",
 ]
 
 MIDDLEWARE = [
@@ -164,6 +165,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TAILWIND_APP_NAME = "theme"
 
+# API keys used in the tinybox "map.js" file
 STADIA_MAPS_API_KEY = os.getenv("STADIA_MAPS_API_KEY")
-
 MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
+SPACES_KEY = os.getenv("SPACES_KEY")
+SPACES_SECRET = os.getenv("SPACES_SECRET")
+SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
