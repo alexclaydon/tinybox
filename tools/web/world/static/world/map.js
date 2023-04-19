@@ -26,20 +26,18 @@ if (!maplibregl.supported()) {
 
 // Initialize tiling protocol
 let protocol = new pmtiles.Protocol();
-console.log("Initialized PMTiles protocol:", protocol);
 maplibregl.addProtocol("pmtiles", protocol.tile);
+console.log("Initialized PMTiles protocol:", protocol);
 
-let PMTILES_URL = spaces_cdn_endpoint + "output.pmtiles";
-// If you remove the `http`, it will try to look for a flat out incorrect URL (it will actually apprend it directly to the url of the map itself.  So dont remove it)
-
-const p = new pmtiles.PMTiles(PMTILES_URL);
-console.log("Created PMTiles instance:", p);
-
-// This is so we share one instance across the JS code and the map renderer
-protocol.add(p);
+const initialMapLayers = ["vector-layer-01"];
 
 (async () => {
   const mapStyle = await fetchMapStyle();
+  console.log(mapStyle);
+  const mapSources = await fetchMapSources();
+  console.log(mapSources);
+  const mapLayers = await fetchMapLayers();
+  console.log(mapLayers);
 
   const map = new maplibregl.Map({
     container: "map",
@@ -50,29 +48,17 @@ protocol.add(p);
 
   map.on("load", () => {
     try {
-      // Add a vector source
-      map.addSource("vector-source", {
-        type: "vector",
-        url: "pmtiles://" + PMTILES_URL,
-      });
+      // Add sources
+      for (const source in mapSources) {
+        map.addSource(source, mapSources[source]);
+      }
 
-      map.addLayer({
-        id: "vector-layer",
-        type: "circle",
-        source: "vector-source",
-        "source-layer": "testlayer02",
-        layout: {
-          // Make the layer visible by default.
-          visibility: "visible",
-        },
-        paint: {
-          "circle-radius": 5,
-          "circle-color": "#007cbf",
-          "circle-opacity": 0.8,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff",
-        },
-      });
+      for (const layer in mapLayers) {
+        if (initialMapLayers.includes(layer)) {
+          mapLayers[layer].id = layer;
+          map.addLayer(mapLayers[layer]);
+        }
+      }
 
       console.log("Added vector source and layer information");
     } catch (error) {
@@ -210,6 +196,49 @@ async function fetchMapStyle() {
     return mapStyle;
   } catch (error) {
     console.error("Error fetching map_style.json:", error);
+  }
+}
+
+async function fetchMapSources() {
+  try {
+    const response = await fetch("/static/world/map_sources.json");
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+    let mapSources = await response.json();
+
+    // Perform string substitution for spaces_cdn_endpoint
+    for (let sourceKey in mapSources) {
+      let source = mapSources[sourceKey];
+      if (source.url && source.url.includes("__SPACES_CDN_ENDPOINT__")) {
+        source.url = source.url.replace(
+          "__SPACES_CDN_ENDPOINT__",
+          spaces_cdn_endpoint
+        );
+      }
+    }
+
+    return mapSources;
+  } catch (error) {
+    console.error("Error fetching mapSources.json:", error);
+  }
+}
+
+async function fetchMapLayers() {
+  try {
+    const response = await fetch("/static/world/map_layers.json");
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+    let mapLayers = await response.json();
+
+    return mapLayers;
+  } catch (error) {
+    console.error("Error fetching mapSources.json:", error);
   }
 }
 

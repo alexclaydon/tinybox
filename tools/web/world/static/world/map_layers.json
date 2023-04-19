@@ -1,0 +1,29 @@
+{
+  "vector-layer-01": {
+    "type": "circle",
+    "source": "vector-source",
+    "source-layer": "testlayer02",
+    "layout": {
+      "visibility": "visible"
+    },
+    "paint": {
+      "circle-radius": 5,
+      "circle-color": "#007cbf",
+      "circle-opacity": 0.8,
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#fff"
+    }
+  },
+  "polygon-layer-01": {
+    "type": "fill",
+    "source": "vector-source",
+    "source-layer": "testlayer02",
+    "layout": {
+      "visibility": "visible"
+    },
+    "paint": {
+      "fill-color": "#088",
+      "fill-opacity": 0.8
+    }
+  }
+}
