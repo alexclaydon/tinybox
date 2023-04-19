@@ -38,15 +38,6 @@ console.log("Created PMTiles instance:", p);
 // This is so we share one instance across the JS code and the map renderer
 protocol.add(p);
 
-// Initialize the base map
-// const map = new maplibregl.Map({
-//   container: "map",
-//   center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
-//   zoom: 9,
-//   style:
-//     "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json?api_key=${stadiaMapsApiKey}",
-// });
-
 (async () => {
   const mapStyle = await fetchMapStyle();
 
@@ -83,28 +74,6 @@ protocol.add(p);
         },
       });
 
-      // Add a layer for the vector source
-      // map.addLayer({
-      //   id: "vector-layer",
-      //   type: "fill",
-      //   source: "vector-source",
-      //   "source-layer": "testlayer02",
-      //   paint: {
-      //     "fill-color": "#008000",
-      //     "fill-opacity": 0.5,
-      //   },
-      // });
-
-      // map.addLayer({
-      //   id: "polygon-layer",
-      //   type: "fill",
-      //   source: "vector-source",
-      //   "source-layer": "testlayer02",
-      //   paint: {
-      //     "fill-color": "#088",
-      //     "fill-opacity": 0.8,
-      //   },
-      // });
       console.log("Added vector source and layer information");
     } catch (error) {
       console.error(
@@ -113,37 +82,6 @@ protocol.add(p);
       );
     }
   });
-
-  // map.on("load", () => {
-  //   // Add a vector source
-  //   map.addSource("vector-source", {
-  //     type: "vector",
-  //     url: "pmtiles://" + PMTILES_URL,
-  //   });
-  //   console.log("Added vector source");
-
-  //   // Add a layer for the vector source
-  //   map.addLayer({
-  //     id: "vector-layer",
-  //     type: "fill",
-  //     source: "vector-source",
-  //     "source-layer": "testlayer02",
-  //     paint: {
-  //       "fill-color": "#008000",
-  //       "fill-opacity": 0.5,
-  //     },
-  //   });
-  //   map.addLayer({
-  //     id: "polygon-layer",
-  //     type: "fill",
-  //     source: "vector-source",
-  //     "source-layer": "testlayer02",
-  //     paint: {
-  //       "fill-color": "#088", // Set the fill color for the polygons
-  //       "fill-opacity": 0.8, // Set the fill opacity for the polygons
-  //     },
-  //   });
-  // });
 
   map.on("idle", () => {
     // If these two layers were not added to the map, abort
@@ -242,7 +180,7 @@ protocol.add(p);
 
   // Add a scale control to the map.
   var scale = new maplibregl.ScaleControl({
-    maxWidth: 100,
+    maxWidth: 80,
     unit: "metric",
   });
 
@@ -314,6 +252,6 @@ async function addMarkers(apiUrl) {
   }
 }
 
-addMarkers((apiUrl = "/world/poi_geojson/"));
+// addMarkers((apiUrl = "/world/poi_geojson/"));
 
 // async function addLineFeatures(apiUrl) { }
