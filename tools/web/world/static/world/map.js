@@ -34,8 +34,10 @@ const initialMapLayers = ["vector-layer-01"];
 (async () => {
   const mapStyle = await fetchMapStyle();
   console.log(mapStyle);
+
   const mapSources = await fetchMapSources();
   console.log(mapSources);
+
   const mapLayers = await fetchMapLayers();
   console.log(mapLayers);
 
@@ -57,6 +59,7 @@ const initialMapLayers = ["vector-layer-01"];
         if (initialMapLayers.includes(layer)) {
           mapLayers[layer].id = layer;
           map.addLayer(mapLayers[layer]);
+          map.setLayoutProperty(layer, "visibility", "visible");
         }
       }
 
@@ -70,13 +73,8 @@ const initialMapLayers = ["vector-layer-01"];
   });
 
   map.on("idle", () => {
-    // If these two layers were not added to the map, abort
-    if (!map.getLayer("vector-layer")) {
-      return;
-    }
-
     // Enumerate ids of the layers.
-    const toggleableLayerIds = ["vector-layer"];
+    const toggleableLayerIds = Object.keys(mapLayers);
 
     // Set up the corresponding toggle button for each layer.
     for (const id of toggleableLayerIds) {
@@ -90,13 +88,19 @@ const initialMapLayers = ["vector-layer-01"];
       link.id = id;
       link.href = "#";
       link.textContent = id;
-      link.className = "active";
+      link.className = initialMapLayers.includes(id) ? "active" : "";
 
       // Show or hide layer when the toggle is clicked.
       link.onclick = function (e) {
         const clickedLayer = this.textContent;
         e.preventDefault();
         e.stopPropagation();
+
+        if (!map.getLayer(clickedLayer)) {
+          // Add the layer if it's not on the map yet
+          mapLayers[clickedLayer].id = clickedLayer;
+          map.addLayer(mapLayers[clickedLayer]);
+        }
 
         const visibility = map.getLayoutProperty(clickedLayer, "visibility");
 
