@@ -1,3 +1,24 @@
+// Import API keys: Note that it's not yet clear to me whether this is secure although I understand that it probably is
+const mapbox_api_key = JSON.parse(
+  document.getElementById("mapbox_api_key").textContent
+);
+
+const stadiaMapsApiKey = JSON.parse(
+  document.getElementById("stadia_maps_api_key").textContent
+);
+
+const spaces_api_key = JSON.parse(
+  document.getElementById("spaces_api_key").textContent
+);
+
+const spaces_api_secret = JSON.parse(
+  document.getElementById("spaces_api_secret").textContent
+);
+
+const spaces_cdn_endpoint = JSON.parse(
+  document.getElementById("spaces_cdn_endpoint").textContent
+);
+
 // Show an alert if the browser does not support MapLibre GL
 if (!maplibregl.supported()) {
   alert("Your browser does not support MapLibre GL");
@@ -6,90 +27,224 @@ if (!maplibregl.supported()) {
 // Initialize tiling protocol
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
+console.log("Initialized PMTiles protocol:", protocol);
 
-// let PMTILES_URL = "localhost:8081/output.pmtiles";
+const initialMapLayers = ["vector-layer-01"];
 
-// const p = new pmtiles.PMTiles(PMTILES_URL)
+(async () => {
+  const mapStyle = await fetchMapStyle();
+  console.log(mapStyle);
 
-// protocol.add(p);
+  const mapSources = await fetchMapSources();
+  console.log(mapSources);
 
-// Initialize the base map
-var map = new maplibregl.Map({
-  container: "map",
-  center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
-  zoom: 9,
-  style: "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json",
-});
+  const mapLayers = await fetchMapLayers();
+  console.log(mapLayers);
 
-const mapbox_api_key = JSON.parse(
-  document.getElementById("mapbox_api_key").textContent
-);
+  const map = new maplibregl.Map({
+    container: "map",
+    center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
+    zoom: 9,
+    style: mapStyle, // Replace the existing style URL with the fetched mapStyle object
+  });
 
-// Add Mapbox geocoder to the map
-var geocoder = new MapboxGeocoder({
-  accessToken: mapbox_api_key,
-  countries: "au",
-  language: "en-AU",
-  maplibregl: maplibregl,
-});
+  map.on("load", () => {
+    try {
+      // Add sources
+      for (const source in mapSources) {
+        map.addSource(source, mapSources[source]);
+      }
 
-map.addControl(geocoder, "bottom-right");
+      for (const layer in mapLayers) {
+        if (initialMapLayers.includes(layer)) {
+          mapLayers[layer].id = layer;
+          map.addLayer(mapLayers[layer]);
+          map.setLayoutProperty(layer, "visibility", "visible");
+        }
+      }
 
-geocoder.on("result", async (event) => {
-  console.log(event.result);
-  // When the geocoder returns a result
-  const point = event.result.center; // Capture the result coordinates
+      console.log("Added vector source and layer information");
+    } catch (error) {
+      console.error(
+        "An error occurred while adding vector source and layers:",
+        error
+      );
+    }
+  });
 
-  var elem = document.createElement("div");
-  elem.className = "marker";
+  map.on("idle", () => {
+    // Enumerate ids of the layers.
+    const toggleableLayerIds = Object.keys(mapLayers);
 
-  var marker = new maplibregl.Marker(elem);
+    // Set up the corresponding toggle button for each layer.
+    for (const id of toggleableLayerIds) {
+      // Skip layers that already have a button set up.
+      if (document.getElementById(id)) {
+        continue;
+      }
 
-  marker.setLngLat(point); // Add the marker to the map at the result coordinates
+      // Create a link.
+      const link = document.createElement("a");
+      link.id = id;
+      link.href = "#";
+      link.textContent = id;
+      link.className = initialMapLayers.includes(id) ? "active" : "";
 
-  var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
-  popup.setHTML("<div>" + event.result.place_name + "</div>");
+      // Show or hide layer when the toggle is clicked.
+      link.onclick = function (e) {
+        const clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
 
-  marker.setPopup(popup);
+        if (!map.getLayer(clickedLayer)) {
+          // Add the layer if it's not on the map yet
+          mapLayers[clickedLayer].id = clickedLayer;
+          map.addLayer(mapLayers[clickedLayer]);
+        }
 
-  marker.addTo(map);
-});
+        const visibility = map.getLayoutProperty(clickedLayer, "visibility");
 
-// Add zoom and rotation controls to the map.
-map.addControl(new maplibregl.NavigationControl());
+        // Toggle layer visibility by changing the layout object's visibility property.
+        if (visibility === "visible") {
+          map.setLayoutProperty(clickedLayer, "visibility", "none");
+          this.className = "";
+        } else {
+          this.className = "active";
+          map.setLayoutProperty(clickedLayer, "visibility", "visible");
+        }
+      };
 
-// Add geolocate control to the map.
-var geolocate = new maplibregl.GeolocateControl({
-  positionOptions: {
-    enableHighAccuracy: true,
-  },
-  trackUserLocation: true,
-});
+      const layers = document.getElementById("layer-controls");
+      layers.appendChild(link);
+    }
+  });
 
-map.addControl(geolocate);
+  // Add Mapbox geocoder to the map
+  var geocoder = new MapboxGeocoder({
+    accessToken: mapbox_api_key,
+    countries: "au",
+    language: "en-AU",
+    maplibregl: maplibregl,
+  });
 
-// Set an event listener that fires
-// when a trackuserlocationstart event occurs.
-geolocate.on("trackuserlocationstart", function () {
-  console.log("A trackuserlocationstart event has occurred.");
-});
+  map.addControl(geocoder, "bottom-right");
 
-// Add a scale control to the map.
-var scale = new maplibregl.ScaleControl({
-  maxWidth: 100,
-  unit: "metric",
-});
+  geocoder.on("result", async (event) => {
+    console.log(event.result);
+    // When the geocoder returns a result
+    const point = event.result.center; // Capture the result coordinates
 
-map.addControl(scale);
+    var elem = document.createElement("div");
+    elem.className = "marker";
 
-scale.setUnit("metric");
+    var marker = new maplibregl.Marker(elem);
 
-// Add fullscreen control to the map.
-map.addControl(
-  new maplibregl.FullscreenControl({
-    container: document.querySelector("body"),
-  })
-);
+    marker.setLngLat(point); // Add the marker to the map at the result coordinates
+
+    var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
+    popup.setHTML("<div>" + event.result.place_name + "</div>");
+
+    marker.setPopup(popup);
+
+    marker.addTo(map);
+  });
+
+  // Add zoom and rotation controls to the map.
+  map.addControl(new maplibregl.NavigationControl());
+
+  // Add geolocate control to the map.
+  var geolocate = new maplibregl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true,
+    },
+    trackUserLocation: true,
+  });
+
+  map.addControl(geolocate);
+
+  // Set an event listener that fires
+  // when a trackuserlocationstart event occurs.
+  geolocate.on("trackuserlocationstart", function () {
+    console.log("A trackuserlocationstart event has occurred.");
+  });
+
+  // Add a scale control to the map.
+  var scale = new maplibregl.ScaleControl({
+    maxWidth: 80,
+    unit: "metric",
+  });
+
+  map.addControl(scale);
+
+  scale.setUnit("metric");
+
+  // Add fullscreen control to the map.
+  map.addControl(
+    new maplibregl.FullscreenControl({
+      container: document.querySelector("body"),
+    })
+  );
+})();
+
+// Fetch custom map stylesheet
+async function fetchMapStyle() {
+  try {
+    const response = await fetch("/static/world/map_style.json");
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+
+    const mapStyle = await response.json();
+    return mapStyle;
+  } catch (error) {
+    console.error("Error fetching map_style.json:", error);
+  }
+}
+
+async function fetchMapSources() {
+  try {
+    const response = await fetch("/static/world/map_sources.json");
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+    let mapSources = await response.json();
+
+    // Perform string substitution for spaces_cdn_endpoint
+    for (let sourceKey in mapSources) {
+      let source = mapSources[sourceKey];
+      if (source.url && source.url.includes("__SPACES_CDN_ENDPOINT__")) {
+        source.url = source.url.replace(
+          "__SPACES_CDN_ENDPOINT__",
+          spaces_cdn_endpoint
+        );
+      }
+    }
+
+    return mapSources;
+  } catch (error) {
+    console.error("Error fetching mapSources.json:", error);
+  }
+}
+
+async function fetchMapLayers() {
+  try {
+    const response = await fetch("/static/world/map_layers.json");
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+    let mapLayers = await response.json();
+
+    return mapLayers;
+  } catch (error) {
+    console.error("Error fetching mapSources.json:", error);
+  }
+}
 
 // Fetch GeoJSON data from any Django API endpoint
 async function fetchGeoJSONData(apiUrl) {
@@ -130,24 +285,6 @@ async function addMarkers(apiUrl) {
   }
 }
 
-addMarkers((apiUrl = "/world/poi_geojson/"));
+// addMarkers((apiUrl = "/world/poi_geojson/"));
 
 // async function addLineFeatures(apiUrl) { }
-
-map.on("load", function () {
-  map.addSource("landuse", {
-    type: "vector",
-    url: "pmtiles://localhost:8081/output.pmtiles", // It's not clear to me whether this should be `url` or `tiles` but I'm going to experiment with both.  It's possible that it's tiles for local and url when we're hosting remotely.
-    // its also not clear to me whether the `pmtiles://` stem is required.  I get a different error when I remove it vs when it's present.
-  });
-  map.addLayer({
-    id: "polygon-layer",
-    type: "fill",
-    source: "landuse",
-    "source-layer": "testlayer01", // Replace this with the actual source layer name from your PMTiles
-    paint: {
-      "fill-color": "#088", // Set the fill color for the polygons
-      "fill-opacity": 0.8, // Set the fill opacity for the polygons
-    },
-  });
-});

@@ -20,6 +20,9 @@ def map_view(request):
     context = {
         "STADIA_MAPS_API_KEY": settings.STADIA_MAPS_API_KEY,
         "MAPBOX_API_KEY": settings.MAPBOX_API_KEY,
+        "SPACES_KEY": settings.SPACES_KEY,
+        "SPACES_SECRET": settings.SPACES_SECRET,
+        "SPACES_CDN_ENDPOINT": settings.SPACES_CDN_ENDPOINT,
     }
     return render(request, "world/map.html", context)
 

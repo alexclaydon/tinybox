@@ -1,0 +1,6 @@
+{
+  "vector-source": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/output.pmtiles"
+  }
+}

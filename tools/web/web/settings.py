@@ -56,10 +56,11 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "storages",
     "tailwind",
     "theme",
-    "world",
     "django_browser_reload",
+    "world",
 ]
 
 MIDDLEWARE = [
@@ -180,8 +181,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TAILWIND_APP_NAME = "theme"
 
+# API keys used in the tinybox "map.js" file
 STADIA_MAPS_API_KEY = os.getenv("STADIA_MAPS_API_KEY")
-
 MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
 
 GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
@@ -189,3 +190,6 @@ GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
 GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
 
 LOGIN_REDIRECT_URL = 'home'
+SPACES_KEY = os.getenv("SPACES_KEY")
+SPACES_SECRET = os.getenv("SPACES_SECRET")
+SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
