@@ -46,6 +46,7 @@ const initialMapLayers = ["vector-layer-01"];
     center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
     zoom: 9,
     style: mapStyle, // Replace the existing style URL with the fetched mapStyle object
+    attributionControl: false,
   });
 
   map.on("load", () => {
@@ -149,8 +150,18 @@ const initialMapLayers = ["vector-layer-01"];
     marker.addTo(map);
   });
 
+  // Add a scale control to the map.
+  var scale = new maplibregl.ScaleControl({
+    maxWidth: 100,
+    unit: "metric",
+  });
+
+  map.addControl(scale, "top-right");
+
+  scale.setUnit("metric");
+
   // Add zoom and rotation controls to the map.
-  map.addControl(new maplibregl.NavigationControl());
+  map.addControl(new maplibregl.NavigationControl(), "bottom-right");
 
   // Add geolocate control to the map.
   var geolocate = new maplibregl.GeolocateControl({
@@ -160,7 +171,7 @@ const initialMapLayers = ["vector-layer-01"];
     trackUserLocation: true,
   });
 
-  map.addControl(geolocate);
+  map.addControl(geolocate, "bottom-right");
 
   // Set an event listener that fires
   // when a trackuserlocationstart event occurs.
@@ -168,22 +179,13 @@ const initialMapLayers = ["vector-layer-01"];
     console.log("A trackuserlocationstart event has occurred.");
   });
 
-  // Add a scale control to the map.
-  var scale = new maplibregl.ScaleControl({
-    maxWidth: 80,
-    unit: "metric",
-  });
-
-  map.addControl(scale);
-
-  scale.setUnit("metric");
-
-  // Add fullscreen control to the map.
-  map.addControl(
-    new maplibregl.FullscreenControl({
-      container: document.querySelector("body"),
-    })
-  );
+  // // Add fullscreen control to the map.
+  // map.addControl(
+  //   new maplibregl.FullscreenControl({
+  //     container: document.querySelector("body"),
+  //   }),
+  //   "top-right"
+  // );
 })();
 
 // Fetch custom map stylesheet

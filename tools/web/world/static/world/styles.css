@@ -26,27 +26,28 @@ body {
 }
 
 #layer-controls {
-  background: #fff;
+  background: #cdf8ed;
   position: absolute;
   z-index: 1;
-  top: 10px;
-  right: 50px;
+  top: 50px;
+  right: 12px;
   border-radius: 2px;
-  width: 120px;
+  width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.4);
   font-family: 'Open Sans', sans-serif;
 }
 
 #layer-controls a {
-  font-size: 10px;
+  font-size: 14px;
+  font-weight: bold;
   color: #404040;
   display: block;
   margin: 0;
   padding: 0;
-  padding: 5px;
+  padding: 6px;
   text-decoration: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-  text-align: center;
+  text-align: left;
   }
    
   #layer-controls a:last-child {
@@ -77,32 +78,34 @@ body {
 #toggle-icon {
   position: absolute;
   z-index: 1;
-  top: 10px;
-  right: 50px;
+  top: 50px;
+  right: 12px;
   cursor: pointer;
   padding: 4px 12px; /* Add padding around the text */
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
+  font-style: italic;
   color: #404040;
   background-color: #4bc8b7; /* Add a background color to the toggle button */
-  border-radius: 15px; /* Make the toggle button pill-shaped */
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3); /* Add a subtle shadow around the toggle button */
+  border-radius: 6px; /* Make the toggle button pill-shaped */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow around the toggle button */
 }
 
 /* Update the close button style */
 #layer-controls .close-btn {
   position: absolute;
   top: -8px; /* Move the close button upwards */
-  left: -12px; /* Adjust the position to move the close button to the left of the layer-controls box */
+  right: -4px; /* Adjust the position to move the close button to the left of the layer-controls box */
   cursor: pointer;
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-  font-weight: bold;
+  width: 26px;
+  height: 26px;
+  font-size: 28px;
+  /* font-weight: bold; */
   text-align: center;
-  line-height: 16px;
+  line-height: 18px;
   color: #404040;
   background-color: #fff; /* Add a background color to the close button */
+  border: #404040 1px solid;
   border-radius: 50%; /* Make the close button circular */
 }
 
