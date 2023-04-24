@@ -128,7 +128,7 @@ const initialMapLayers = ["vector-layer-01"];
     maplibregl: maplibregl,
   });
 
-  map.addControl(geocoder, "bottom-left");
+  map.addControl(geocoder, "bottom-right");
 
   geocoder.on("result", async (event) => {
     console.log(event.result);
@@ -149,6 +149,23 @@ const initialMapLayers = ["vector-layer-01"];
 
     marker.addTo(map);
   });
+
+  class HelloWorldControl {
+    onAdd(map) {
+      this._map = map;
+      this._container = document.createElement("div");
+      this._container.className = "maplibregl-ctrl";
+      this._container.textContent = "";
+      return this._container;
+    }
+
+    onRemove() {
+      this._container.parentNode.removeChild(this._container);
+      this._map = undefined;
+    }
+  }
+
+  map.addControl(new HelloWorldControl(), "bottom-right");
 
   // Add a scale control to the map.
   var scale = new maplibregl.ScaleControl({

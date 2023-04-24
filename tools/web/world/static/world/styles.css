@@ -29,8 +29,8 @@ body {
   background: #e7efed;
   position: absolute;
   z-index: 1;
-  bottom: 69px;
-  right: 60px;
+  bottom: 79px;
+  right: 50px;
   border-radius: 2px;
   width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.4);
@@ -78,8 +78,8 @@ body {
 #toggle-icon {
   position: absolute;
   z-index: 1;
-  bottom: 69px;
-  right: 60px;
+  bottom: 79px;
+  right: 50px;
   cursor: pointer;
   background-color: #fff; /* Add a background color to the close button */
   border-radius: 6px; /* Make the close button circular */
