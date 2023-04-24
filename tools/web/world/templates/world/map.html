@@ -45,11 +45,13 @@
     />
 
     <!-- Add page elements -->
-    <div id="map"></div>
-    <div id="toggle-icon">LAYERS</div>
+    <div id="toggle-icon">
+      <img src="{% static 'world/tb_Logo.svg' %}"></img>
+    </div>
       <div id="layer-controls">
       <div class="close-btn">&times;</div>
     </div>
+    <div id="map"></div>
     <script>
       document.getElementById('toggle-icon').addEventListener('click', function() {
         document.getElementById('layer-controls').style.display = 'block';

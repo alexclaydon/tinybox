@@ -29,8 +29,8 @@ body {
   background: #cdf8ed;
   position: absolute;
   z-index: 1;
-  top: 40px;
-  right: 12px;
+  bottom: 69px;
+  right: 45px;
   border-radius: 2px;
   width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.4);
@@ -78,17 +78,19 @@ body {
 #toggle-icon {
   position: absolute;
   z-index: 1;
-  top: 40px;
-  right: 12px;
+  bottom: 69px;
+  right: 45px;
   cursor: pointer;
-  padding: 4px 12px; /* Add padding around the text */
-  font-size: 16px;
-  font-weight: bold;
-  font-style: italic;
-  color: #404040;
-  background-color: #4bc8b7; /* Add a background color to the toggle button */
-  border-radius: 6px; /* Make the toggle button pill-shaped */
+  background-color: #fff; /* Add a background color to the close button */
+  border-radius: 6px; /* Make the close button circular */
+  padding: 2px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow around the toggle button */
+}
+
+#toggle-icon img {
+  /* Set the width and height of the image, and any other styles you'd like */
+  width: 35px; /* Adjust the width */
+  height: 35px; /* Adjust the height */
 }
 
 /* Update the close button style */
