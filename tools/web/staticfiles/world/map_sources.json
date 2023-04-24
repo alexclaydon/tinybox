@@ -1,7 +1,0 @@
-{
-  "cbd_bike_facilities": {
-    "type": "vector",
-    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/cbd_bike_facilties.pmtiles",
-    "description": "Bike routes and docks"
-  }
-}
