@@ -26,11 +26,11 @@ body {
 }
 
 #layer-controls {
-  background: #cdf8ed;
+  background: #e7efed;
   position: absolute;
   z-index: 1;
   bottom: 69px;
-  right: 45px;
+  right: 60px;
   border-radius: 2px;
   width: 200px;
   border: 1px solid rgba(0, 0, 0, 0.4);
@@ -79,7 +79,7 @@ body {
   position: absolute;
   z-index: 1;
   bottom: 69px;
-  right: 45px;
+  right: 60px;
   cursor: pointer;
   background-color: #fff; /* Add a background color to the close button */
   border-radius: 6px; /* Make the close button circular */

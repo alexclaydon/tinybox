@@ -128,7 +128,7 @@ const initialMapLayers = ["vector-layer-01"];
     maplibregl: maplibregl,
   });
 
-  map.addControl(geocoder, "bottom-right");
+  map.addControl(geocoder, "bottom-left");
 
   geocoder.on("result", async (event) => {
     console.log(event.result);
