@@ -29,7 +29,7 @@ body {
   background: #cdf8ed;
   position: absolute;
   z-index: 1;
-  top: 50px;
+  top: 40px;
   right: 12px;
   border-radius: 2px;
   width: 200px;
@@ -78,7 +78,7 @@ body {
 #toggle-icon {
   position: absolute;
   z-index: 1;
-  top: 50px;
+  top: 40px;
   right: 12px;
   cursor: pointer;
   padding: 4px 12px; /* Add padding around the text */
