@@ -39,6 +39,7 @@ dependencies = [
   "dagit>=1.2.6",
   "pydantic>=1.10.7",
   "datamodel-code-generator>=0.17.2",
+  "django-allauth",
 ]
 dynamic = ["version"]
 

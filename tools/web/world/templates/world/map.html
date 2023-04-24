@@ -30,8 +30,19 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'world/styles.css' %}"
+      href="{% static 'world/styles.css' %}?{% now 'U'%}">
+
+  <div id="authDetails"
     />
+  {% if user.is_authenticated %}
+  {{user.username}} (<a href="{% url 'home' %}">Home</a> <a href="{% url 'account_logout' %}">Logout</a>)
+{% else %}
+  <a href="{% url 'account_login' %}">Login</a>
+  <a href="{% url 'account_signup' %}">Sign Up</a>
+{% endif %}
+<br>
+</div>
+
     <div id="image-container">
       <img src="{% static 'world/tb_Logo-Logotype.svg' %}" alt="tinybox logo"/>
     </div>
