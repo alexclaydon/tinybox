@@ -1,8 +1,18 @@
 {
-  "vector-layer-01": {
+  "CBD bike routes": {
+    "type": "line",
+    "source": "cbd_bike_facilities",
+    "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
+    "paint": {
+      "line-color": "#088",
+      "line-opacity": 0.8,
+      "line-width": 2
+    }
+  },
+  "CBD share-bike docks": {
     "type": "circle",
-    "source": "vector-source",
-    "source-layer": "testlayer02",
+    "source": "cbd_bike_facilities",
+    "source-layer": "bikesharedocklocations",
     "paint": {
       "circle-radius": 5,
       "circle-color": "#007cbf",
@@ -11,25 +21,13 @@
       "circle-stroke-color": "#fff"
     }
   },
-  "polygon-layer-01": {
+  "polygon-fill-example": {
     "type": "fill",
-    "source": "vector-source",
-    "source-layer": "testlayer02",
+    "source": "cbd_bike_facilities",
+    "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
     "paint": {
       "fill-color": "#088",
       "fill-opacity": 0.8
-    }
-  },
-  "vector-layer-02": {
-    "type": "circle",
-    "source": "vector-source",
-    "source-layer": "testlayer02",
-    "paint": {
-      "circle-radius": 5,
-      "circle-color": "#007cbf",
-      "circle-opacity": 0.8,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff"
     }
   }
 }
