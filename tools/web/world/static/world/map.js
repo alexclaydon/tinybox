@@ -259,6 +259,58 @@ async function fetchMapLayers() {
     }
     let mapLayers = await response.json();
 
+    // Loop through mapLayers
+    for (const layerId in mapLayers) {
+      // Check if the layer has the desired metadata property
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "line-sunrise"
+      ) {
+        mapLayers[layerId].paint = {
+          "line-color": [
+            "step",
+            ["get", "ALLVEHS_AADT"],
+            "#add8e6", // Light blue
+            5000,
+            "#4db3d8", // Medium light blue
+            10000,
+            "#0074c8", // Medium blue
+            15000,
+            "#9c5060", // Medium dark red
+            20000,
+            "#c80000", // Dark red
+            35000,
+            "#4b0000", // Very dark red
+          ],
+          "line-opacity": 1,
+          "line-width": 2.5,
+        };
+      }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "poly-sunrise"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["get", "ALLVEHS_AADT"],
+            "#add8e6", // Light blue
+            5000,
+            "#4db3d8", // Medium light blue
+            10000,
+            "#0074c8", // Medium blue
+            15000,
+            "#9c5060", // Medium dark red
+            20000,
+            "#c80000", // Dark red
+            35000,
+            "#4b0000", // Very dark red
+          ],
+          "fill-opacity": 1,
+        };
+      }
+    }
+
     return mapLayers;
   } catch (error) {
     console.error("Error fetching mapSources.json:", error);
@@ -307,3 +359,10 @@ async function addMarkers(apiUrl) {
 // addMarkers((apiUrl = "/world/poi_geojson/"));
 
 // async function addLineFeatures(apiUrl) { }
+
+function getColor(value) {
+  if (value <= 5000) return "#00ff00";
+  if (value <= 10000) return "#ffff00";
+  if (value <= 20000) return "#ff7f00";
+  return "#ff0000";
+}

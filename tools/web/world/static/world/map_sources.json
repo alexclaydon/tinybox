@@ -8,5 +8,10 @@
     "type": "vector",
     "url": "pmtiles://__SPACES_CDN_ENDPOINT__/cbd_bike_facilties.pmtiles",
     "description": "Bike routes and docks"
+  },
+  "vic_vechicle_traffic": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/vic_vehicle_traffic.pmtiles",
+    "description": "Victoria vehicle traffic"
   }
 }
