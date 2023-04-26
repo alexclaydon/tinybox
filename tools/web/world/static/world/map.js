@@ -29,11 +29,22 @@ let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 console.log("Initialized PMTiles protocol:", protocol);
 
-const initialMapLayers = ["vector-layer-01"];
+let mediaQueryObj = window.matchMedia("(prefers-color-scheme: dark)");
+let isDarkMode = mediaQueryObj.matches;
+
+let activeMode = isDarkMode ? "dark" : "light";
+
+const initialMapLayers = [];
 
 (async () => {
   const mapStyle = await fetchMapStyle();
   console.log(mapStyle);
+
+  function getStyleByMode(mode) {
+    return mode == "dark" ? mapStyle : mapStyle;
+  }
+
+  // "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json"
 
   const mapSources = await fetchMapSources();
   console.log(mapSources);
@@ -45,7 +56,7 @@ const initialMapLayers = ["vector-layer-01"];
     container: "map",
     center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
     zoom: 9,
-    style: mapStyle, // Replace the existing style URL with the fetched mapStyle object
+    style: getStyleByMode(activeMode), // Replace the existing style URL with the fetched mapStyle object
     attributionControl: false,
   });
 
@@ -115,9 +126,28 @@ const initialMapLayers = ["vector-layer-01"];
         }
       };
 
-      const layers = document.getElementById("layer-controls");
-      layers.appendChild(link);
+      const layerControls = document.getElementById("tailwindow-contents");
+      const listItem = document.createElement("li");
+      listItem.classList.add("px-6", "py-2");
+      listItem.appendChild(link);
+      layerControls.appendChild(listItem);
     }
+
+    function switchMode(mode) {
+      activeMode = mode;
+      const style = getStyleByMode(mode);
+      // map.setStyle(style);
+    }
+
+    document
+      .getElementById("modeSwitch")
+      .addEventListener("click", function () {
+        if (activeMode == "light") {
+          switchMode("dark");
+        } else if (activeMode == "dark") {
+          switchMode("light");
+        }
+      });
   });
 
   // Add Mapbox geocoder to the map

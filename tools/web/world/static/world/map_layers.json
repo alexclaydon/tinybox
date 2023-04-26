@@ -1,12 +1,52 @@
 {
-  "Victoria vehicle traffic": {
+  "Road traffic volume": {
     "type": "line",
     "source": "vic_vechicle_traffic",
     "source-layer": "Traffic_Volume",
     "metadata": {
+      "category": "Traffic",
       "source:comment": "",
       "paint-style": "line-sunrise",
       "paint-quintiles": ""
+    }
+  },
+  "Future land development": {
+    "type": "fill",
+    "source": "future_land_development",
+    "source-layer": "Land_Use",
+    "metadata": {
+      "category": "Development",
+      "source:comment": ""
+    },
+    "paint": {
+      "fill-color": "#007cbf",
+      "fill-opacity": 0.6
+    }
+  },
+  "Open space": {
+    "type": "fill",
+    "source": "vpa_open_space",
+    "source-layer": "VPA_Open_Space",
+    "metadata": {
+      "category": "Lifestyle",
+      "source:comment": ""
+    },
+    "paint": {
+      "fill-color": "#007cbf",
+      "fill-opacity": 0.6
+    }
+  },
+  "Areas within walking distance (400m) of public space": {
+    "type": "fill",
+    "source": "walkable_catchment_400m",
+    "source-layer": "Public_Open_Space__400m_Walkable_Catchment",
+    "metadata": {
+      "category": "Lifestyle",
+      "source:comment": ""
+    },
+    "paint": {
+      "fill-color": "#007cbf",
+      "fill-opacity": 0.6
     }
   },
   "CBD bike routes": {
@@ -14,19 +54,21 @@
     "source": "cbd_bike_facilities",
     "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
     "metadata": {
+      "category": "Lifestyle",
       "source:comment": ""
     },
     "paint": {
-      "line-color": "#088",
+      "line-color": "#007cbf",
       "line-opacity": 0.8,
       "line-width": 2
     }
   },
-  "CBD share-bike docks": {
+  "CBD bike-share docks": {
     "type": "circle",
     "source": "cbd_bike_facilities",
     "source-layer": "bikesharedocklocations",
     "metadata": {
+      "category": "Lifestyle",
       "source:comment": ""
     },
     "paint": {
