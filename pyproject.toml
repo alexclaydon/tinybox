@@ -76,7 +76,7 @@ etl = "dagster dev"
 # Web app
 webstatic = "python tools/web/manage.py collectstatic -c --noinput"
 webdev = "(trap 'kill 0' SIGINT; python tools/web/manage.py tailwind start & python tools/web/manage.py runserver 0.0.0.0:8080)"
-webdev-srv = "python tools/web/manage.py runserver"
+webdev-srv = "python tools/web/manage.py runserver 0.0.0.0:8080"
 # For use when you want to run the Django dev server on its own, or when you want to run it in a separate process to Tailwind hot reload for troubleshooting purposes
 webdev-tailwind = "python tools/web/manage.py tailwind start"
 # For use when you want to run Tailwind hot reload on its own, or when you want to run it in a separate process to the Django dev server for troubleshooting purposes
