@@ -150,6 +150,26 @@ const initialMapLayers = [];
       });
   });
 
+  // map.on("click", function (e) {
+  //   var features = map.queryRenderedFeatures(e.point);
+
+  //   var displayProperties = ["layer"];
+
+  //   var displayFeatures = features.map(function (feat) {
+  //     var displayFeat = {};
+  //     displayProperties.forEach(function (prop) {
+  //       displayFeat[prop] = feat[prop];
+  //     });
+  //     return displayFeat;
+  //   });
+
+  //   document.getElementById("features").innerHTML = JSON.stringify(
+  //     displayFeatures,
+  //     null,
+  //     2
+  //   );
+  // });
+
   // Add Mapbox geocoder to the map
   var geocoder = new MapboxGeocoder({
     accessToken: mapbox_api_key,

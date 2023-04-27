@@ -36,7 +36,7 @@
       href="{% static 'world/styles.css' %}"
     />
     <div id="image-container">
-      <img src="{% static 'world/tb_Logo-Logotype.svg' %}" alt="tinybox logo" />
+      <img src="{% static 'world/tb_Logo-Logotype.svg' %}"/>
     </div>
 
     <!-- Load the `mapbox-gl-geocoder` plugin. -->
@@ -83,18 +83,21 @@
           ></ul>
         </div>
       </div>
-
-      <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
-
-      <button id="modeSwitch" class="">DARK MODE</button>
-
-      {{STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key"}}
-      {{MAPBOX_API_KEY|json_script:"mapbox_api_key"}}
-      {{SPACES_KEY|json_script:"spaces_api_key"}}
-      {{SPACES_SECRET|json_script:"spaces_api_secret"}}
-      {{SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint"}}
-
-      <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
     </div>
+
+    <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
+
+    {% comment %} <pre id="features">DEBUG</pre> {% endcomment %}
+
+    <div id="modeSwitch" type="button" class="hidden absolute z-20 top-20 sm:top-16 left-12 cursor-pointer rounded-md bg-gray-50 p-1 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-300 active:hover:bg-gray-300 outline-4">asdfasdf</div>
+
+    {{STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key"}}
+    {{MAPBOX_API_KEY|json_script:"mapbox_api_key"}}
+    {{SPACES_KEY|json_script:"spaces_api_key"}}
+    {{SPACES_SECRET|json_script:"spaces_api_secret"}}
+    {{SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint"}}
+
+    <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
+
   </body>
 </html>
