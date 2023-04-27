@@ -359,6 +359,29 @@ async function fetchMapLayers() {
           "fill-opacity": 1,
         };
       }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "poly-heatmap"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["get", "DN"],
+            "#FFFF00",
+            15,
+            "#FFAA00",
+            17,
+            "#FF6600",
+            20,
+            "#FF3300",
+            22,
+            "#DC143C",
+            24,
+            "#8B0000",
+          ],
+          "fill-opacity": 0.7,
+        };
+      }
     }
 
     return mapLayers;

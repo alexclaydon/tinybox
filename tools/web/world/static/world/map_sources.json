@@ -58,5 +58,17 @@
       "tippecanoe_command": "tippecanoe -zg -f -o walkable_catchment_400m.pmtiles --drop-densest-as-needed -n 'Walkable catchment within 400m' Public_Open_Space_-_400m_Walkable_Catchment.geojson",
       "analyst_comment": ""
     }
+  },
+  "bom_solar_rad_summer": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/bom_solar_rad_summer.pmtiles",
+    "description": "Solar radiation - Summer season",
+    "metadata": {
+      "source_org": "Bureau of Meteorology",
+      "source_url": "",
+      "study_date": "2023-04-27",
+      "tippecanoe_command": "tippecanoe -zg -f -o bom_solar_rad_summer.pmtiles --drop-densest-as-needed -n 'Solar radiation in Summer' solarwet.geojson",
+      "analyst_comment": ""
+    }
   }
 }

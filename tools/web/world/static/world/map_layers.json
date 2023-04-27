@@ -1,5 +1,5 @@
 {
-  "Road traffic volume": {
+  "Average annual traffic volume": {
     "type": "line",
     "source": "vic_vechicle_traffic",
     "source-layer": "Traffic_Volume",
@@ -23,7 +23,7 @@
       "fill-opacity": 0.6
     }
   },
-  "Open space": {
+  "Open spaces": {
     "type": "fill",
     "source": "vpa_open_space",
     "source-layer": "VPA_Open_Space",
@@ -77,6 +77,16 @@
       "circle-opacity": 0.8,
       "circle-stroke-width": 1,
       "circle-stroke-color": "#fff"
+    }
+  },
+  "Average solar radiation in Summer": {
+    "type": "fill",
+    "source": "bom_solar_rad_summer",
+    "source-layer": "solarwet",
+    "metadata": {
+      "category": "Environment",
+      "paint-style": "poly-heatmap",
+      "source:comment": ""
     }
   }
 }
