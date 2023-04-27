@@ -34,17 +34,24 @@ let isDarkMode = mediaQueryObj.matches;
 
 let activeMode = isDarkMode ? "dark" : "light";
 
+const lightStyleUrl = "/static/world/map_style.json";
+const darkStyleUrl =
+  "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json";
+
 const initialMapLayers = [];
 
 (async () => {
-  const mapStyle = await fetchMapStyle();
-  console.log(mapStyle);
+  const [lightStyle, darkStyle] = await Promise.all([
+    fetchMapStyle(lightStyleUrl),
+    fetchMapStyle(darkStyleUrl),
+  ]);
+
+  console.log(lightStyle);
+  console.log(darkStyle);
 
   function getStyleByMode(mode) {
-    return mode == "dark" ? mapStyle : mapStyle;
+    return mode == "dark" ? lightStyle : lightStyle;
   }
-
-  // "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json"
 
   const mapSources = await fetchMapSources();
   console.log(mapSources);
@@ -56,7 +63,7 @@ const initialMapLayers = [];
     container: "map",
     center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
     zoom: 9,
-    style: getStyleByMode(activeMode), // Replace the existing style URL with the fetched mapStyle object
+    style: getStyleByMode(activeMode),
     attributionControl: false,
   });
 
@@ -133,18 +140,44 @@ const initialMapLayers = [];
       layerControls.appendChild(listItem);
     }
 
-    function switchMode(mode) {
+    async function switchMode(mode) {
       activeMode = mode;
       const style = getStyleByMode(mode);
-      // map.setStyle(style);
+      await map.setStyle(style); // Add "await" here
+
+      // Restore the visibility of layers
+      map.on("styledata", () => {
+        console.log("Style data changed")
+        try {
+          // Add sources
+          for (const source in mapSources) {
+            map.addSource(source, mapSources[source]);
+          }
+
+          for (const layer in mapLayers) {
+            if (initialMapLayers.includes(layer)) {
+              mapLayers[layer].id = layer;
+              map.addLayer(mapLayers[layer]);
+              map.setLayoutProperty(layer, "visibility", "visible");
+            }
+          }
+
+          console.log("Added vector source and layer information");
+        } catch (error) {
+          console.error(
+            "An error occurred while adding vector source and layers:",
+            error
+          );
+        }
+      });
     }
 
     document
       .getElementById("modeSwitch")
       .addEventListener("click", function () {
-        if (activeMode == "light") {
+        if (activeMode === "light") {
           switchMode("dark");
-        } else if (activeMode == "dark") {
+        } else if (activeMode === "dark") {
           switchMode("light");
         }
       });
@@ -256,9 +289,9 @@ const initialMapLayers = [];
 })();
 
 // Fetch custom map stylesheet
-async function fetchMapStyle() {
+async function fetchMapStyle(url) {
   try {
-    const response = await fetch("/static/world/map_style.json");
+    const response = await fetch(url);
 
     if (!response.ok) {
       const message = `An error has occurred: ${response.status}`;
