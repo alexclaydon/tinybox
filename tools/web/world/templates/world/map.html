@@ -35,17 +35,28 @@
       type="text/css"
       href="{% static 'world/styles.css' %}"
     />
-    <div id="image-container">
-      <img src="{% static 'world/tb_Logo-Logotype.svg' %}"/>
-    </div>
 
-    <!-- Load the `mapbox-gl-geocoder` plugin. -->
+    <!-- Load `mapbox-gl-geocoder` plugin and stylesheet -->
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
     <link
       rel="stylesheet"
       href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
       type="text/css"
     />
+
+    <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
+
+    <div id="image-container">
+      <img src="{% static 'world/tb_Logo-Logotype.svg' %}" />
+    </div>
+
+    <div
+      id="modeSwitch"
+      type="button"
+      class="hidden absolute z-20 top-20 sm:top-16 left-12 cursor-pointer rounded-md bg-gray-50 p-1 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-300 active:hover:bg-gray-300 outline-4"
+    >
+      asdfasdf
+    </div>
 
     <div
       id="toggle-icon"
@@ -56,28 +67,13 @@
         src="{% static 'world/tb_Logo.svg' %}"
         class="w-8 sm:w-6 h-8 sm:h-6"
       />
-    </div>
-
-    <script>
-      document
-        .getElementById("toggle-icon")
-        .addEventListener("click", function () {
-          this.classList.toggle("bg-gray-600");
-          this.classList.toggle("clicked");
-          document
-            .getElementById("tailwindow-panel")
-            .classList.toggle("hidden");
-        });
-    </script>
-
-    <div id="tailwindow-container" class="z-10">
-      <div
-        id="tailwindow-panel"
-        class="hidden mx-auto max-w-xl px-4 sm:px-6 lg:px-8 py-12"
-      >
-        <div class="overflow-hidden rounded-md bg-white shadow">
+      <div class="relative">
+        <div
+          id="layers-panel"
+          class="hidden z-10 overflow-y-auto rounded-md bg-white shadow"
+        >
           <ul
-            id="tailwindow-contents"
+            id="layers-contents"
             role="list"
             class="divide-y divide-gray-200"
           ></ul>
@@ -85,11 +81,21 @@
       </div>
     </div>
 
-    <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
+    <div class="container px-10"></div>
 
-    {% comment %} <pre id="features">DEBUG</pre> {% endcomment %}
+    {% comment %}
+    <pre id="features">DEBUG</pre>
+    {% endcomment %}
 
-    <div id="modeSwitch" type="button" class="hidden absolute z-20 top-20 sm:top-16 left-12 cursor-pointer rounded-md bg-gray-50 p-1 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-300 active:hover:bg-gray-300 outline-4">asdfasdf</div>
+    <script>
+      document
+        .getElementById("toggle-icon")
+        .addEventListener("click", function () {
+          this.classList.toggle("bg-gray-600");
+          this.classList.toggle("clicked");
+          document.getElementById("layers-panel").classList.toggle("hidden");
+        });
+    </script>
 
     {{STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key"}}
     {{MAPBOX_API_KEY|json_script:"mapbox_api_key"}}
@@ -98,6 +104,5 @@
     {{SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint"}}
 
     <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
-
   </body>
 </html>

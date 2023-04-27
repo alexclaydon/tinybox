@@ -133,9 +133,9 @@ const initialMapLayers = [];
         }
       };
 
-      const layerControls = document.getElementById("tailwindow-contents");
+      const layerControls = document.getElementById("layers-contents");
       const listItem = document.createElement("li");
-      listItem.classList.add("px-6", "py-2");
+      listItem.classList.add("px-6", "py-4");
       listItem.appendChild(link);
       layerControls.appendChild(listItem);
     }
@@ -147,7 +147,7 @@ const initialMapLayers = [];
 
       // Restore the visibility of layers
       map.on("styledata", () => {
-        console.log("Style data changed")
+        console.log("Style data changed");
         try {
           // Add sources
           for (const source in mapSources) {
