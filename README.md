@@ -154,7 +154,13 @@ Each time Hatch is called (in any capacity) from the command line, it will autom
 
 ## VS Code debugger setup
 
+### Interpreter
+
 If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/tinybox/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
+
+### Python debugging with `launch.json` and the Python extension
+
+On account of the way that string arguments containing spaces in `launch.json` are parsed before being passed to the integrated terminal, attempting to run the debugger in such circumstances will leave you tearing your hair out.  Accordingly, all `launch`-type debug configurations presently use `"console": "externalTerminal"`.  Any new debug configurations added should also use this flag.
 
 ## Updating pinned dependencies
 

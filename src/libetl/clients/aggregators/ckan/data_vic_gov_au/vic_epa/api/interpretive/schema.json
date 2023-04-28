@@ -1,0 +1,194 @@
+{
+  "type": "object",
+  "properties": {
+    "totalRecords": {
+      "type": "integer",
+      "example": 2,
+      "description": "The total number of environment monitoring sites retrieved by the search criteria"
+    },
+    "records": {
+      "type": "array",
+      "description": "Array of the environment monitoring sites retrieved by the search criteria",
+      "items": {
+        "type": "object",
+        "properties": {
+          "siteID": {
+            "type": "string",
+            "example": "b01407a1-62cd-4385-a526-9384fb99d7db",
+            "description": "A 36 digit unique id used to identify a particular site, format:xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx"
+          },
+          "siteName": {
+            "type": "string",
+            "example": "Alphington",
+            "description": "Name of the site"
+          },
+          "siteType": {
+            "type": "string",
+            "example": "Ambient",
+            "description": "Type of the site"
+          },
+          "geometry": {
+            "type": "object",
+            "description": "GeoJSon geometry",
+            "allOf": [
+              {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "discriminator": "type",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "description": "the geometry type",
+                    "enum": [
+                      "Point",
+                      "LineString",
+                      "Polygon",
+                      "MultiPoint",
+                      "MultiLineString",
+                      "MultiPolygon"
+                    ]
+                  }
+                },
+                "externalDocs": {
+                  "url": "http://geojson.org/geojson-spec.html#geometry-objects"
+                },
+                "description": "GeoJSon geometry"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "coordinates": {
+                    "type": "array",
+                    "description": "Point in 3D space",
+                    "items": {
+                      "type": "number"
+                    },
+                    "example": [
+                      -37.73973,
+                      144.94615
+                    ],
+                    "minItems": 2,
+                    "maxItems": 3
+                  }
+                }
+              }
+            ]
+          },
+          "distance": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number",
+                "example": 123.0,
+                "description": "Distance from the provided location, this will be returned only when location is provided in query params in the request"
+              },
+              "unit": {
+                "type": "string",
+                "example": "metre",
+                "description": "Unit of distance"
+              }
+            }
+          },
+          "cameraImageURL": {
+            "type": "string",
+            "example": "https://cmcameras.net.au/images/Calignee/snapsho.jpg",
+            "description": "URL of the camera image"
+          },
+          "timeLapseURL": {
+            "type": "string",
+            "example": "https://cmcameras.net.au/ images/Calignee/video.mp4",
+            "description": "URL of the time lapse image"
+          },
+          "siteHealthAdvices": {
+            "type": "array",
+            "description": "Array of the site health advices.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "since": {
+                  "type": "string",
+                  "format": "dateTime",
+                  "example": "2019-07-14T23:00:00Z",
+                  "description": "Start dateTime of the reading in UTC"
+                },
+                "until": {
+                  "type": "string",
+                  "format": "dateTime",
+                  "example": "2019-07-13T23:00:00Z",
+                  "description": "End dateTime of the reading in UTC"
+                },
+                "healthParameter": {
+                  "type": "string",
+                  "example": "CO2",
+                  "description": "Name of the scientific paramter used for this reading"
+                },
+                "averageValue": {
+                  "type": "integer",
+                  "example": 80,
+                  "description": "Value of the scientific parameter reading"
+                },
+                "unit": {
+                  "type": "string",
+                  "example": "&micro;g/m&sup3;",
+                  "description": "unit of the parameter quantity"
+                },
+                "healthAdvice": {
+                  "type": "string",
+                  "example": "Good",
+                  "description": "Health advice based on the reading"
+                },
+                "healthAdviceColor": {
+                  "type": "string",
+                  "example": "#DBDBDBD",
+                  "description": "Color to indicate the health status"
+                },
+                "healthCode": {
+                  "type": "string",
+                  "example": "000001",
+                  "description": "Health advice code"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "totalRecords": 1,
+    "records": [
+      {
+        "siteID": "77062cb7-3e3b-4984-b6d0-03dda76177f2",
+        "siteName": "Alphington",
+        "siteType": "Ambient",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -37.78,
+            145.023
+          ]
+        },
+        "distance": {
+          "value": 123,
+          "unit": "metre"
+        },
+        "cameraImageURL": "https://cmcameras.net.au/images/Calignee/snapsho.jpg",
+        "timeLapseURL": "https://cmcameras.net.au/ images/Calignee/video.mp4",
+        "siteHealthAdvices": [
+          {
+            "since": "2019-07-14T23:00:00Z",
+            "until": "2019-07-13T23:00:00Z",
+            "healthParameter": "PM2.5",
+            "averageValue": 16,
+            "unit": "&micro;g/m&sup3;",
+            "healthAdvice": "Good",
+            "healthAdviceColor": "#DBDBDBD",
+            "healthCode": "000001"
+          }
+        ]
+      }
+    ]
+  }
+}
