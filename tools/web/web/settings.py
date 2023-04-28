@@ -57,9 +57,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "storages",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
     "tailwind",
     "theme",
     "django_browser_reload",
@@ -128,7 +125,7 @@ elif len(sys.argv) > 0 and sys.argv[1] != "collectstatic":
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'auth_app.CustomUser'
+AUTH_USER_MODEL = "auth_app.CustomUser"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -147,12 +144,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # settings.py
 AUTHENTICATION_BACKENDS = (
-    'auth_app.backends.CustomUserModelBackend',
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "auth_app.backends.CustomUserModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # or 'mandatory' if you want to require email verification
+ACCOUNT_EMAIL_VERIFICATION = (
+    "none"  # or 'mandatory' if you want to require email verification
+)
 ACCOUNT_APPROVAL_REQUIRED = True  # Enable account approval process
 
 
@@ -188,17 +187,17 @@ TAILWIND_APP_NAME = "theme"
 STADIA_MAPS_API_KEY = os.getenv("STADIA_MAPS_API_KEY")
 MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
 
-GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
+GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
 
-GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
+GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = "home"
 SPACES_KEY = os.getenv("SPACES_KEY")
 SPACES_SECRET = os.getenv("SPACES_SECRET")
 SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
 
-GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
+GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
 
-GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
+GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = "home"

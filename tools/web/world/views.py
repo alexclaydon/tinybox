@@ -15,7 +15,8 @@ from .models import (
 )
 
 
-@user_is_approved
+# Temporarily disabled as we are using Ngrok auth instead
+# @user_is_approved
 def map_view(request):
     context = {
         "STADIA_MAPS_API_KEY": settings.STADIA_MAPS_API_KEY,
