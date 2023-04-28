@@ -20,27 +20,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = [
-  "gunicorn",
-  "psycopg2-binary",
-  "dj-database-url",
-  "rich>=13.0.0",
-  "python-dotenv>=1.0.0",
-  "python-dateutil>=2.8.2",
-  "requests>=2.28.2",
-  "Django==4.2",
-  # "psycopg2>=2.9.6",
-  "django-tailwind>=3.5.0",
-  "geojson>=3.0.1",
-  "pandas>=2.0.0",
-  "Pillow>=9.5.0",
-  "beautifulsoup4>=4.12.1",
-  "dagster>=1.2.6",
-  "dagit>=1.2.6",
-  "pydantic>=1.10.7",
-  "datamodel-code-generator>=0.17.2",
-  "django-allauth",
-]
+dependencies = ["typer[all]", "python-dotenv>=1.0.0", "python-dateutil>=2.8.2"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
@@ -57,26 +37,73 @@ path = "src/tinybox/__about__.py"
 [tool.hatch.envs.default]
 python = "3.9"
 type = "virtual"
-dependencies = []
+dependencies = [
+  "gunicorn",
+  "psycopg2-binary",
+  "dj-database-url",
+  "Django==4.2",
+  # "psycopg2>=2.9.6",
+  "django-tailwind>=3.5.0",
+  "django-storages",
+  "requests>=2.28.2",
+  "geojson>=3.0.1",
+  "pandas>=2.0.0",
+  "Pillow>=9.5.0",
+  "beautifulsoup4>=4.12.1",
+  "django-allauth",
+]
 features = ["dev"]
 
 [tool.hatch.envs.default.env-vars]
-PIP_FIND_LINKS = "https://github.com/dagster-io/build-grpcio/wiki/Wheels"
-PIP_VERBOSE = "2"
-DAGSTER_HOME = "/Users/alexclaydon/dev/dev-projects/tinybox/tools/etl/data"
-MallocNanoZone = "1"
 
 [tool.hatch.envs.default.scripts]
 # Tests
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/tinybox --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
-# ETL pipeline
-etldev = "dagster dev"
 # Web app
+webstatic = "python tools/web/manage.py collectstatic -c --noinput"
 webdev = "(trap 'kill 0' SIGINT; python tools/web/manage.py tailwind start & python tools/web/manage.py runserver 0.0.0.0:8080)"
+webdev-srv = "python tools/web/manage.py runserver 0.0.0.0:8080"
+# For use when you want to run the Django dev server on its own, or when you want to run it in a separate process to Tailwind hot reload for troubleshooting purposes
+webdev-tailwind = "python tools/web/manage.py tailwind start"
+# For use when you want to run Tailwind hot reload on its own, or when you want to run it in a separate process to the Django dev server for troubleshooting purposes
+webngrok = "./bin/ngrok http 8080 --domain=tinybox.ngrok.dev --oauth google --oauth-allow-email mattielangton@gmail.com --oauth-allow-email alexclaydon@gmail.com --oauth-allow-email liamgilchrist@gmail.com"
 webmakemigrate = "python tools/web/manage.py makemigrations"
 webmigrate = "python tools/web/manage.py migrate"
 webshell = "python tools/web/manage.py shell"
+
+[tool.hatch.envs.etl]
+python = "3.9"
+type = "virtual"
+dependencies = [
+  "numpy",
+  "scipy",
+  "pandas>=2.0.0",
+  "matplotlib",
+  "nbconvert",
+  "nbformat",
+  "ipykernel",
+  "jupytext",
+  "geojson>=3.0.1",
+  "dagster>=1.2.6",
+  "dagit>=1.2.6",
+  "pydantic>=1.10.7",
+  "datamodel-code-generator>=0.17.2",
+  "rasterio",
+  "geopandas",
+  "pyproj",
+  "boto3",
+]
+features = ["dev"]
+
+[tool.hatch.envs.etl.env-vars]
+PIP_FIND_LINKS = "https://github.com/dagster-io/build-grpcio/wiki/Wheels"
+PIP_VERBOSE = "2"
+DAGSTER_HOME = "/Users/alexclaydon/dev/dev-projects/tinybox/tools/etl/data"
+MallocNanoZone = "1"
+
+[tool.hatch.envs.etl.scripts]
+dd = "dagster dev"
 
 [[tool.hatch.envs.test.matrix]]
 python = ["3.9"]
@@ -95,3 +122,7 @@ exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.black]
 line-length = 71
+
+[tool.ruff]
+# Never enforce `E501` (line length violations).
+ignore = ["E501"]

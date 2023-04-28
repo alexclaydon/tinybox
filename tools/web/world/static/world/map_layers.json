@@ -1,35 +1,92 @@
 {
-  "vector-layer-01": {
-    "type": "circle",
-    "source": "vector-source",
-    "source-layer": "testlayer02",
-    "paint": {
-      "circle-radius": 5,
-      "circle-color": "#007cbf",
-      "circle-opacity": 0.8,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff"
+  "Average annual traffic volume": {
+    "type": "line",
+    "source": "vic_vechicle_traffic",
+    "source-layer": "Traffic_Volume",
+    "metadata": {
+      "category": "Traffic",
+      "source:comment": "",
+      "paint-style": "line-sunrise",
+      "paint-quintiles": ""
     }
   },
-  "polygon-layer-01": {
+  "Future land development": {
     "type": "fill",
-    "source": "vector-source",
-    "source-layer": "testlayer02",
+    "source": "future_land_development",
+    "source-layer": "Land_Use",
+    "metadata": {
+      "category": "Development",
+      "source:comment": ""
+    },
     "paint": {
-      "fill-color": "#088",
-      "fill-opacity": 0.8
+      "fill-color": "#007cbf",
+      "fill-opacity": 0.6
     }
   },
-  "vector-layer-02": {
+  "Open spaces": {
+    "type": "fill",
+    "source": "vpa_open_space",
+    "source-layer": "VPA_Open_Space",
+    "metadata": {
+      "category": "Lifestyle",
+      "source:comment": ""
+    },
+    "paint": {
+      "fill-color": "#007cbf",
+      "fill-opacity": 0.6
+    }
+  },
+  "Areas within walking distance (400m) of public space": {
+    "type": "fill",
+    "source": "walkable_catchment_400m",
+    "source-layer": "Public_Open_Space__400m_Walkable_Catchment",
+    "metadata": {
+      "category": "Lifestyle",
+      "source:comment": ""
+    },
+    "paint": {
+      "fill-color": "#007cbf",
+      "fill-opacity": 0.6
+    }
+  },
+  "CBD bike routes": {
+    "type": "line",
+    "source": "cbd_bike_facilities",
+    "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
+    "metadata": {
+      "category": "Lifestyle",
+      "source:comment": ""
+    },
+    "paint": {
+      "line-color": "#007cbf",
+      "line-opacity": 0.8,
+      "line-width": 2
+    }
+  },
+  "CBD bike-share docks": {
     "type": "circle",
-    "source": "vector-source",
-    "source-layer": "testlayer02",
+    "source": "cbd_bike_facilities",
+    "source-layer": "bikesharedocklocations",
+    "metadata": {
+      "category": "Lifestyle",
+      "source:comment": ""
+    },
     "paint": {
       "circle-radius": 5,
       "circle-color": "#007cbf",
       "circle-opacity": 0.8,
       "circle-stroke-width": 1,
       "circle-stroke-color": "#fff"
+    }
+  },
+  "Average solar radiation in Summer": {
+    "type": "fill",
+    "source": "bom_solar_rad_summer",
+    "source-layer": "solarwet",
+    "metadata": {
+      "category": "Environment",
+      "paint-style": "poly-heatmap",
+      "source:comment": ""
     }
   }
 }

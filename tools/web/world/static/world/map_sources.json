@@ -1,6 +1,86 @@
 {
-  "vector-source": {
+  "cbd_bike_facilities": {
     "type": "vector",
-    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/output.pmtiles"
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/cbd_bike_facilties.pmtiles",
+    "description": "Bike routes and docks",
+    "metadata": {
+      "source_org": "City of Melbourne",
+      "source_url": "",
+      "study_date": "2023-04-24",
+      "tippecanoe_command": "tippecanoe -zg -f -o cbd_bike_facilties.pmtiles --drop-densest-as-needed -n 'Bike routes and docks' bicycle-routes-including-informal-on-road-and-off-road-routes.geojson bike-share-dock-locations.geojson",
+      "analyst_comment": ""
+    }
+  },
+  "vic_vechicle_traffic": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/vic_vehicle_traffic.pmtiles",
+    "description": "Victoria vehicle traffic",
+    "metadata": {
+      "source_org": "Dept. Transportation and Planning",
+      "source_url": "",
+      "study_date": "2023-04-25",
+      "tippecanoe_command": "tippecanoe -zg -f -o vic_vehicle_traffic.pmtiles --drop-densest-as-needed -n 'Vehicle traffic' Traffic_Volume.geojson",
+      "analyst_comment": ""
+    }
+  },
+  "future_land_development": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/future_land_development.pmtiles",
+    "description": "Future land development",
+    "metadata": {
+      "source_org": "Victorian Planning Authority",
+      "source_url": "",
+      "study_date": "2023-04-26",
+      "tippecanoe_command": "tippecanoe -zg -f -o future_land_development.pmtiles --drop-densest-as-needed -n 'Future land development' Land_Use.geojson",
+      "analyst_comment": ""
+    }
+  },
+  "vpa_open_space": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/vpa_open_space.pmtiles",
+    "description": "Open space",
+    "metadata": {
+      "source_org": "Victorian Planning Authority",
+      "source_url": "",
+      "study_date": "2023-04-26",
+      "tippecanoe_command": "tippecanoe -zg -f -o vpa_open_space.pmtiles --drop-densest-as-needed -n 'Open space' VPA_Open_Space.geojson",
+      "analyst_comment": ""
+    }
+  },
+  "walkable_catchment_400m": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/walkable_catchment_400m.pmtiles",
+    "description": "Walkable catchment within 400m",
+    "metadata": {
+      "source_org": "Victorian Planning Authority",
+      "source_url": "",
+      "study_date": "2023-04-26",
+      "tippecanoe_command": "tippecanoe -zg -f -o walkable_catchment_400m.pmtiles --drop-densest-as-needed -n 'Walkable catchment within 400m' Public_Open_Space_-_400m_Walkable_Catchment.geojson",
+      "analyst_comment": ""
+    }
+  },
+  "bom_solar_rad_summer": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/bom_solar_rad_summer.pmtiles",
+    "description": "Solar radiation - Summer season",
+    "metadata": {
+      "source_org": "Bureau of Meteorology",
+      "source_url": "http://www.bom.gov.au/climate/maps/averages/solar-exposure/?period=wet",
+      "study_date": "2023-04-27",
+      "tippecanoe_command": "tippecanoe -zg -f -o bom_solar_rad_summer.pmtiles --drop-densest-as-needed -n 'Solar radiation in Summer' solarwet.geojson",
+      "analyst_comment": "Converted from raster to vector in QGIS."
+    }
+  },
+  "epa_air_quality": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/bom_solar_rad_summer.pmtiles",
+    "description": "Air quality",
+    "metadata": {
+      "source_org": "Victorian Environmental Protection Agency",
+      "source_url": "https://discover.data.vic.gov.au/dataset/epa-air-watch-all-sites-air-quality-hourly-averages-yearly/historical",
+      "study_date": "2023-04-28",
+      "tippecanoe_command": "tippecanoe -zg -f -o bom_solar_rad_summer.pmtiles --drop-densest-as-needed -n 'Solar radiation in Summer' solarwet.geojson",
+      "analyst_comment": ""
+    }
   }
 }

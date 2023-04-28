@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "storages",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "tailwind",
     "theme",
     "django_browser_reload",
@@ -193,3 +196,9 @@ LOGIN_REDIRECT_URL = 'home'
 SPACES_KEY = os.getenv("SPACES_KEY")
 SPACES_SECRET = os.getenv("SPACES_SECRET")
 SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
+
+GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
+
+GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
+
+LOGIN_REDIRECT_URL = 'home'

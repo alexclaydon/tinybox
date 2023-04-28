@@ -29,11 +29,29 @@ let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 console.log("Initialized PMTiles protocol:", protocol);
 
-const initialMapLayers = ["vector-layer-01"];
+let mediaQueryObj = window.matchMedia("(prefers-color-scheme: dark)");
+let isDarkMode = mediaQueryObj.matches;
+
+let activeMode = isDarkMode ? "dark" : "light";
+
+const lightStyleUrl = "/static/world/map_style.json";
+const darkStyleUrl =
+  "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json";
+
+const initialMapLayers = [];
 
 (async () => {
-  const mapStyle = await fetchMapStyle();
-  console.log(mapStyle);
+  const [lightStyle, darkStyle] = await Promise.all([
+    fetchMapStyle(lightStyleUrl),
+    fetchMapStyle(darkStyleUrl),
+  ]);
+
+  console.log(lightStyle);
+  console.log(darkStyle);
+
+  function getStyleByMode(mode) {
+    return mode == "dark" ? lightStyle : lightStyle;
+  }
 
   const mapSources = await fetchMapSources();
   console.log(mapSources);
@@ -45,7 +63,8 @@ const initialMapLayers = ["vector-layer-01"];
     container: "map",
     center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
     zoom: 9,
-    style: mapStyle, // Replace the existing style URL with the fetched mapStyle object
+    style: getStyleByMode(activeMode),
+    attributionControl: false,
   });
 
   map.on("load", () => {
@@ -114,10 +133,75 @@ const initialMapLayers = ["vector-layer-01"];
         }
       };
 
-      const layers = document.getElementById("layer-controls");
-      layers.appendChild(link);
+      const layerControls = document.getElementById("layers-contents");
+      const listItem = document.createElement("li");
+      listItem.classList.add("px-6", "py-4");
+      listItem.appendChild(link);
+      layerControls.appendChild(listItem);
     }
+
+    async function switchMode(mode) {
+      activeMode = mode;
+      const style = getStyleByMode(mode);
+      await map.setStyle(style); // Add "await" here
+
+      // Restore the visibility of layers
+      map.on("styledata", () => {
+        console.log("Style data changed");
+        try {
+          // Add sources
+          for (const source in mapSources) {
+            map.addSource(source, mapSources[source]);
+          }
+
+          for (const layer in mapLayers) {
+            if (initialMapLayers.includes(layer)) {
+              mapLayers[layer].id = layer;
+              map.addLayer(mapLayers[layer]);
+              map.setLayoutProperty(layer, "visibility", "visible");
+            }
+          }
+
+          console.log("Added vector source and layer information");
+        } catch (error) {
+          console.error(
+            "An error occurred while adding vector source and layers:",
+            error
+          );
+        }
+      });
+    }
+
+    document
+      .getElementById("modeSwitch")
+      .addEventListener("click", function () {
+        if (activeMode === "light") {
+          switchMode("dark");
+        } else if (activeMode === "dark") {
+          switchMode("light");
+        }
+      });
   });
+
+  // map.on("click", function (e) {
+  //   var features = map.queryRenderedFeatures(e.point);
+
+  //   var displayProperties = ["layer"];
+
+  //   var displayFeatures = features.map(function (feat) {
+  //     var displayFeat = {};
+  //     displayProperties.forEach(function (prop) {
+  //       displayFeat[prop] = feat[prop];
+  //     });
+  //     return displayFeat;
+  //   });
+
+  //   document.getElementById("features").innerHTML = JSON.stringify(
+  //     displayFeatures,
+  //     null,
+  //     2
+  //   );
+  // });
 
   // Add Mapbox geocoder to the map
   var geocoder = new MapboxGeocoder({
@@ -149,8 +233,35 @@ const initialMapLayers = ["vector-layer-01"];
     marker.addTo(map);
   });
 
+  class HelloWorldControl {
+    onAdd(map) {
+      this._map = map;
+      this._container = document.createElement("div");
+      this._container.className = "maplibregl-ctrl";
+      this._container.textContent = "";
+      return this._container;
+    }
+
+    onRemove() {
+      this._container.parentNode.removeChild(this._container);
+      this._map = undefined;
+    }
+  }
+
+  map.addControl(new HelloWorldControl(), "bottom-right");
+
+  // Add a scale control to the map.
+  var scale = new maplibregl.ScaleControl({
+    maxWidth: 100,
+    unit: "metric",
+  });
+
+  map.addControl(scale, "top-right");
+
+  scale.setUnit("metric");
+
   // Add zoom and rotation controls to the map.
-  map.addControl(new maplibregl.NavigationControl());
+  map.addControl(new maplibregl.NavigationControl(), "bottom-right");
 
   // Add geolocate control to the map.
   var geolocate = new maplibregl.GeolocateControl({
@@ -160,7 +271,7 @@ const initialMapLayers = ["vector-layer-01"];
     trackUserLocation: true,
   });
 
-  map.addControl(geolocate);
+  map.addControl(geolocate, "bottom-right");
 
   // Set an event listener that fires
   // when a trackuserlocationstart event occurs.
@@ -168,28 +279,19 @@ const initialMapLayers = ["vector-layer-01"];
     console.log("A trackuserlocationstart event has occurred.");
   });
 
-  // Add a scale control to the map.
-  var scale = new maplibregl.ScaleControl({
-    maxWidth: 80,
-    unit: "metric",
-  });
-
-  map.addControl(scale);
-
-  scale.setUnit("metric");
-
-  // Add fullscreen control to the map.
-  map.addControl(
-    new maplibregl.FullscreenControl({
-      container: document.querySelector("body"),
-    })
-  );
+  // // Add fullscreen control to the map.
+  // map.addControl(
+  //   new maplibregl.FullscreenControl({
+  //     container: document.querySelector("body"),
+  //   }),
+  //   "top-right"
+  // );
 })();
 
 // Fetch custom map stylesheet
-async function fetchMapStyle() {
+async function fetchMapStyle(url) {
   try {
-    const response = await fetch("/static/world/map_style.json");
+    const response = await fetch(url);
 
     if (!response.ok) {
       const message = `An error has occurred: ${response.status}`;
@@ -240,6 +342,81 @@ async function fetchMapLayers() {
     }
     let mapLayers = await response.json();
 
+    // Loop through mapLayers
+    for (const layerId in mapLayers) {
+      // Check if the layer has the desired metadata property
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "line-sunrise"
+      ) {
+        mapLayers[layerId].paint = {
+          "line-color": [
+            "step",
+            ["get", "ALLVEHS_AADT"],
+            "#add8e6", // Light blue
+            5000,
+            "#4db3d8", // Medium light blue
+            10000,
+            "#0074c8", // Medium blue
+            15000,
+            "#9c5060", // Medium dark red
+            20000,
+            "#c80000", // Dark red
+            35000,
+            "#4b0000", // Very dark red
+          ],
+          "line-opacity": 1,
+          "line-width": 2.5,
+        };
+      }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "poly-sunrise"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["get", "ALLVEHS_AADT"],
+            "#add8e6", // Light blue
+            5000,
+            "#4db3d8", // Medium light blue
+            10000,
+            "#0074c8", // Medium blue
+            15000,
+            "#9c5060", // Medium dark red
+            20000,
+            "#c80000", // Dark red
+            35000,
+            "#4b0000", // Very dark red
+          ],
+          "fill-opacity": 1,
+        };
+      }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "poly-heatmap"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["get", "DN"],
+            "#FFFF00",
+            15,
+            "#FFAA00",
+            17,
+            "#FF6600",
+            20,
+            "#FF3300",
+            22,
+            "#DC143C",
+            24,
+            "#8B0000",
+          ],
+          "fill-opacity": 0.7,
+        };
+      }
+    }
+
     return mapLayers;
   } catch (error) {
     console.error("Error fetching mapSources.json:", error);
@@ -288,3 +465,10 @@ async function addMarkers(apiUrl) {
 // addMarkers((apiUrl = "/world/poi_geojson/"));
 
 // async function addLineFeatures(apiUrl) { }
+
+function getColor(value) {
+  if (value <= 5000) return "#00ff00";
+  if (value <= 10000) return "#ffff00";
+  if (value <= 20000) return "#ff7f00";
+  return "#ff0000";
+}

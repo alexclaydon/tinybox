@@ -154,9 +154,15 @@ Each time Hatch is called (in any capacity) from the command line, it will autom
 
 ## VS Code debugger setup
 
+### Interpreter
+
 If you are using VS Code, open this project repo as a Workspace using the `enviro.code-workspace` file in the repo root.  Hit Cmd + P, `Python: Select Interpreter`, the choose the newly-installed project Python interpreter (which should be at `.hatch/tinybox/bin/python3.9`).  This will allow you to conveniently use the VS Code debugger, should you need it.
 
-## Create Django admin user
+### Python debugging with `launch.json` and the Python extension
+
+On account of the way that string arguments containing spaces in `launch.json` are parsed before being passed to the integrated terminal, attempting to run the debugger in such circumstances will leave you tearing your hair out.  Accordingly, all `launch`-type debug configurations presently use `"console": "externalTerminal"`.  Any new debug configurations added should also use this flag.
+
+## Updating pinned dependencies
 
 If you are doing a fresh deploy, go [here](https://cloud.digitalocean.com/apps/new) and create a new app.  Select this GitHub repo.  As our Django web app code is _not_ located in the repo root, you'll need to specify the `tools/web` directory as the app root.
 Principal Python dependencies, as specified in `pyproject.toml`, should to the extent possible be pinned.  Unfortunately this is currently a manual process with Hatch.  We'll need to do it every couple of weeks or so.
