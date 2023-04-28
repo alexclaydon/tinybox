@@ -65,8 +65,20 @@
     "description": "Solar radiation - Summer season",
     "metadata": {
       "source_org": "Bureau of Meteorology",
-      "source_url": "",
+      "source_url": "http://www.bom.gov.au/climate/maps/averages/solar-exposure/?period=wet",
       "study_date": "2023-04-27",
+      "tippecanoe_command": "tippecanoe -zg -f -o bom_solar_rad_summer.pmtiles --drop-densest-as-needed -n 'Solar radiation in Summer' solarwet.geojson",
+      "analyst_comment": "Converted from raster to vector in QGIS."
+    }
+  },
+  "epa_air_quality": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/bom_solar_rad_summer.pmtiles",
+    "description": "Air quality",
+    "metadata": {
+      "source_org": "Victorian Environmental Protection Agency",
+      "source_url": "https://discover.data.vic.gov.au/dataset/epa-air-watch-all-sites-air-quality-hourly-averages-yearly/historical",
+      "study_date": "2023-04-28",
       "tippecanoe_command": "tippecanoe -zg -f -o bom_solar_rad_summer.pmtiles --drop-densest-as-needed -n 'Solar radiation in Summer' solarwet.geojson",
       "analyst_comment": ""
     }
