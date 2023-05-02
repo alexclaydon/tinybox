@@ -353,43 +353,20 @@ async function fetchMapLayers() {
           "line-color": [
             "step",
             ["get", "ALLVEHS_AADT"],
-            "#add8e6", // Light blue
+            "#0198BD",
             5000,
-            "#4db3d8", // Medium light blue
+            "#49E3CE",
             10000,
-            "#0074c8", // Medium blue
+            "#E8FEB5",
             15000,
-            "#9c5060", // Medium dark red
+            "#FEEDB1",
             20000,
-            "#c80000", // Dark red
+            "#FEAD54",
             35000,
-            "#4b0000", // Very dark red
+            "#D50255",
           ],
           "line-opacity": 1,
           "line-width": 2.5,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "poly-sunrise"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["get", "ALLVEHS_AADT"],
-            "#add8e6", // Light blue
-            5000,
-            "#4db3d8", // Medium light blue
-            10000,
-            "#0074c8", // Medium blue
-            15000,
-            "#9c5060", // Medium dark red
-            20000,
-            "#c80000", // Dark red
-            35000,
-            "#4b0000", // Very dark red
-          ],
-          "fill-opacity": 1,
         };
       }
       if (
@@ -400,17 +377,17 @@ async function fetchMapLayers() {
           "fill-color": [
             "step",
             ["get", "DN"],
-            "#FFFF00",
+            "#FFC300",
             15,
-            "#FFAA00",
+            "#F1920E",
             17,
-            "#FF6600",
+            "#E3611C",
             20,
-            "#FF3300",
+            "#C70039",
             22,
-            "#DC143C",
+            "#900C3F",
             24,
-            "#8B0000",
+            "#5A1846",
           ],
           "fill-opacity": 0.7,
         };
@@ -423,19 +400,19 @@ async function fetchMapLayers() {
           "fill-color": [
             "step",
             ["to-number", ["get", "Unemployment rate (%)"]],
-            "#add8e6", // Light blue
+            "#FEEBE2",
             3.0,
-            "#4db3d8", // Medium light blue
+            "#FCC5C0",
             4.0,
-            "#0074c8", // Medium blue
+            "#FA9FB5",
             5.0,
-            "#9c5060", // Medium dark red
+            "#F768A1",
             6.0,
-            "#c80000", // Dark red
+            "#C51B8A",
             7.0,
-            "#4b0000", // Very dark red
+            "#7A0177",
           ],
-          "fill-opacity": 0.7,
+          "fill-opacity": 0.8,
         };
       }
     }
