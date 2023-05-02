@@ -422,17 +422,17 @@ async function fetchMapLayers() {
         mapLayers[layerId].paint = {
           "fill-color": [
             "step",
-            ["get", "Unemployment rate"],
+            ["to-number", ["get", "Unemployment rate (%)"]],
             "#add8e6", // Light blue
             3.0,
             "#4db3d8", // Medium light blue
             4.0,
             "#0074c8", // Medium blue
-            4.5,
+            5.0,
             "#9c5060", // Medium dark red
-            6,
+            6.0,
             "#c80000", // Dark red
-            7,
+            7.0,
             "#4b0000", // Very dark red
           ],
           "fill-opacity": 0.7,
