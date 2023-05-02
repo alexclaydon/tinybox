@@ -415,6 +415,29 @@ async function fetchMapLayers() {
           "fill-opacity": 0.7,
         };
       }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "unemployment-heatmap"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["get", "Unemployment rate"],
+            "#add8e6", // Light blue
+            3.0,
+            "#4db3d8", // Medium light blue
+            4.0,
+            "#0074c8", // Medium blue
+            4.5,
+            "#9c5060", // Medium dark red
+            6,
+            "#c80000", // Dark red
+            7,
+            "#4b0000", // Very dark red
+          ],
+          "fill-opacity": 0.7,
+        };
+      }
     }
 
     return mapLayers;

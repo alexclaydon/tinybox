@@ -82,5 +82,17 @@
       "tippecanoe_command": "tippecanoe -zg -f -o bom_solar_rad_summer.pmtiles --drop-densest-as-needed -n 'Solar radiation in Summer' solarwet.geojson",
       "analyst_comment": ""
     }
+  },
+  "lga_unemployment": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/lga_unemployment.pmtiles",
+    "description": "Unemployment rate",
+    "metadata": {
+      "source_org": "ABS",
+      "source_url": "https://www.abs.gov.au/methodologies/data-region-methodology/2011-22#data-downloads",
+      "study_date": "2023-05-02",
+      "tippecanoe_command": "tippecanoe -zg -f -o lga_unemployment.pmtiles --drop-densest-as-needed -n 'LGA unemployment' data/national/abs/unemployment/derived/lga_unemployment.geojson",
+      "analyst_comment": "ETL done with /Users/alexclaydon/dev/dev-projects/tinybox-data/data/national/abs/unemployment/derived/scripts/etl_unemployment.ipynb"
+    }
   }
 }
