@@ -279,6 +279,18 @@ const initialMapLayers = [];
     console.log("A trackuserlocationstart event has occurred.");
   });
 
+  const targets = {};
+
+  map.addControl(
+    new MaplibreLegendControl(targets, {
+      showDefault: false,
+      showCheckbox: true,
+      onlyRendered: true,
+      reverseOrder: true,
+    }),
+    "bottom-right"
+  );
+
   // // Add fullscreen control to the map.
   // map.addControl(
   //   new maplibregl.FullscreenControl({
