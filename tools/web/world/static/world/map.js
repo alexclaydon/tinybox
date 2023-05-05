@@ -415,6 +415,29 @@ async function fetchMapLayers() {
           "fill-opacity": 0.8,
         };
       }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "median-age-heatmap"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["to-number", ["get", "Median age - persons (years)"]],
+            "#EDF8FB",
+            30,
+            "#CCECE6",
+            35,
+            "#99D8C9",
+            40,
+            "#66C2A4",
+            45,
+            "#2CA25F",
+            50,
+            "#006D2C",
+          ],
+          "fill-opacity": 0.8,
+        };
+      }
     }
 
     return mapLayers;

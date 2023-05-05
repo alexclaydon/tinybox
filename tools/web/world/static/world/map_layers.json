@@ -98,5 +98,15 @@
       "paint-style": "unemployment-heatmap",
       "source:comment": ""
     }
+  },
+  "Median population age": {
+    "type": "fill",
+    "source": "lga_demographics",
+    "source-layer": "lga_demographics",
+    "metadata": {
+      "category": "Social",
+      "paint-style": "median-age-heatmap",
+      "source:comment": ""
+    }
   }
 }
