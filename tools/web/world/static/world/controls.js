@@ -1,3 +1,4 @@
+// Control for toggling map layers
 export class LayerToggleControl {
   onAdd(map) {
     this._map = map;
@@ -28,6 +29,7 @@ export class LayerToggleControl {
   }
 }
 
+// Control for switching between dark and light map modes
 export class ModeSwitchControl {
   onAdd(map) {
     this._map = map;
