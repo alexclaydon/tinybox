@@ -2,9 +2,6 @@
   "folders": [
     {
       "path": "."
-    },
-    {
-      "path": "../tinybox-data"
     }
   ],
   "settings": {
@@ -17,10 +14,7 @@
         "source.organizeImports": true
       }
     },
-    "isort.args": [
-      "--profile",
-      "black"
-    ],
+    "isort.args": ["--profile", "black"],
     "[git-commit]": {
       "rewrap.autoWrap.enabled": true,
       "rewrap.wrappingColumn": 72
@@ -31,7 +25,7 @@
       "**/__pycache__": true,
       "**/*.egg-info": true,
       "**/*.ipynb_checkpoints": true,
-      "**/.git": false,
+      "**/.git": false
     },
     // Exclude from searches within the repo
     "search.exclude": {
@@ -40,7 +34,7 @@
       "**/.git": true,
       "**/*.geojson": true,
       "**/*.zip": true,
-      "**/*.csv": true,
+      "**/*.csv": true
     },
     // Exclude from file watcher processes
     "files.watcherExclude": {
@@ -51,7 +45,7 @@
       "**/node_modules/*/**": true,
       "**/*.geojson": true,
       "**/*.zip": true,
-      "**/*.csv": true,
-    },
+      "**/*.csv": true
+    }
   }
 }

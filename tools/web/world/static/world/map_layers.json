@@ -88,5 +88,25 @@
       "paint-style": "poly-heatmap",
       "source:comment": ""
     }
+  },
+  "Unemployment rate (%)": {
+    "type": "fill",
+    "source": "lga_unemployment",
+    "source-layer": "lga_unemployment",
+    "metadata": {
+      "category": "Social",
+      "paint-style": "unemployment-heatmap",
+      "source:comment": ""
+    }
+  },
+  "Median population age": {
+    "type": "fill",
+    "source": "lga_demographics",
+    "source-layer": "lga_demographics",
+    "metadata": {
+      "category": "Social",
+      "paint-style": "median-age-heatmap",
+      "source:comment": ""
+    }
   }
 }

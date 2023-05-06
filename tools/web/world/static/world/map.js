@@ -1,22 +1,14 @@
-// Import API keys: Note that it's not yet clear to me whether this is secure although I understand that it probably is
+// Import custom map controls
+import { LayerToggleControl, ModeSwitchControl } from "./controls.js";
+import { fetchMapSources, fetchMapLayers } from "./features.js";
+
+// Import API keys: To be confirmed whether this is actually secure
 const mapbox_api_key = JSON.parse(
   document.getElementById("mapbox_api_key").textContent
 );
 
 const stadiaMapsApiKey = JSON.parse(
   document.getElementById("stadia_maps_api_key").textContent
-);
-
-const spaces_api_key = JSON.parse(
-  document.getElementById("spaces_api_key").textContent
-);
-
-const spaces_api_secret = JSON.parse(
-  document.getElementById("spaces_api_secret").textContent
-);
-
-const spaces_cdn_endpoint = JSON.parse(
-  document.getElementById("spaces_cdn_endpoint").textContent
 );
 
 // Show an alert if the browser does not support MapLibre GL
@@ -62,7 +54,7 @@ const initialMapLayers = [];
   const map = new maplibregl.Map({
     container: "map",
     center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
-    zoom: 9,
+    zoom: 8,
     style: getStyleByMode(activeMode),
     attributionControl: false,
   });
@@ -233,22 +225,7 @@ const initialMapLayers = [];
     marker.addTo(map);
   });
 
-  class HelloWorldControl {
-    onAdd(map) {
-      this._map = map;
-      this._container = document.createElement("div");
-      this._container.className = "maplibregl-ctrl";
-      this._container.textContent = "";
-      return this._container;
-    }
-
-    onRemove() {
-      this._container.parentNode.removeChild(this._container);
-      this._map = undefined;
-    }
-  }
-
-  map.addControl(new HelloWorldControl(), "bottom-right");
+  map.addControl(new LayerToggleControl(), "bottom-right");
 
   // Add a scale control to the map.
   var scale = new maplibregl.ScaleControl({
@@ -279,6 +256,20 @@ const initialMapLayers = [];
     console.log("A trackuserlocationstart event has occurred.");
   });
 
+  const legendLayers = {};
+
+  map.addControl(
+    new MaplibreLegendControl(legendLayers, {
+      showDefault: false,
+      showCheckbox: true,
+      onlyRendered: true,
+      reverseOrder: true,
+    }),
+    "bottom-right"
+  );
+
+  map.addControl(new ModeSwitchControl(), "bottom-left");
+
   // // Add fullscreen control to the map.
   // map.addControl(
   //   new maplibregl.FullscreenControl({
@@ -303,172 +294,4 @@ async function fetchMapStyle(url) {
   } catch (error) {
     console.error("Error fetching map_style.json:", error);
   }
-}
-
-async function fetchMapSources() {
-  try {
-    const response = await fetch("/static/world/map_sources.json");
-
-    if (!response.ok) {
-      const message = `An error has occurred: ${response.status}`;
-      throw new Error(message);
-    }
-    let mapSources = await response.json();
-
-    // Perform string substitution for spaces_cdn_endpoint
-    for (let sourceKey in mapSources) {
-      let source = mapSources[sourceKey];
-      if (source.url && source.url.includes("__SPACES_CDN_ENDPOINT__")) {
-        source.url = source.url.replace(
-          "__SPACES_CDN_ENDPOINT__",
-          spaces_cdn_endpoint
-        );
-      }
-    }
-
-    return mapSources;
-  } catch (error) {
-    console.error("Error fetching mapSources.json:", error);
-  }
-}
-
-async function fetchMapLayers() {
-  try {
-    const response = await fetch("/static/world/map_layers.json");
-
-    if (!response.ok) {
-      const message = `An error has occurred: ${response.status}`;
-      throw new Error(message);
-    }
-    let mapLayers = await response.json();
-
-    // Loop through mapLayers
-    for (const layerId in mapLayers) {
-      // Check if the layer has the desired metadata property
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "line-sunrise"
-      ) {
-        mapLayers[layerId].paint = {
-          "line-color": [
-            "step",
-            ["get", "ALLVEHS_AADT"],
-            "#add8e6", // Light blue
-            5000,
-            "#4db3d8", // Medium light blue
-            10000,
-            "#0074c8", // Medium blue
-            15000,
-            "#9c5060", // Medium dark red
-            20000,
-            "#c80000", // Dark red
-            35000,
-            "#4b0000", // Very dark red
-          ],
-          "line-opacity": 1,
-          "line-width": 2.5,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "poly-sunrise"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["get", "ALLVEHS_AADT"],
-            "#add8e6", // Light blue
-            5000,
-            "#4db3d8", // Medium light blue
-            10000,
-            "#0074c8", // Medium blue
-            15000,
-            "#9c5060", // Medium dark red
-            20000,
-            "#c80000", // Dark red
-            35000,
-            "#4b0000", // Very dark red
-          ],
-          "fill-opacity": 1,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "poly-heatmap"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["get", "DN"],
-            "#FFFF00",
-            15,
-            "#FFAA00",
-            17,
-            "#FF6600",
-            20,
-            "#FF3300",
-            22,
-            "#DC143C",
-            24,
-            "#8B0000",
-          ],
-          "fill-opacity": 0.7,
-        };
-      }
-    }
-
-    return mapLayers;
-  } catch (error) {
-    console.error("Error fetching mapSources.json:", error);
-  }
-}
-
-// Fetch GeoJSON data from any Django API endpoint
-async function fetchGeoJSONData(apiUrl) {
-  const response = await fetch(apiUrl);
-
-  if (!response.ok) {
-    const message = `An error has occured: ${response.status}`;
-    throw new Error(message);
-  }
-
-  const geojsonData = await response.json();
-  return JSON.parse(geojsonData);
-}
-
-async function addMarkers(apiUrl) {
-  try {
-    const PoIData = await fetchGeoJSONData(apiUrl);
-
-    console.log(PoIData); // Add this line to check the structure of the fetched data
-
-    // Replace the following line with your actual marker creation logic
-    PoIData.features.forEach(function (point) {
-      var elem = document.createElement("div");
-      elem.className = "marker";
-
-      var marker = new maplibregl.Marker(elem);
-      marker.setLngLat(point.geometry.coordinates);
-
-      var popup = new maplibregl.Popup({ offset: 24, closeButton: false });
-      popup.setHTML("<div>" + point.properties.name + "</div>");
-
-      marker.setPopup(popup);
-
-      marker.addTo(map);
-    });
-  } catch (error) {
-    console.error(error.message);
-  }
-}
-
-// addMarkers((apiUrl = "/world/poi_geojson/"));
-
-// async function addLineFeatures(apiUrl) { }
-
-function getColor(value) {
-  if (value <= 5000) return "#00ff00";
-  if (value <= 10000) return "#ffff00";
-  if (value <= 20000) return "#ff7f00";
-  return "#ff0000";
 }
