@@ -2,12 +2,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>tinybox prototype</title>
+    <title>tinybox - Neighbourhood Intelligence</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
+    {{STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key"}}
+    {{MAPBOX_API_KEY|json_script:"mapbox_api_key"}}
+    {{SPACES_KEY|json_script:"spaces_api_key"}}
+    {{SPACES_SECRET|json_script:"spaces_api_secret"}}
+    {{SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint"}}
     <link
       rel="shortcut icon"
       type="image/png"
@@ -21,12 +26,19 @@
       type="text/javascript"
       src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"
     ></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
     <script src="https://unpkg.com/pmtiles@2.5.0/dist/index.js"></script>
     <link
       href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
     <script src="https://watergis.github.io/maplibre-gl-legend/maplibre-gl-legend.js"></script>
+    <script type="module" src="{% static 'world/map.js' %}"></script>
     {% tailwind_css %}
   </head>
 
@@ -34,102 +46,50 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'world/styles.css' %}?{% now 'U'%}">
-
-  <div id="authDetails"
+      href="{% static 'world/styles.css' %}?{% now 'U'%}"
     />
-    
-  {% if user.is_authenticated %}
-  {{user.username}} (<a href="{% url 'home' %}">Home</a> <a href="{% url 'account_logout' %}">Logout</a>)
-{% else %}
-  <a href="{% url 'account_login' %}">Login</a>
-  <a href="{% url 'account_signup' %}">Sign Up</a>
-{% endif %}
-<br>
-</div>
 
-    <div id="image-container">
-      <img src="{% static 'world/tb_Logo-Logotype.svg' %}" alt="tinybox logo"/>
+    <div id="authDetails" class="hidden">
+      {% if user.is_authenticated %} {{user.username}} (<a
+        href="{% url 'home' %}"
+        >Home</a
+      >
+      <a href="{% url 'account_logout' %}">Logout</a>) {% else %}
+      <a href="{% url 'account_login' %}">Login</a>
+      <a href="{% url 'account_signup' %}">Sign Up</a>
+      {% endif %}
+      <br />
     </div>
-
-    <!-- Load `mapbox-gl-geocoder` plugin and stylesheet -->
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
-      type="text/css"
-    />
 
     <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
-  <link rel="stylesheet" type="text/css" href="{% static 'world/styles.css' %}?{% now 'U'%}">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'world/styles.css' %}?{% now 'U'%}"
+    />
 
-  <div id="authDetails">
-  {% if user.is_authenticated %}
-  {{user.username}} (<a href="{% url 'home' %}">Home</a> <a href="{% url 'account_logout' %}">Logout</a>)
-{% else %}
-  <a href="{% url 'account_login' %}">Login</a>
-  <a href="{% url 'account_signup' %}">Sign Up</a>
-{% endif %}
-<br>
-</div>
+    <div id="tailwind-main-container" class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div id="image-container">
+        <img
+          src="{% static 'world/tb_Logo-Logotype.svg' %}"
+          alt="tinybox logo"
+        />
+      </div>
 
-    <div id="image-container">
-      <img src="{% static 'world/tb_Logo-Logotype.svg' %}" />
-    </div>
-
-    <div
-      id="modeSwitch"
-      type="button"
-      class="hidden absolute z-20 top-20 sm:top-16 left-12 cursor-pointer rounded-md bg-gray-50 p-1 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-300 active:hover:bg-gray-300 outline-4"
-    >
-      asdfasdf
-    </div>
-
-    <div
-      id="toggle-icon"
-      type="button"
-      class="absolute z-20 bottom-20 sm:bottom-16 right-12 cursor-pointer rounded-md bg-gray-50 p-1 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-300 active:hover:bg-gray-300 outline-4"
-    >
-      <img
-        src="{% static 'world/tb_Logo.svg' %}"
-        class="w-8 sm:w-6 h-8 sm:h-6"
-      />
-      <div class="relative">
-        <div
-          id="layers-panel"
-          class="hidden z-10 overflow-y-auto rounded-md bg-white shadow"
-        >
-          <ul
-            id="layers-contents"
-            role="list"
-            class="divide-y divide-gray-200"
-          ></ul>
+      <div
+        id="wide-panel"
+        class="mx-auto overflow-hidden bg-white shadow rounded-md max-w-xl"
+      >
+        <div id="layers-panel" class="hidden px-4 py-5 sm:p-6">
+          <div class="z-10 overflow-y-auto">
+            <ul
+              id="layers-contents"
+              role="list"
+              class="divide-y divide-gray-200"
+            ></ul>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="container px-10"></div>
-
-    {% comment %}
-    <pre id="features">DEBUG</pre>
-    {% endcomment %}
-
-    <script>
-      document
-        .getElementById("toggle-icon")
-        .addEventListener("click", function () {
-          this.classList.toggle("bg-gray-600");
-          this.classList.toggle("clicked");
-          document.getElementById("layers-panel").classList.toggle("hidden");
-        });
-    </script>
-
-    {{STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key"}}
-    {{MAPBOX_API_KEY|json_script:"mapbox_api_key"}}
-    {{SPACES_KEY|json_script:"spaces_api_key"}}
-    {{SPACES_SECRET|json_script:"spaces_api_secret"}}
-    {{SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint"}}
-
-    <script type="text/javascript" src="{% static 'world/map.js' %}"></script>
   </body>
 </html>
