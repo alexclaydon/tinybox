@@ -7,7 +7,7 @@
       "category": "Traffic",
       "paint-style": "sunrise-line",
       "paint-variable": "ALLVEHS_AADT",
-      "paint-steps": [5000, 10000, 15000, 20000, 35000],
+      "paint-variable-min-max": [2, 119000],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -100,7 +100,7 @@
       "category": "Environment",
       "paint-style": "red-heatmap",
       "paint-variable": "DN",
-      "paint-steps": [15, 17, 20, 22, 24],
+      "paint-variable-min-max": [15, 26],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -114,7 +114,7 @@
       "category": "Social",
       "paint-style": "good-to-bad-heatmap",
       "paint-variable": "Unemployment rate (%)",
-      "paint-steps": [3.0, 4.0, 5.0, 6.0, 7.0],
+      "paint-variable-min-max": [3.0, 7.0],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -128,7 +128,7 @@
       "category": "Social",
       "paint-style": "purple-heatmap",
       "paint-variable": "Median age - persons (years)",
-      "paint-steps": [30, 35, 40, 45, 50],
+      "paint-variable-min-max": [29, 62.4],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -142,7 +142,7 @@
       "category": "Social",
       "paint-style": "red-heatmap",
       "paint-variable": "Rate per 100,000 population",
-      "paint-steps": [3000, 6000, 9000, 12000, 15000],
+      "paint-variable-min-max": [2361.9, 22235.9],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""

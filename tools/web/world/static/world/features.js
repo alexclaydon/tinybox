@@ -37,11 +37,23 @@ export async function fetchMapSources() {
   }
 }
 
-async function generatePaintExpression(paintStyle, paintSteps, paintVariable) {
+async function generatePaintExpression(
+  paintStyle,
+  paintVariableMinMax,
+  paintVariable
+) {
   const paintStylesResponse = await fetch("/static/world/paint_styles.json");
   const paintStyles = await paintStylesResponse.json();
 
   const colors = paintStyles[paintStyle].colors;
+
+  const min = paintVariableMinMax[0];
+  const max = paintVariableMinMax[1];
+  const stepSize = (max - min) / (colors.length - 1);
+  const paintSteps = Array.from(
+    { length: colors.length - 1 },
+    (_, i) => min + (i + 1) * stepSize
+  );
 
   const colorExpression = ["step", ["to-number", ["get", paintVariable]]];
   let startIndex = 0;
@@ -73,16 +85,16 @@ export async function fetchMapLayers() {
       const metadata = mapLayers[layerId].metadata;
       if (metadata && metadata["paint-style"]) {
         const paintStyle = metadata["paint-style"];
-        const paintSteps = metadata["paint-steps"];
+        const paintVariableMinMax = metadata["paint-variable-min-max"];
         const paintVariable = metadata["paint-variable"];
 
         const colorExpression = await generatePaintExpression(
           paintStyle,
-          paintSteps,
+          paintVariableMinMax,
           paintVariable
         );
 
-        if (paintStyle === "line-sunrise") {
+        if (paintStyle === "sunrise-line") {
           mapLayers[layerId].paint = {
             "line-color": colorExpression,
             "line-opacity": 1,
@@ -91,7 +103,7 @@ export async function fetchMapLayers() {
         } else {
           mapLayers[layerId].paint = {
             "fill-color": colorExpression,
-            "fill-opacity": paintStyle === "poly-heatmap" ? 0.7 : 0.8,
+            "fill-opacity": 0.8,
           };
         }
       }
