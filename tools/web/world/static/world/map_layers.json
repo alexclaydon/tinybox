@@ -108,5 +108,15 @@
       "paint-style": "median-age-heatmap",
       "source:comment": ""
     }
+  },
+  "Crime rate (per 100k ppl)": {
+    "type": "fill",
+    "source": "lga_crime",
+    "source-layer": "lga_crime",
+    "metadata": {
+      "category": "Social",
+      "paint-style": "crime-heatmap",
+      "source:comment": ""
+    }
   }
 }

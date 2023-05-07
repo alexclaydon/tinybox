@@ -106,5 +106,17 @@
       "tippecanoe_command": "tippecanoe -zg -f -o lga_demographics.pmtiles --drop-densest-as-needed -n 'LGA demographics' lga_demographics.geojson",
       "analyst_comment": "ETL done with /Users/alexclaydon/dev/dev-projects/tinybox-data/data/national/abs/demographic/derived/scripts/etl_demographics.ipynb"
     }
+  },
+  "lga_crime": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/lga_crime.pmtiles",
+    "description": "Crime",
+    "metadata": {
+      "source_org": "ABS",
+      "source_url": "https://files.crimestatistics.vic.gov.au/2023-03/Data_Tables_LGA_Recorded_Offences_Year_Ending_December_2022.xlsx",
+      "study_date": "2023-05-06",
+      "tippecanoe_command": "tippecanoe -zg -f -o lga_crime.pmtiles --drop-densest-as-needed --attribute-type='Rate per 100,000 population':float -n 'LGA crime' lga_crime.geojson",
+      "analyst_comment": "ETL done with /Users/alexclaydon/dev/dev-projects/tinybox-data/data/state/victoria/csa/derived/scripts/etl_crime.ipynb"
+    }
   }
 }

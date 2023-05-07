@@ -143,6 +143,29 @@ export async function fetchMapLayers() {
           "fill-opacity": 0.8,
         };
       }
+      if (
+        mapLayers[layerId].metadata &&
+        mapLayers[layerId].metadata["paint-style"] === "crime-heatmap"
+      ) {
+        mapLayers[layerId].paint = {
+          "fill-color": [
+            "step",
+            ["to-number", ["get", "Rate per 100,000 population"]],
+            "#FFFFB2",
+            0,
+            "#FED976",
+            3000,
+            "#FEB24C",
+            6000,
+            "#FD8D3C",
+            9000,
+            "#F03B20",
+            12000,
+            "#BD0026",
+          ],
+          "fill-opacity": 0.8,
+        };
+      }
     }
 
     return mapLayers;
