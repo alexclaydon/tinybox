@@ -118,5 +118,21 @@
       "paint-style": "crime-heatmap",
       "source:comment": ""
     }
+  },
+  "CBD building information": {
+    "type": "circle",
+    "source": "cbd_building_data",
+    "source-layer": "buildingswithnameagesizeaccessibilityandbicyclefacilities",
+    "metadata": {
+      "category": "Construction",
+      "source:comment": ""
+    },
+    "paint": {
+      "circle-radius": 5,
+      "circle-color": "#007cbf",
+      "circle-opacity": 0.8,
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#fff"
+    }
   }
 }

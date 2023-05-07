@@ -118,5 +118,17 @@
       "tippecanoe_command": "tippecanoe -zg -f -o lga_crime.pmtiles --drop-densest-as-needed --attribute-type='Rate per 100,000 population':float -n 'LGA crime' lga_crime.geojson",
       "analyst_comment": "ETL done with /Users/alexclaydon/dev/dev-projects/tinybox-data/data/state/victoria/csa/derived/scripts/etl_crime.ipynb"
     }
+  },
+  "cbd_building_data": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/cbd_building_data.pmtiles",
+    "description": "City of Melbourne building information",
+    "metadata": {
+      "source_org": "City of Melbourne",
+      "source_url": "https://discover.data.vic.gov.au/dataset/building-information",
+      "study_date": "2023-05-07",
+      "tippecanoe_command": "tippecanoe -zg -f -o cbd_building_data.pmtiles --drop-densest-as-needed -n 'City of Melbourne building information' buildings-with-name-age-size-accessibility-and-bicycle-facilities.geojson",
+      "analyst_comment": ""
+    }
   }
 }
