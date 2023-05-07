@@ -37,6 +37,27 @@ export async function fetchMapSources() {
   }
 }
 
+async function generatePaintExpression(paintStyle, paintSteps, paintVariable) {
+  const paintStylesResponse = await fetch("/static/world/paint_styles.json");
+  const paintStyles = await paintStylesResponse.json();
+
+  const colors = paintStyles[paintStyle];
+
+  const colorExpression = ["step", ["to-number", ["get", paintVariable]]];
+  let startIndex = 0;
+
+  if (colors.length > paintSteps.length) {
+    colorExpression.push(colors[0]);
+    startIndex = 1;
+  }
+
+  for (let i = startIndex; i < colors.length; i++) {
+    colorExpression.push(paintSteps[i - startIndex], colors[i]);
+  }
+
+  return colorExpression;
+}
+
 export async function fetchMapLayers() {
   try {
     const response = await fetch("/static/world/map_layers.json");
@@ -49,122 +70,30 @@ export async function fetchMapLayers() {
 
     // Loop through mapLayers
     for (const layerId in mapLayers) {
-      // Check if the layer has the desired metadata property
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "line-sunrise"
-      ) {
-        mapLayers[layerId].paint = {
-          "line-color": [
-            "step",
-            ["get", "ALLVEHS_AADT"],
-            "#0198BD",
-            5000,
-            "#49E3CE",
-            10000,
-            "#E8FEB5",
-            15000,
-            "#FEEDB1",
-            20000,
-            "#FEAD54",
-            35000,
-            "#D50255",
-          ],
-          "line-opacity": 1,
-          "line-width": 2.5,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "poly-heatmap"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["get", "DN"],
-            "#FFC300",
-            15,
-            "#F1920E",
-            17,
-            "#E3611C",
-            20,
-            "#C70039",
-            22,
-            "#900C3F",
-            24,
-            "#5A1846",
-          ],
-          "fill-opacity": 0.7,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "unemployment-heatmap"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["to-number", ["get", "Unemployment rate (%)"]],
-            "#FEEBE2",
-            3.0,
-            "#FCC5C0",
-            4.0,
-            "#FA9FB5",
-            5.0,
-            "#F768A1",
-            6.0,
-            "#C51B8A",
-            7.0,
-            "#7A0177",
-          ],
-          "fill-opacity": 0.8,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "median-age-heatmap"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["to-number", ["get", "Median age - persons (years)"]],
-            "#EDF8FB",
-            30,
-            "#CCECE6",
-            35,
-            "#99D8C9",
-            40,
-            "#66C2A4",
-            45,
-            "#2CA25F",
-            50,
-            "#006D2C",
-          ],
-          "fill-opacity": 0.8,
-        };
-      }
-      if (
-        mapLayers[layerId].metadata &&
-        mapLayers[layerId].metadata["paint-style"] === "crime-heatmap"
-      ) {
-        mapLayers[layerId].paint = {
-          "fill-color": [
-            "step",
-            ["to-number", ["get", "Rate per 100,000 population"]],
-            "#FFFFB2",
-            0,
-            "#FED976",
-            3000,
-            "#FEB24C",
-            6000,
-            "#FD8D3C",
-            9000,
-            "#F03B20",
-            12000,
-            "#BD0026",
-          ],
-          "fill-opacity": 0.8,
-        };
+      const metadata = mapLayers[layerId].metadata;
+      if (metadata && metadata["paint-style"]) {
+        const paintStyle = metadata["paint-style"];
+        const paintSteps = metadata["paint-steps"];
+        const paintVariable = metadata["paint-variable"];
+
+        const colorExpression = await generatePaintExpression(
+          paintStyle,
+          paintSteps,
+          paintVariable
+        );
+
+        if (paintStyle === "line-sunrise") {
+          mapLayers[layerId].paint = {
+            "line-color": colorExpression,
+            "line-opacity": 1,
+            "line-width": 2.5,
+          };
+        } else {
+          mapLayers[layerId].paint = {
+            "fill-color": colorExpression,
+            "fill-opacity": paintStyle === "poly-heatmap" ? 0.7 : 0.8,
+          };
+        }
       }
     }
 
@@ -172,14 +101,6 @@ export async function fetchMapLayers() {
   } catch (error) {
     console.error("Error fetching mapSources.json:", error);
   }
-}
-
-// Incomplete: will eventually be used to color features based on a value
-export function getFeatureColor(value) {
-  if (value <= 5000) return "#00ff00";
-  if (value <= 10000) return "#ffff00";
-  if (value <= 20000) return "#ff7f00";
-  return "#ff0000";
 }
 
 // Fetch GeoJSON data from any Django API endpoint

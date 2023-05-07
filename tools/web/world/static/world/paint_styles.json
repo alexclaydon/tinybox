@@ -1,0 +1,42 @@
+{
+  "sunrise-line": [
+    "#0198BD",
+    "#49E3CE",
+    "#E8FEB5",
+    "#FEEDB1",
+    "#FEAD54",
+    "#D50255"
+  ],
+  "good-to-bad-heatmap": [
+    "#FFC300",
+    "#F1920E",
+    "#E3611C",
+    "#C70039",
+    "#900C3F",
+    "#5A1846"
+  ],
+  "purple-heatmap": [
+    "#FEEBE2",
+    "#FCC5C0",
+    "#FA9FB5",
+    "#F768A1",
+    "#C51B8A",
+    "#7A0177"
+  ],
+  "green-heatmap": [
+    "#EDF8FB",
+    "#CCECE6",
+    "#99D8C9",
+    "#66C2A4",
+    "#2CA25F",
+    "#006D2C"
+  ],
+  "red-heatmap": [
+    "#FFFFB2",
+    "#FED976",
+    "#FEB24C",
+    "#FD8D3C",
+    "#F03B20",
+    "#BD0026"
+  ]
+}

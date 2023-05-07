@@ -5,8 +5,9 @@
     "source-layer": "Traffic_Volume",
     "metadata": {
       "category": "Traffic",
-      "paint-style": "line-sunrise",
-      "paint-variable": "",
+      "paint-style": "sunrise-line",
+      "paint-variable": "ALLVEHS_AADT",
+      "paint-steps": [5000, 10000, 15000, 20000, 35000],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -97,8 +98,9 @@
     "source-layer": "solarwet",
     "metadata": {
       "category": "Environment",
-      "paint-style": "poly-heatmap",
-      "paint-variable": "",
+      "paint-style": "red-heatmap",
+      "paint-variable": "DN",
+      "paint-steps": [15, 17, 20, 22, 24],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -110,8 +112,9 @@
     "source-layer": "lga_unemployment",
     "metadata": {
       "category": "Social",
-      "paint-style": "unemployment-heatmap",
-      "paint-variable": "",
+      "paint-style": "good-to-bad-heatmap",
+      "paint-variable": "Unemployment rate (%)",
+      "paint-steps": [3.0, 4.0, 5.0, 6.0, 7.0],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -123,8 +126,9 @@
     "source-layer": "lga_demographics",
     "metadata": {
       "category": "Social",
-      "paint-style": "median-age-heatmap",
-      "paint-variable": "",
+      "paint-style": "purple-heatmap",
+      "paint-variable": "Median age - persons (years)",
+      "paint-steps": [30, 35, 40, 45, 50],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
@@ -136,8 +140,9 @@
     "source-layer": "lga_crime",
     "metadata": {
       "category": "Social",
-      "paint-style": "crime-heatmap",
-      "paint-variable": "",
+      "paint-style": "red-heatmap",
+      "paint-variable": "Rate per 100,000 population",
+      "paint-steps": [3000, 6000, 9000, 12000, 15000],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
