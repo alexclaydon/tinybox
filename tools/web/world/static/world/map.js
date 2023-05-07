@@ -175,25 +175,44 @@ const initialMapLayers = [];
       });
   });
 
-  // map.on("click", function (e) {
-  //   var features = map.queryRenderedFeatures(e.point);
+  map.on("click", "CBD building information", function (e) {
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var description = e.features[0].properties.street_address;
 
-  //   var displayProperties = ["layer"];
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
 
-  //   var displayFeatures = features.map(function (feat) {
-  //     var displayFeat = {};
-  //     displayProperties.forEach(function (prop) {
-  //       displayFeat[prop] = feat[prop];
-  //     });
-  //     return displayFeat;
-  //   });
+    new maplibregl.Popup()
+      .setLngLat(coordinates)
+      .setHTML(description)
+      .addTo(map);
+  });
 
-  //   document.getElementById("features").innerHTML = JSON.stringify(
-  //     displayFeatures,
-  //     null,
-  //     2
-  //   );
-  // });
+  map.on("mousemove", function (e) {
+    var features = map.queryRenderedFeatures(e.point);
+
+    // Limit the number of properties we're displaying for
+    // legibility and performance
+    var displayProperties = ["properties"];
+
+    var displayFeatures = features.map(function (feat) {
+      var displayFeat = {};
+      displayProperties.forEach(function (prop) {
+        displayFeat[prop] = feat[prop];
+      });
+      return displayFeat;
+    });
+
+    document.getElementById("info").innerHTML = JSON.stringify(
+      displayFeatures,
+      null,
+      2
+    );
+  });
 
   // Add Mapbox geocoder to the map
   var geocoder = new MapboxGeocoder({
