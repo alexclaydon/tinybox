@@ -41,7 +41,7 @@ async function generatePaintExpression(paintStyle, paintSteps, paintVariable) {
   const paintStylesResponse = await fetch("/static/world/paint_styles.json");
   const paintStyles = await paintStylesResponse.json();
 
-  const colors = paintStyles[paintStyle];
+  const colors = paintStyles[paintStyle].colors;
 
   const colorExpression = ["step", ["to-number", ["get", paintVariable]]];
   let startIndex = 0;
