@@ -5,9 +5,11 @@
     "source-layer": "Traffic_Volume",
     "metadata": {
       "category": "Traffic",
-      "source:comment": "",
       "paint-style": "line-sunrise",
-      "paint-quintiles": ""
+      "paint-variable": "",
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     }
   },
   "Future land development": {
@@ -16,7 +18,9 @@
     "source-layer": "Land_Use",
     "metadata": {
       "category": "Development",
-      "source:comment": ""
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     },
     "paint": {
       "fill-color": "#007cbf",
@@ -29,7 +33,9 @@
     "source-layer": "VPA_Open_Space",
     "metadata": {
       "category": "Lifestyle",
-      "source:comment": ""
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     },
     "paint": {
       "fill-color": "#007cbf",
@@ -42,7 +48,9 @@
     "source-layer": "Public_Open_Space__400m_Walkable_Catchment",
     "metadata": {
       "category": "Lifestyle",
-      "source:comment": ""
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     },
     "paint": {
       "fill-color": "#007cbf",
@@ -55,7 +63,9 @@
     "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
     "metadata": {
       "category": "Lifestyle",
-      "source:comment": ""
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     },
     "paint": {
       "line-color": "#007cbf",
@@ -69,7 +79,9 @@
     "source-layer": "bikesharedocklocations",
     "metadata": {
       "category": "Lifestyle",
-      "source:comment": ""
+      "mousemove_properties": [],
+      "popup_properties": ["name", "capacity", "rental_method"],
+      "notes": ""
     },
     "paint": {
       "circle-radius": 5,
@@ -86,7 +98,10 @@
     "metadata": {
       "category": "Environment",
       "paint-style": "poly-heatmap",
-      "source:comment": ""
+      "paint-variable": "",
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     }
   },
   "Unemployment rate (%)": {
@@ -96,7 +111,10 @@
     "metadata": {
       "category": "Social",
       "paint-style": "unemployment-heatmap",
-      "source:comment": ""
+      "paint-variable": "",
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     }
   },
   "Median population age": {
@@ -106,7 +124,10 @@
     "metadata": {
       "category": "Social",
       "paint-style": "median-age-heatmap",
-      "source:comment": ""
+      "paint-variable": "",
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     }
   },
   "Crime rate (per 100k ppl)": {
@@ -116,7 +137,10 @@
     "metadata": {
       "category": "Social",
       "paint-style": "crime-heatmap",
-      "source:comment": ""
+      "paint-variable": "",
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
     }
   },
   "CBD building information": {
@@ -125,7 +149,15 @@
     "source-layer": "buildingswithnameagesizeaccessibilityandbicyclefacilities",
     "metadata": {
       "category": "Construction",
-      "source:comment": ""
+      "mousemove_properties": [],
+      "popup_properties": [
+        "street_address",
+        "building_name",
+        "construction_year",
+        "number_of_floors_above_ground",
+        "bicycle_spaces"
+      ],
+      "notes": ""
     },
     "paint": {
       "circle-radius": 5,

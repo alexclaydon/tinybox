@@ -175,13 +175,15 @@ const initialMapLayers = [];
       });
   });
 
-  map.on("click", "CBD building information", function (e) {
+  function createPopup(e, propertyKeys) {
     var coordinates = e.features[0].geometry.coordinates.slice();
-    var description = e.features[0].properties.street_address;
+    var description = propertyKeys
+      .map(
+        (propertyKey) =>
+          `<strong>${propertyKey}:</strong> ${e.features[0].properties[propertyKey]}`
+      )
+      .join("<br>");
 
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
@@ -190,24 +192,19 @@ const initialMapLayers = [];
       .setLngLat(coordinates)
       .setHTML(description)
       .addTo(map);
-  });
+  }
 
-  map.on("click", "CBD bike-share docks", function (e) {
-    var coordinates = e.features[0].geometry.coordinates.slice();
-    var description = e.features[0].properties.name;
-
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  for (const [layer, layerData] of Object.entries(mapLayers)) {
+    if (
+      Array.isArray(layerData.metadata.popup_properties) &&
+      layerData.metadata.popup_properties.length > 0
+    ) {
+      const propertyKeys = layerData.metadata.popup_properties;
+      map.on("click", layer, function (e) {
+        createPopup(e, propertyKeys);
+      });
     }
-
-    new maplibregl.Popup()
-      .setLngLat(coordinates)
-      .setHTML(description)
-      .addTo(map);
-  });
+  }
 
   map.on("mousemove", function (e) {
     var features = map.queryRenderedFeatures(e.point);
