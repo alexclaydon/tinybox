@@ -175,25 +175,58 @@ const initialMapLayers = [];
       });
   });
 
-  // map.on("click", function (e) {
-  //   var features = map.queryRenderedFeatures(e.point);
+  function createPopup(e, propertyKeys) {
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var description = propertyKeys
+      .map(
+        (propertyKey) =>
+          `<strong>${propertyKey}:</strong> ${e.features[0].properties[propertyKey]}`
+      )
+      .join("<br>");
 
-  //   var displayProperties = ["layer"];
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
 
-  //   var displayFeatures = features.map(function (feat) {
-  //     var displayFeat = {};
-  //     displayProperties.forEach(function (prop) {
-  //       displayFeat[prop] = feat[prop];
-  //     });
-  //     return displayFeat;
-  //   });
+    new maplibregl.Popup()
+      .setLngLat(coordinates)
+      .setHTML(description)
+      .addTo(map);
+  }
 
-  //   document.getElementById("features").innerHTML = JSON.stringify(
-  //     displayFeatures,
-  //     null,
-  //     2
-  //   );
-  // });
+  for (const [layer, layerData] of Object.entries(mapLayers)) {
+    if (
+      Array.isArray(layerData.metadata.popup_properties) &&
+      layerData.metadata.popup_properties.length > 0
+    ) {
+      const propertyKeys = layerData.metadata.popup_properties;
+      map.on("click", layer, function (e) {
+        createPopup(e, propertyKeys);
+      });
+    }
+  }
+
+  map.on("mousemove", function (e) {
+    var features = map.queryRenderedFeatures(e.point);
+
+    // Limit the number of properties we're displaying for
+    // legibility and performance
+    var displayProperties = ["properties"];
+
+    var displayFeatures = features.map(function (feat) {
+      var displayFeat = {};
+      displayProperties.forEach(function (prop) {
+        displayFeat[prop] = feat[prop];
+      });
+      return displayFeat;
+    });
+
+    document.getElementById("info").innerHTML = JSON.stringify(
+      displayFeatures,
+      null,
+      2
+    );
+  });
 
   // Add Mapbox geocoder to the map
   var geocoder = new MapboxGeocoder({

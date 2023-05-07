@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "propertyNames": {
+    "pattern": "^[a-zA-Z0-9-]+$"
+  },
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "colors": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "required": ["colors"]
+  }
+}
