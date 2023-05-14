@@ -94,7 +94,7 @@ export async function fetchMapLayers() {
           paintVariable
         );
 
-        if (paintStyle === "sunrise-line") {
+        if (paintStyle === "sunrise") {
           mapLayers[layerId].paint = {
             "line-color": colorExpression,
             "line-opacity": 1,

@@ -291,15 +291,15 @@ const initialMapLayers = [];
 
   const legendLayers = {};
 
-  map.addControl(
-    new MaplibreLegendControl(legendLayers, {
-      showDefault: false,
-      showCheckbox: true,
-      onlyRendered: true,
-      reverseOrder: true,
-    }),
-    "bottom-right"
-  );
+  // map.addControl(
+  //   new MaplibreLegendControl(legendLayers, {
+  //     showDefault: false,
+  //     showCheckbox: true,
+  //     onlyRendered: true,
+  //     reverseOrder: true,
+  //   }),
+  //   "bottom-right"
+  // );
 
   map.addControl(new ModeSwitchControl(), "bottom-left");
 
