@@ -171,5 +171,30 @@
       "circle-stroke-width": 1,
       "circle-stroke-color": "#fff"
     }
+  },
+  "School locations": {
+    "type": "circle",
+    "source": "education",
+    "source-layer": "school_locations",
+    "metadata": {
+      "category": "Education",
+      "mousemove_properties": [],
+      "popup_properties": [
+        "School_Name",
+        "School_Type",
+        "Education_Sector",
+        "Full_Phone_No",
+        "Address_Line_1",
+        "Address_Line_2"
+      ],
+      "notes": ""
+    },
+    "paint": {
+      "circle-radius": 5,
+      "circle-color": "#007cbf",
+      "circle-opacity": 0.8,
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#fff"
+    }
   }
 }

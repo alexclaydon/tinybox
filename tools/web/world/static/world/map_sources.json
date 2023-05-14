@@ -130,5 +130,17 @@
       "tippecanoe_command": "tippecanoe -zg -f -o cbd_building_data.pmtiles --drop-densest-as-needed -n 'City of Melbourne building information' buildings-with-name-age-size-accessibility-and-bicycle-facilities.geojson",
       "analyst_comment": ""
     }
+  },
+  "education": {
+    "type": "vector",
+    "url": "pmtiles://__SPACES_CDN_ENDPOINT__/education.pmtiles",
+    "description": "Data concerning education",
+    "metadata": {
+      "source_org": "Victorian Department of Education",
+      "source_url": "",
+      "study_date": "2023-05-14",
+      "tippecanoe_command": "tippecanoe -zg -f -o education.pmtiles --drop-densest-as-needed -n 'Education' school_locations.geojson",
+      "analyst_comment": ""
+    }
   }
 }
