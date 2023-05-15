@@ -5,12 +5,28 @@
     "source-layer": "Traffic_Volume",
     "metadata": {
       "category": "Traffic",
-      "paint-style": "sunrise-line",
+      "paint-style": "sunrise",
       "paint-variable": "ALLVEHS_AADT",
       "paint-variable-min-max": [2, 119000],
       "mousemove_properties": [],
       "popup_properties": [],
       "notes": ""
+    }
+  },
+  "Average annual traffic volume_ALT": {
+    "type": "line",
+    "source": "vic_vechicle_traffic",
+    "source-layer": "Traffic_Volume",
+    "metadata": {
+      "category": "Traffic",
+      "mousemove_properties": [],
+      "popup_properties": [],
+      "notes": ""
+    },
+    "paint": {
+      "line-color": "#007cbf",
+      "line-width": 2,
+      "line-opacity": 1
     }
   },
   "Future land development": {
@@ -24,8 +40,30 @@
       "notes": ""
     },
     "paint": {
-      "fill-color": "#007cbf",
-      "fill-opacity": 0.6
+      "fill-color": [
+        "match",
+        ["get", "LU_CLASS"],
+        "Credited Open Space",
+        "#9E559C",
+        "Developable Area - Employment",
+        "#A7C636",
+        "Developable Area - Residential",
+        "#149ECE",
+        "Education/Community/Government",
+        "#ED5151",
+        "Other",
+        "#FBB03B",
+        "Other Non-Developable Land",
+        "#FBB03B",
+        "Regional Open Space",
+        "#9E559C",
+        "Transport",
+        "#007cbf",
+        "Uncredited Open Space",
+        "#9E559C",
+        "black"
+      ],
+      "fill-opacity": 0.8
     }
   },
   "Open spaces": {
@@ -88,8 +126,7 @@
       "circle-radius": 5,
       "circle-color": "#007cbf",
       "circle-opacity": 0.8,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff"
+      "circle-stroke-width": 1
     }
   },
   "Average solar radiation in Summer": {
@@ -98,7 +135,7 @@
     "source-layer": "solarwet",
     "metadata": {
       "category": "Environment",
-      "paint-style": "red-heatmap",
+      "paint-style": "red-light-to-dark",
       "paint-variable": "DN",
       "paint-variable-min-max": [15, 26],
       "mousemove_properties": [],
@@ -112,7 +149,7 @@
     "source-layer": "lga_unemployment",
     "metadata": {
       "category": "Social",
-      "paint-style": "good-to-bad-heatmap",
+      "paint-style": "good-to-bad",
       "paint-variable": "Unemployment rate (%)",
       "paint-variable-min-max": [3.0, 7.0],
       "mousemove_properties": [],
@@ -126,7 +163,7 @@
     "source-layer": "lga_demographics",
     "metadata": {
       "category": "Social",
-      "paint-style": "purple-heatmap",
+      "paint-style": "purple-light-to-dark",
       "paint-variable": "Median age - persons (years)",
       "paint-variable-min-max": [29, 62.4],
       "mousemove_properties": [],
@@ -140,7 +177,7 @@
     "source-layer": "lga_crime",
     "metadata": {
       "category": "Social",
-      "paint-style": "red-heatmap",
+      "paint-style": "red-light-to-dark",
       "paint-variable": "Rate per 100,000 population",
       "paint-variable-min-max": [2361.9, 22235.9],
       "mousemove_properties": [],
@@ -168,8 +205,41 @@
       "circle-radius": 5,
       "circle-color": "#007cbf",
       "circle-opacity": 0.8,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff"
+      "circle-stroke-width": 1
+    }
+  },
+  "School locations": {
+    "type": "circle",
+    "source": "education",
+    "source-layer": "school_locations",
+    "metadata": {
+      "category": "Education",
+      "mousemove_properties": [],
+      "popup_properties": [
+        "School_Name",
+        "School_Type",
+        "Education_Sector",
+        "Full_Phone_No",
+        "Address_Line_1",
+        "Address_Line_2"
+      ],
+      "notes": ""
+    },
+    "paint": {
+      "circle-radius": 5,
+      "circle-color": [
+        "match",
+        ["get", "Education_Sector"],
+        "Catholic",
+        "#3CB371",
+        "Government",
+        "#6495ED",
+        "Independent",
+        "#CD5C5C",
+        "black"
+      ],
+      "circle-opacity": 0.8,
+      "circle-stroke-width": 1
     }
   }
 }
