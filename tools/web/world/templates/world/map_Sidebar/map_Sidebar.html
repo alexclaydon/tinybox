@@ -14,7 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     {% comment %} <script type="text/javascript" src={% static 'world/map_Sidebar/tailwind.config.js'%}></script> {% endcomment %}
     
-    <title>tinybox - Neighbourhood Intelligence</title> 
+    {% comment %} <title>tinybox - Neighbourhood Intelligence</title>  {% endcomment %}
 </head>
 <body>
 <!--Side Bar Container - Logo/Home button-->
@@ -322,7 +322,7 @@ document.querySelectorAll('.layer-button').forEach(button => {
 
 <!--Map-->    
 {% comment %} <div id="map" class="overflow-hidden absolute top-0 bottom-0 w-full"></div> {% endcomment %}
-    <script type="text/javascript">
+    {% comment %} <script type="text/javascript">
     var map = new maplibregl.Map({
     container: 'map',
     center: [144.7631, -37.9536],  // Initial focus coordinate
@@ -334,9 +334,9 @@ document.querySelectorAll('.layer-button').forEach(button => {
         map.addControl(new maplibregl.NavigationControl());
     </script>
     
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLYGDfskhxGs3WyJrHZLT-2-3R1CcA6a8&libraries=places&region=AU"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLYGDfskhxGs3WyJrHZLT-2-3R1CcA6a8&libraries=places&region=AU"></script> {% endcomment %}
     
-    <script>    
+    {% comment %} <script>    
     google.maps.event.addDomListener(window, 'load', initialize);
     function initialize() {
     var input = document.getElementById('autocomplete_search');
@@ -346,7 +346,7 @@ document.querySelectorAll('.layer-button').forEach(button => {
     });
   }
 
-</script>
+</script> {% endcomment %}
     
     <script> 
 // Select the overlay element and the open/close button element
@@ -354,9 +354,9 @@ const overlay = document.querySelector('.overlay');
 const button = document.querySelector('#open-overlay-button');
 
 // Add a click event listener to the button element to toggle the overlay
-button.addEventListener('click', function() {
+{% comment %} button.addEventListener('click', function() {
   overlay.classList.toggle('show');
-});
+}); {% endcomment %}
 
      </script>   
     
