@@ -17,7 +17,7 @@ from .models import (
 
 def map_Sidebar_temp(request):
     # return render(request, "world/map_Sidebar2.html")
-    return render(request, "world/map_Sidebar/map_Sidebar.html")
+    return render(request, "world/map_Sidebar/map_Sidebar copy.html")
 
 # Temporarily disabled as we are using Ngrok auth instead
 # @user_is_approved
