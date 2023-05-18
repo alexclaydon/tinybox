@@ -1,4 +1,4 @@
-{% load static %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -10,7 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href=tailwind.css rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src={% static 'world/map_Sidebar/tailwind.config.js'%}></script>
+    <script type="text/javascript" src=tailwind.config.js></script>
+    <script type="text/javascript" src=tailwind.config.js></script>
     
     <title>tinybox - Neighbourhood Intelligence</title> 
 </head>
@@ -20,12 +21,12 @@
   <div id="slidingDiv" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out">
     <div class="flex items-center">
       <button type="button" id="slideBtn" class="pt-2 mx-auto">
-        <img id="btnImg" src="{% static 'world/map_Sidebar/images/btn_Down.svg' %}" alt="Down" class="h-3"/>
+        <img id="btnImg" src="images/btn_Down.svg" alt="Down" class="h-3"/>
     </button>
     </div>
     <div class="flex items-center justify-between pb-5 pl-4">
-      <img src="{% static 'world/map_Sidebar/images/tinybox_Logo.svg'%}" class="w-36">      
-      <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg'%}" alt="Profile" class="h-12 pr-4"/>
+      <img src="images/tinybox_Logo.svg" class="w-36">      
+      <img src="images/btn_Profile.svg" alt="Profile" class="h-12 pr-4"/>
     </div>
 <!--Search bar-->
 <div class="mb-3">
@@ -61,7 +62,7 @@
           <div class="flex items-center">
             <span class="font-semibold">Data Overlay 1</span>
             <button  id="key" class="ml-5">
-              <img src="{% static 'world/map_Sidebar/images/btn_Key.svg'%}" alt="Key" class="w-6 inline"/>
+              <img src="images/btn_Key.svg" alt="Key" class="w-6 inline"/>
             </button>
             <div id="popover" class="hidden absolute mt-20 bg-neutral-50 text-black p-4 border border-neutral-400 rounded-lg shadow-md">
               This is the popover message.
@@ -79,7 +80,7 @@
           <div id="accordion">
             <div class="accordion-item">
               <button type="button" id="twistieBtn" class="accordion-button pt-2 mx-auto">
-                <img id="btnTwistie" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3"/>
+                <img id="btnTwistie" src="images/btn_Twistie.svg" alt="Down" class="h-3"/>
             </button>
               <div class="accordion-content hidden pb-36 max-w-sm">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -87,7 +88,7 @@
             </div>
           </div>
           <button class="float-right">
-            <img src="{% static 'world/map_Sidebar/images/btn_X.svg'%}" alt="X" class="w-6"/>
+            <img src="images/btn_X.svg" alt="X" class="w-6"/>
           </button>
         </div>
       </div>
@@ -319,7 +320,7 @@ document.querySelectorAll('.layer-button').forEach(button => {
 </script>
 
 <!--Map-->    
-{% comment %} <div id="map" class="overflow-hidden absolute top-0 bottom-0 w-full"></div> {% endcomment %}
+<div id="map" class="overflow-hidden absolute top-0 bottom-0 w-full"></div>
     <script type="text/javascript">
     var map = new maplibregl.Map({
     container: 'map',

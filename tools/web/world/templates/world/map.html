@@ -1,4 +1,5 @@
 {% load static tailwind_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -67,6 +68,11 @@
       type="text/css"
       href="{% static 'world/styles.css' %}?{% now 'U'%}"
     />
+
+    <div id="slidingDiv" class="absolute z-40 sm:w-96 h-full bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out">
+      {% include 'world/map_Sidebar/map_Sidebar.html'%}
+      <!-- Sidebar content goes here -->
+    </div>
 
     <div id="tailwind-main-container" class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div id="image-container">
