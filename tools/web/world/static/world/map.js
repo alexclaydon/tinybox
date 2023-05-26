@@ -16,6 +16,144 @@ if (!maplibregl.supported()) {
   alert("Your browser does not support MapLibre GL");
 }
 
+// function createLayerItem(link3, layerName, layerDescription) {
+//   // Create necessary elements
+//   const listItem = document.createElement("li");
+  
+//   listItem.appendChild(link3);
+
+//   return listItem;
+// }
+
+// Temporary variable to store layer names
+let defaultDisplayedLayers = [
+  "Average annual traffic volume",
+  // "Average annual traffic volume_ALT",
+  "Future land development",
+  "Open spaces",
+  // "Areas within walking distance (400m) of public space",
+  "CBD bike routes",
+  // "CBD bike-share docks",
+  // "Average solar radiation in Summer",
+  // "Unemployment rate (%)",
+  // "Median population age",
+  "Crime rate (per 100k ppl)",
+  // "CBD building information",
+  "School locations"
+]
+
+const layerMetaData = {
+  "Average annual traffic volume": {
+      "category": "Category 1",
+      "summary_description": "",
+      "full_description": "",
+  },
+  "Average annual traffic volume_ALT": {
+    "category": "Category 1",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Future land development": {
+    "category": "Category 1",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Open spaces": {
+    "category": "Category 1",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Areas within walking distance (400m) of public space": {
+    "category": "Category 1",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "CBD bike routes": {
+    "category": "Category 3",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "CBD bike-share docks": {
+    "category": "Category 3",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Average solar radiation in Summer": {
+    "category": "Category 1",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Unemployment rate (%)": {
+    "category": "Category 2",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Median population age": {
+    "category": "Category 2",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "Crime rate (per 100k ppl)": {
+    "category": "Category 2",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "CBD building information": {
+    "category": "Category 2",
+    "summary_description": "",
+    "full_description": "",
+  },
+  "School locations": {
+    "category": "Category 2",
+    "summary_description": "",
+    "full_description": "",
+  },
+};
+
+let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
+
+function toggleButton(button) {
+  if (button.dataset.state === 'off') {
+    button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    DisplayedLayers.push(button.dataset.layerId);
+    button.dataset.state = 'on';
+  } else {
+    button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    DisplayedLayers = DisplayedLayers.filter(id => id !== button.dataset.layerId);
+    button.dataset.state = 'off';
+  }
+  localStorage.setItem('DisplayedLayers', JSON.stringify(DisplayedLayers)); // Save DisplayedLayers to localStorage
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.getElementById('layer-addremove-buttons').addEventListener('click', function(e) {
+    var buttonElement = e.target.closest('.layer-button');
+    if (buttonElement) {
+      console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
+      toggleButton(buttonElement);
+    } else {
+      console.log ("no match", e.target)
+    }
+    updateToggleButtons(); 
+  });
+});
+
+// Initialize buttons on page load
+function initialiseLayerButtons(){
+  document.querySelectorAll('.layer-button').forEach(button => {
+    // Check if button's layerId is in DisplayedLayers
+    if (DisplayedLayers.includes(button.dataset.layerId)) {
+      // If it is, set the button to 'on' state
+      button.dataset.state = 'on';
+      button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    } else {
+      // If it's not, set the button to 'off' state
+      button.dataset.state = 'off';
+      button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    }
+  });
+};
+
 // Initialize tiling protocol
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -44,12 +182,82 @@ const initialMapLayers = [];
   function getStyleByMode(mode) {
     return mode == "dark" ? lightStyle : lightStyle;
   }
+  
+  let createLayerShowHideButtons = (id) => {
+    let element = document.getElementById("layers-show-hide-buttons");
+    let dataUrl = element.getAttribute('data-url');
+    console.log(dataUrl); // Prints the value of data-url
+    console.log("this id", id); // Prints the value of data-url
+
+    if (DisplayedLayers.includes(id)) {
+    
+      // let url = new URL(window.location.origin + '/get_map_layer_button/');
+      let url = new URL(window.location.origin + dataUrl);
+    
+      // Add data to the query string
+      url.searchParams.append('id', id);
+    
+      // Make the request
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const layerControls = document.getElementById("layers-show-hide-buttons");
+          
+          // Create a temporary container and append the HTML to it
+          let tempContainer = document.createElement('div');
+          tempContainer.innerHTML = data.html;
+    
+          // Get the first (and only) child node of the container (this is your new HTML)
+          let newElement = tempContainer.firstElementChild;
+    
+          // Append the new HTML to the DOM
+          layerControls.appendChild(newElement);
+    
+          // Extract the ID from the new element's data-id attribute
+          const elementId = newElement.getAttribute('data-id');
+    
+          // The new HTML is now in the DOM, so we can attach event listeners.
+
+          newElement.addEventListener('click', function(e) {
+            console.log("this", this)
+            console.log("this.textContent", this.textContent)
+            const clickedLayer = elementId;
+            console.log("clickedLayer", clickedLayer)
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
+          
+            if (!map.getLayer(clickedLayer)) {
+              // Add the layer if it's not on the map yet
+              mapLayers[clickedLayer].id = clickedLayer;
+              map.addLayer(mapLayers[clickedLayer]);
+            }
+          
+            const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+          
+            // Toggle layer visibility by changing the layout object's visibility property.
+            if (visibility === "visible") {
+              map.setLayoutProperty(clickedLayer, "visibility", "none");
+              this.classList.remove("active");
+            } else {
+              this.classList.add("active");
+              map.setLayoutProperty(clickedLayer, "visibility", "visible");
+            }
+          });
+    
+        })
+        .catch(err => {
+          console.error('Error:', err);
+        });
+      };
+    
+    };
 
   const mapSources = await fetchMapSources();
   console.log(mapSources);
 
   const mapLayers = await fetchMapLayers();
-  console.log(mapLayers);
+  console.log("maplayers", mapLayers);
 
   const map = new maplibregl.Map({
     container: "map",
@@ -58,6 +266,23 @@ const initialMapLayers = [];
     style: getStyleByMode(activeMode),
     attributionControl: false,
   });
+
+  function updateToggleButtons() {
+    // Get container of yourLayers
+    const yourLayers = document.getElementById('layers-show-hide-buttons');
+
+    // Clear all current toggles
+    yourLayers.innerHTML = '';
+
+    // Enumerate ids of the layers.
+    const toggleableLayerIds = Object.keys(mapLayers);
+
+    // Set up the corresponding toggle button for each layer.
+    for (const id of toggleableLayerIds) {
+      // ... existing code to create toggles ...
+      createLayerShowHideButtons(id);
+    }
+  }
 
   map.on("load", () => {
     try {
@@ -94,6 +319,8 @@ const initialMapLayers = [];
         continue;
       }
 
+      // >>>OLD LAYER CONTROL CODE<<<
+
       // Create a link.
       const link = document.createElement("a");
       link.id = id;
@@ -104,8 +331,10 @@ const initialMapLayers = [];
       // Show or hide layer when the toggle is clicked.
       link.onclick = function (e) {
         const clickedLayer = this.textContent;
+        console.log("clickedLayer", clickedLayer)
         e.preventDefault();
         e.stopPropagation();
+        console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
 
         if (!map.getLayer(clickedLayer)) {
           // Add the layer if it's not on the map yet
@@ -126,10 +355,74 @@ const initialMapLayers = [];
       };
 
       const layerControls = document.getElementById("layers-contents");
+
       const listItem = document.createElement("li");
+      // const newItem = createLayerItem(link, "Layer 1 description.")
       listItem.classList.add("px-6", "py-4");
       listItem.appendChild(link);
       layerControls.appendChild(listItem);
+      console.log("listItem", listItem)
+
+       // >>>NEW LAYER CONTROL CODE<<<
+
+      // Create each "Add Layers" buttons
+
+      // Create filter buttons for adding and removing layers
+      const layer_button = document.createElement("button");
+      const layer_div = document.createElement("div");
+      const layer_h1 = document.createElement("h1");
+      const layer_p = document.createElement("p");
+
+      // Add necessary classes
+      layer_button.classList.add("layer-button", "border-[#00aa95]", "border-2", "border-t-[#00ffda]", "border-l-[#00ffda]", "bg-white", "text-left", "px-4", "w-full");
+      layer_button.setAttribute("data-layer-id", id);
+      layer_div.classList.add("flex", "flex-col", "h-full");
+
+      // Add content
+      layer_h1.classList.add("pt-4", "font-semibold");
+      layer_h1.textContent = id;
+      layer_p.classList.add("pb-4", "text-sm");
+      layer_p.textContent = `this is a placeholder for the description of ${id} layer`;
+
+      // Combine the elements
+      layer_div.appendChild(layer_h1);
+      layer_div.appendChild(layer_p);
+      layer_button.appendChild(layer_div);
+
+      // Get correct category div (or create it if it does not yet exist)
+   
+      const layerAddRemove = document.getElementById("layer-addremove-buttons");
+      console.log("category", layerMetaData[id]["category"])
+
+      let idWithoutSpaces = layerMetaData[id]["category"].replace(/\s+/g, '');
+      let category_div = document.getElementById(idWithoutSpaces);
+
+      // if category div does not exist, create it
+      if (!category_div) {
+          category_div = document.createElement("div");
+
+          // add ids
+          category_div.id = idWithoutSpaces;
+          category_div.setAttribute("data-category-id", idWithoutSpaces);
+
+          // Create category div and add button
+          let category_p = document.createElement("p");
+          category_p.className = "px-4 pb-4 font-semibold";
+          category_p.textContent = layerMetaData[id]["category"];
+          category_div.appendChild(category_p);
+
+          let br = document.createElement("br");
+
+          // Append it to the layerAddRemove element
+          layerAddRemove.appendChild(category_div);
+          layerAddRemove.appendChild(br);
+      }
+
+      category_div.appendChild(layer_button);
+
+      // Create the "Your Layers" filter buttons
+      createLayerShowHideButtons(id);
+
     }
 
     async function switchMode(mode) {
@@ -173,6 +466,8 @@ const initialMapLayers = [];
           switchMode("light");
         }
       });
+
+      initialiseLayerButtons();
   });
 
   function createPopup(e, propertyKeys) {

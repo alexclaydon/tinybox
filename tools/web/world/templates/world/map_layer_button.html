@@ -1,0 +1,39 @@
+{%load static%}
+
+<li class="p-4 border-y border-neutral-100" data-id="{{id}}">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <span class="font-semibold">{{id}}</span>
+          <button  id="key" class="ml-5">
+            <img src="{% static 'world/map_Sidebar/images/btn_Key.svg'%}" alt="Key" class="w-6 inline"/>
+          </button>
+          <div id="popover" class="hidden absolute mt-20 bg-neutral-50 text-black p-4 border border-neutral-400 rounded-lg shadow-md">
+            This is the popover message.
+          </div>
+        </div>
+        <label class="relative inline-block w-12 h-7 rounded-full">
+          <input type="checkbox" class="peer opacity-0 w-0 h-0 left-5">
+          <span class="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-neutral-200 rounded-full duration-300 before:absolute before:w-5 before:h-5 before:top-1 before:left-1 before:rounded-full before:bg-[#00aa95] before:duration-300 peer-checked:before:translate-x-5 peer-checked:bg-[#00ffda]"></span>
+        </label>
+      </div>
+      <p class="mt-2 mb-2 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      
+      
+      <div class="mt-auto flex justify-between">
+        <div id="accordion">
+          <div class="accordion-item">
+            <button type="button" id="twistieBtn" class="accordion-button pt-2 mx-auto">
+              <img id="btnTwistie" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3"/>
+          </button>
+            <div class="accordion-content hidden pb-36 max-w-sm">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+          </div>
+        </div>
+        <button class="float-right">
+          <img src="{% static 'world/map_Sidebar/images/btn_X.svg'%}" alt="X" class="w-6"/>
+        </button>
+      </div>
+    </div>
+</li>

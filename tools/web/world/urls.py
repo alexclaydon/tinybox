@@ -10,4 +10,6 @@ urlpatterns = [
         views.poi_geojson,
         name="linefeature_geojson",
     ),
+    # path('get_map_layer_button/', views.ajax_get_map_layer, name='get_map_layer_button'),
+    path('get_map_layer_button/', views.ajax_get_map_layer.as_view(), name='get_map_layer_button'),
 ]

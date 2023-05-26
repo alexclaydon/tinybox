@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.views import View
 
 from .models import (
     ImageOverlay,
@@ -46,3 +48,20 @@ def linefeature_geojson(request):
         fields=("name", "description"),
     )
     return JsonResponse(linefeature_data, safe=False)
+
+# def ajax_get_map_layer(request):
+#     id = request.GET.get('id', None)
+
+#     # You might want to use the id variable here somehow...
+#     # For now, we're not doing anything with it
+
+#     html = render_to_string('world/map_layer_button.html', {'id': layer_id})
+
+#     return JsonResponse({'html': html})
+
+class ajax_get_map_layer(View):
+    def get(self, request, *args, **kwargs):
+        layer_id = request.GET.get('id')
+        print ("layer_id", layer_id)
+        html = render_to_string('world/map_layer_button.html', {'id': layer_id})
+        return JsonResponse({'html': html})
