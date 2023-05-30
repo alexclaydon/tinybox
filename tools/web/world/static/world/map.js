@@ -44,69 +44,69 @@ let defaultDisplayedLayers = [
 
 const layerMetaData = {
   "Average annual traffic volume": {
-      "category": "Category 1",
-      "summary_description": "",
-      "full_description": "",
+      "category": "Traffic",
+      "summary_description": "This is a short snappy description of Average annual traffic volume.",
+      "full_description": "This is the full description of Average annual traffic volume.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Average annual traffic volume_ALT": {
-    "category": "Category 1",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Traffic",
+    "summary_description": "This is a short snappy description of Average annual traffic volume_ALT.",
+      "full_description": "This is the full description of Average annual traffic volume_ALT.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Future land development": {
-    "category": "Category 1",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Building and Development",
+    "summary_description": "This is a short snappy description of Future land development.",
+      "full_description": "This is the full description of Future land development.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Open spaces": {
-    "category": "Category 1",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Public Amenities",
+    "summary_description": "This is a short snappy description of Public Amenities.",
+      "full_description": "This is the full description of Public Amenities.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Areas within walking distance (400m) of public space": {
-    "category": "Category 1",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Public Amenities",
+    "summary_description": "This is a short snappy description of Areas within walking distance (400m) of public space.",
+      "full_description": "This is the full description of Areas within walking distance (400m) of public space.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "CBD bike routes": {
-    "category": "Category 3",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Public Amenities",
+    "summary_description": "This is a short snappy description of CBD bike routes.",
+      "full_description": "This is the full description of CBD bike routes.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "CBD bike-share docks": {
-    "category": "Category 3",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Public Amenities",
+    "summary_description": "This is a short snappy description of CBD bike-share docks.",
+      "full_description": "This is the full description of CBD bike-share docks.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Average solar radiation in Summer": {
-    "category": "Category 1",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Environmental Factors",
+    "summary_description": "This is a short snappy description of Average solar radiation in Summer.",
+      "full_description": "This is the full description of Average solar radiation in Summer.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Unemployment rate (%)": {
-    "category": "Category 2",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Demographics",
+    "summary_description": "This is a short snappy description of Unemployment rate (%).",
+      "full_description": "This is the full description of Unemployment rate (%).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Median population age": {
-    "category": "Category 2",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Demographics",
+    "summary_description": "This is a short snappy description of Medium population age.",
+      "full_description": "This is the full description of Medium population age.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "Crime rate (per 100k ppl)": {
-    "category": "Category 2",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Safety",
+    "summary_description": "This is a short snappy description of Crime rate (per 100k ppl).",
+      "full_description": "This is the full description of Crime rate (per 100k ppl).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "CBD building information": {
-    "category": "Category 2",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Building and Development",
+    "summary_description": "This is a short snappy description of CBD Building information.",
+      "full_description": "This is the full description of CBD Building information.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
   "School locations": {
-    "category": "Category 2",
-    "summary_description": "",
-    "full_description": "",
+    "category": "Public Amenities",
+    "summary_description": "This is a short snappy description of School location.",
+      "full_description": "This is the full description of School location.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be.",
   },
 };
 
@@ -126,16 +126,16 @@ function toggleButton(button) {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  document.getElementById('layer-addremove-buttons').addEventListener('click', function(e) {
-    var buttonElement = e.target.closest('.layer-button');
-    if (buttonElement) {
-      console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
-      toggleButton(buttonElement);
-    } else {
-      console.log ("no match", e.target)
-    }
-    updateToggleButtons(); 
-  });
+  // document.getElementById('layer-addremove-buttons').addEventListener('click', function(e) {
+  //   var buttonElement = e.target.closest('.layer-button');
+  //   if (buttonElement) {
+  //     console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
+  //     toggleButton(buttonElement);
+  //   } else {
+  //     console.log ("no match", e.target)
+  //   }
+  //   updateToggleButtons(); 
+  // });
 });
 
 // Initialize buttons on page load
@@ -183,7 +183,7 @@ const initialMapLayers = [];
     return mode == "dark" ? lightStyle : lightStyle;
   }
   
-  let createLayerShowHideButtons = (id) => {
+  let createYourLayerButtons = async (id) => {
     let element = document.getElementById("layers-show-hide-buttons");
     let dataUrl = element.getAttribute('data-url');
     console.log(dataUrl); // Prints the value of data-url
@@ -198,7 +198,7 @@ const initialMapLayers = [];
       url.searchParams.append('id', id);
     
       // Make the request
-      fetch(url)
+      return fetch(url)
         .then(response => response.json())
         .then(data => {
           const layerControls = document.getElementById("layers-show-hide-buttons");
@@ -209,6 +209,12 @@ const initialMapLayers = [];
     
           // Get the first (and only) child node of the container (this is your new HTML)
           let newElement = tempContainer.firstElementChild;
+
+          // Select the layer-description p tag and replace its content
+          let summaryParagraph = newElement.querySelector('.layer-description-summary');
+          let detailedParagraph = newElement.querySelector('.layer-description-detail');
+          summaryParagraph.innerText= layerMetaData[id]["summary_description"];
+          detailedParagraph.innerText= layerMetaData[id]["full_description"];
     
           // Append the new HTML to the DOM
           layerControls.appendChild(newElement);
@@ -218,31 +224,42 @@ const initialMapLayers = [];
     
           // The new HTML is now in the DOM, so we can attach event listeners.
 
-          newElement.addEventListener('click', function(e) {
-            console.log("this", this)
-            console.log("this.textContent", this.textContent)
-            const clickedLayer = elementId;
-            console.log("clickedLayer", clickedLayer)
-            e.preventDefault();
-            e.stopPropagation();
-            console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
-          
-            if (!map.getLayer(clickedLayer)) {
-              // Add the layer if it's not on the map yet
-              mapLayers[clickedLayer].id = clickedLayer;
-              map.addLayer(mapLayers[clickedLayer]);
-            }
-          
-            const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-          
-            // Toggle layer visibility by changing the layout object's visibility property.
-            if (visibility === "visible") {
-              map.setLayoutProperty(clickedLayer, "visibility", "none");
-              this.classList.remove("active");
-            } else {
-              this.classList.add("active");
-              map.setLayoutProperty(clickedLayer, "visibility", "visible");
-            }
+          const activateLayers = newElement.querySelectorAll('.activateLayer');
+          activateLayers.forEach(function(element) {
+              element.addEventListener('click', function(e) {
+                  console.log("this", this)
+                  console.log("this.textContent", this.textContent)
+                  const clickedLayer = elementId;
+                  console.log("clickedLayer", clickedLayer)
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
+
+                  if (!map.getLayer(clickedLayer)) {
+                    // Add the layer if it's not on the map yet
+                    mapLayers[clickedLayer].id = clickedLayer;
+                    map.addLayer(mapLayers[clickedLayer]);
+                  }
+
+                  let parentListElement = this.closest('li');
+                  let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
+
+                  console.log("Swith", switchBtn)
+
+                  const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+                  // Toggle layer visibility by changing the layout object's visibility property.
+                  if (visibility === "visible") {
+                    map.setLayoutProperty(clickedLayer, "visibility", "none");
+                    this.classList.remove("active");
+                    switchBtn.checked = false;
+
+                  } else {
+                    this.classList.add("active");
+                    map.setLayoutProperty(clickedLayer, "visibility", "visible");
+                    switchBtn.checked = true;
+                  }
+              });
           });
     
         })
@@ -252,6 +269,13 @@ const initialMapLayers = [];
       };
     
     };
+    
+  function sortButtons() {
+    const container = document.getElementById('layers-show-hide-buttons');
+    Array.from(container.children)
+      .sort((a, b) => a.textContent.localeCompare(b.textContent))
+      .forEach(button => container.appendChild(button));
+  }
 
   const mapSources = await fetchMapSources();
   console.log(mapSources);
@@ -267,7 +291,7 @@ const initialMapLayers = [];
     attributionControl: false,
   });
 
-  function updateToggleButtons() {
+  async function updateToggleButtons() {
     // Get container of yourLayers
     const yourLayers = document.getElementById('layers-show-hide-buttons');
 
@@ -275,14 +299,54 @@ const initialMapLayers = [];
     yourLayers.innerHTML = '';
 
     // Enumerate ids of the layers.
-    const toggleableLayerIds = Object.keys(mapLayers);
+    const toggleableLayerIds = Object.keys(mapLayers).sort();
+    console.log("map layers object", toggleableLayerIds)
 
     // Set up the corresponding toggle button for each layer.
-    for (const id of toggleableLayerIds) {
-      // ... existing code to create toggles ...
-      createLayerShowHideButtons(id);
-    }
+    // for (const id of toggleableLayerIds) {
+    //   // Create layer toggles
+    //   createYourLayerButtons(id);
+      const promises = toggleableLayerIds.map(id => createYourLayerButtons(id));
+
+      // Await all the promises to be resolved. This ensures all buttons are created before moving forward.
+      await Promise.all(promises);
   }
+
+  function addCategoryToDropdown(category) {
+    let dropdownMenu = document.getElementById("menuItems");
+
+    let dropdownItem = document.createElement("a");
+    dropdownItem.href = "#";
+    dropdownItem.id = "link" + category.replace(/\s+/g, '');
+    dropdownItem.className = "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100";
+    dropdownItem.textContent = category;
+
+    dropdownItem.onclick = function(event) {
+      event.preventDefault();
+      // Scroll to the category in the sidebar
+      let category_div = document.getElementById(category.replace(/\s+/g, ''));
+      console.log("category_div clicked", category_div)
+      category_div.scrollIntoView({behavior: "smooth"});
+    };
+
+    dropdownMenu.appendChild(dropdownItem);
+}
+  
+
+  document.getElementById('layer-addremove-buttons').addEventListener('click', function(e) {
+    var buttonElement = e.target.closest('.layer-button');
+    if (buttonElement) {
+      console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
+      toggleButton(buttonElement);
+    } else {
+      console.log ("no match", e.target)
+    }
+    updateToggleButtons().then(() => {
+      sortButtons();
+    }).catch(error => console.error('Error:', error)); 
+  });
+
+
 
   map.on("load", () => {
     try {
@@ -308,9 +372,14 @@ const initialMapLayers = [];
     }
   });
 
+  const categories = new Set();
+
   map.on("idle", () => {
     // Enumerate ids of the layers.
     const toggleableLayerIds = Object.keys(mapLayers);
+
+    // Create array of promises
+    let promises = [];
 
     // Set up the corresponding toggle button for each layer.
     for (const id of toggleableLayerIds) {
@@ -391,10 +460,17 @@ const initialMapLayers = [];
 
       // Get correct category div (or create it if it does not yet exist)
    
-      const layerAddRemove = document.getElementById("layer-addremove-buttons");
-      console.log("category", layerMetaData[id]["category"])
+      const addLayerButtonDiv = document.getElementById("layer-addremove-buttons");
 
-      let idWithoutSpaces = layerMetaData[id]["category"].replace(/\s+/g, '');
+      let category = layerMetaData[id]["category"];
+
+      console.log("category", layerMetaData[id]["category"], "same answer", category)
+
+      // add the category to the Set
+      categories.add(category);
+
+      // let idWithoutSpaces = layerMetaData[id]["category"].replace(/\s+/g, '');
+      let idWithoutSpaces = category.replace(/\s+/g, '');
       let category_div = document.getElementById(idWithoutSpaces);
 
       // if category div does not exist, create it
@@ -413,17 +489,22 @@ const initialMapLayers = [];
 
           let br = document.createElement("br");
 
-          // Append it to the layerAddRemove element
-          layerAddRemove.appendChild(category_div);
-          layerAddRemove.appendChild(br);
+          // Append it to the addLayerButtonDiv element
+          addLayerButtonDiv.appendChild(category_div);
+          addLayerButtonDiv.appendChild(br);
       }
 
       category_div.appendChild(layer_button);
 
       // Create the "Your Layers" filter buttons
-      createLayerShowHideButtons(id);
+      // createYourLayerButtons(id);
+      promises.push(createYourLayerButtons(id));
 
     }
+
+    Promise.all(promises).then(() => {
+      sortButtons();
+    });
 
     async function switchMode(mode) {
       activeMode = mode;
@@ -468,6 +549,14 @@ const initialMapLayers = [];
       });
 
       initialiseLayerButtons();
+
+      // Clear the dropdown menu once before adding categories
+    let dropdownMenu = document.getElementById("menuItems");
+    dropdownMenu.innerHTML = '';
+
+    // After the "idle" event, populate the dropdown menu with the categories
+      categories.forEach(category => addCategoryToDropdown(category));
+
   });
 
   function createPopup(e, propertyKeys) {

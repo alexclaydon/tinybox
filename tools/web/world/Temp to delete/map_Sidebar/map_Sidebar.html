@@ -1,28 +1,33 @@
-{% comment %} {% load static tailwind_tags %} {% endcomment %}
-{% load static %}
-
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 
+    
+    <title>tinybox - Neighbourhood Intelligence</title> 
 </head>
 <body>
 <!--Side Bar Container - Logo/Home button-->
-<div class="font-titillium p-1 min-h-screen flex flex-col overflow-auto">
-  <div id="slidingDiv" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out">
+<div class="font-titillium p-1 min-h-screen flex flex-col overflow-hidden">
+  <div id="wrapper" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out relative">
     <div class="flex items-center">
-      <button type="button" id="slideBtn" class="pt-2 mx-auto">
-        <img id="btnImg" src="{% static 'world/map_Sidebar/images/btn_Down.svg' %}" alt="Down" class="h-3"/>
+      <button type="button" id="slideY" class="pt-2 mx-auto sm:hidden">
+        <img id="btnFlipY" src="images/btn_Yslide.svg" alt="Hide" class="h-3"/>
+    </button>
+    <button type="button" id="SlideX" class="top-1/2 transform sm:block hidden absolute -right-4">
+      <img id="btnFlipX" src="images/btn_Xslide.svg" alt="Hide" class="w-5"/>
     </button>
     </div>
-    <div class="flex items-center justify-between pb-5 pl-4">
-      <img src="{% static 'world/map_Sidebar/images/tinybox_Logo.svg'%}" class="w-36">      
-      <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg'%}" alt="Profile" class="h-12 pr-4"/>
+    <div class="flex items-center justify-between pb-5 pl-4 sm:pt-5">
+      <img src="images/tinybox_Logo.svg" class="w-36">      
+      <img src="images/btn_Profile.svg" alt="Profile" class="h-12 pr-4"/>
     </div>
 <!--Search bar-->
 <div class="mb-3">
@@ -50,15 +55,15 @@
     <h1 class="pt-4 px-4 font-semibold">Here you'll find all your custom map layers.</h1>
     <p class="px-4 pb-6 text-sm">Add more from the Add Layers tab above, toggle them on and off, or remove them from your list with the x.</p>
 
-<ul class="" id="layers-show-hide-buttons" data-url="{% url 'get_map_layer_button' %}" >
+<ul class="">
 <!-- Layer 1 -->
     <li class="p-4 border-y border-neutral-100">
       <div class="flex flex-col h-full">
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <span class="font-semibold">Data Overlay 123</span>
+            <span class="font-semibold">Data Overlay 1</span>
             <button  id="key" class="ml-5">
-              <img src="{% static 'world/map_Sidebar/images/btn_Key.svg'%}" alt="Key" class="w-6 inline"/>
+              <img src="images/btn_Key.svg" alt="Key" class="w-6 inline"/>
             </button>
             <div id="popover" class="hidden absolute mt-20 bg-neutral-50 text-black p-4 border border-neutral-400 rounded-lg shadow-md">
               This is the popover message.
@@ -69,59 +74,24 @@
             <span class="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-neutral-200 rounded-full duration-300 before:absolute before:w-5 before:h-5 before:top-1 before:left-1 before:rounded-full before:bg-[#00aa95] before:duration-300 peer-checked:before:translate-x-5 peer-checked:bg-[#00ffda]"></span>
           </label>
         </div>
-        <p class="mt-2 mb-2 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p class="mt-2 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         
         
         <div class="mt-auto flex justify-between">
           <div id="accordion">
             <div class="accordion-item">
               <button type="button" id="twistieBtn" class="accordion-button pt-2 mx-auto">
-                <img id="btnTwistie" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3"/>
+                <img id="btnTwistie" src="images/btn_Twistie.svg" alt="Down" class="h-3 inline pr-2"/><span class="text-xs text-neutral-400">Display Options.</span>
             </button>
-              <div class="accordion-content hidden pb-36 max-w-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <div class="accordion-content hidden max-w-sm">
+                <p class="text-sm pt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <button class="float-right">
+                  <img src="images/btn_X.svg" alt="X" class="w-6"/>
+                </button>
               </div>
             </div>
           </div>
-          <button class="float-right">
-            <img src="{% static 'world/map_Sidebar/images/btn_X.svg'%}" alt="X" class="w-6"/>
-          </button>
-        </div>
-      </div>
-    </li>
-    <li class="p-4 border-y border-neutral-100">
-      <div class="flex flex-col h-full">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <span class="font-semibold">Data Overlay w1</span>
-            <button  id="key" class="ml-5">
-              <img src="{% static 'world/map_Sidebar/images/btn_Key.svg'%}" alt="Key" class="w-6 inline"/>
-            </button>
-            <div id="popover" class="hidden absolute mt-20 bg-neutral-50 text-black p-4 border border-neutral-400 rounded-lg shadow-md">
-              This is the popover message.
-            </div>
-          </div>
-          <label class="relative inline-block w-12 h-7 rounded-full">
-            <input type="checkbox" class="peer opacity-0 w-0 h-0 left-5">
-            <span class="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-neutral-200 rounded-full duration-300 before:absolute before:w-5 before:h-5 before:top-1 before:left-1 before:rounded-full before:bg-[#00aa95] before:duration-300 peer-checked:before:translate-x-5 peer-checked:bg-[#00ffda]"></span>
-          </label>
-        </div>
-        <p class="mt-2 mb-2 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        
-        <div class="mt-auto flex justify-between">
-          <div id="accordion">
-            <div class="accordion-item">
-              <button type="button" id="twistieBtn" class="accordion-button pt-2 mx-auto">
-                <img id="btnTwistie" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3"/>
-            </button>
-              <div class="accordion-content hidden pb-36 max-w-sm">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              </div>
-            </div>
-          </div>
-          <button class="float-right">
-            <img src="{% static 'world/map_Sidebar/images/btn_X.svg'%}" alt="X" class="w-6"/>
-          </button>
+          
         </div>
       </div>
     </li>
@@ -148,11 +118,58 @@
     </div>
  
   
-  <div id="buttonContainer-addRemove-layers" data-url="{% url 'get_map_layer_button' %}">
-    <div id="layer-addremove-buttons" class=""></div>
-   
+  <div id="contentContainer">
+      <div id="content1" class="content hidden">
+        <p class="px-4 pb-4 font-semibold">Category 1</p>
+        <ul class="">
+          <!-- Layer 1 [#00aa95] [#00ffda] -->
+              <li class="">
+                <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full">
+                <div class="flex flex-col h-full">
+                      <h1 class="pt-4 font-semibold">Layer 1</h1>
+                      <p class="pb-4 text-sm">Layer 1 description.</p>
+                  </div>
+                </button>
+              </li>
+          <!-- Layer 2 -->
+          <li class="">
+            <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full">
+            <div class="flex flex-col h-full">
+                  <h1 class="pt-4 font-semibold">Layer 2</h1>
+                  <p class="pb-4 text-sm">Layer 2 description.</p>
+              </div>
+            </button>
+          </li>
+          
+                </ul>
+      </div>
+      <div id="content2" class="content hidden">
+        <p class="px-4 pb-4 font-semibold">Category 2</p>
+        <ul class="">
+          <!-- Layer 1 -->
+          <li class="">
+            <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full">
+            <div class="flex flex-col h-full">
+                  <h1 class="pt-4 font-semibold">Layer 1</h1>
+                  <p class="pb-4 text-sm">Layer 1 description.</p>
+              </div>
+            </button>
+          </li>
+      <!-- Layer 2 -->
+      <li class="">
+        <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full">
+        <div class="flex flex-col h-full">
+              <h1 class="pt-4 font-semibold">Layer 2</h1>
+              <p class="pb-4 text-sm">Layer 2 description.</p>
+          </div>
+        </button>
+      </li>
+          
+                </ul>
+      </div>
   </div>
 </div>
+
 
 <!--Side Bar Container End-->
   </div>
@@ -175,7 +192,7 @@
 
 <!--Accordion-->
 <script>
-{% comment %} const accordionButtons = Array.from(document.querySelectorAll('.accordion-button'));
+const accordionButtons = Array.from(document.querySelectorAll('.accordion-button'));
 accordionButtons.forEach(button => {
   button.addEventListener('click', () => {
     const content = button.nextElementSibling;
@@ -188,52 +205,50 @@ accordionButtons.forEach(button => {
       content.classList.remove('hidden');
     }
   });
-}); {% endcomment %}
-document.getElementById('layers-show-hide-buttons').addEventListener('click', function(event) {
-  console.log("event.target!", event.target)
-
-  let button = event.target.closest('button') || event.target.previousElementSibling || event.target.closest('.popover').previousElementSibling;
-
-  if (button.matches('.accordion-button')) {
-    console.log("accordion matched")
-    const content = button.nextElementSibling;
-
-    if(content.style.maxHeight){
-      content.style.maxHeight = null;
-      content.classList.add('hidden');
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-      content.classList.remove('hidden');
-    }
-  } else if(button.matches('.key')){
-    console.log("key matched")
-    const popover = button.nextElementSibling;
-  
-    if (popover.classList.contains('hidden')) {
-      popover.classList.remove('hidden');
-    } else {
-      popover.classList.add('hidden');
-    }
-  } else {
-    console.log ("accordion not matched")
-  }
 });
 </script>
 
-<!--Flip slide button-->
+<!--Slider-->
 <script>
-  document.getElementById('slideBtn').addEventListener('click', function() {
-      const imgElement = document.getElementById('btnImg');
-      if (imgElement.classList.contains('rotate-180')) {
-          imgElement.classList.remove('rotate-180');
+      document.getElementById('SlideX').addEventListener('click', function() {
+      var wrapper = document.getElementById('wrapper');
+      if (wrapper.style.transform === "translateX(-100%)") {
+        wrapper.style.transform = "";
       } else {
-          imgElement.classList.add('rotate-180');
+        wrapper.style.transform = "translateX(-100%)";
       }
-  });
+    });
+    document.getElementById('slideY').addEventListener('click', function() {
+      var wrapper = document.getElementById('wrapper');
+      if (wrapper.style.transform === "translateY(90%)") {
+        wrapper.style.transform = "";
+      } else {
+        wrapper.style.transform = "translateY(90%)";
+      }
+    });
+  </script>
+
+<!--Flip slide buttons-->
+<script>
+  let rotateY = false;
+let rotateX = false;
+
+document.getElementById('slideY').addEventListener('click', function() {
+  var button = document.getElementById('btnFlipY');
+  rotateY = !rotateY; // toggles the rotation state
+  button.style.transform = rotateY ? "rotate(180deg)" : ""; // apply rotation
+});
+
+document.getElementById('SlideX').addEventListener('click', function() {
+  var button = document.getElementById('btnFlipX');
+  rotateX = !rotateX; // toggles the rotation state
+  button.style.transform = rotateX ? "rotate(180deg)" : ""; // apply rotation
+});
+
 </script>
 
 <!--Popover-->
-{% comment %} <script>
+<script>
   document.getElementById('key').addEventListener('click', function() {
     var popover = document.getElementById('popover');
     if (popover.classList.contains('hidden')) {
@@ -243,18 +258,18 @@ document.getElementById('layers-show-hide-buttons').addEventListener('click', fu
     }
   });
   
-  </script> {% endcomment %}
+  </script>
 
 <!--Layers Toggle-->
 <script>
-{% comment %} document.querySelectorAll('.layer-button').forEach(button => {
+document.querySelectorAll('.layer-button').forEach(button => {
   button.addEventListener('click', function() {
     this.classList.toggle('border-[#00ffda]');
     this.classList.toggle('border-t-[#00aa95]');
     this.classList.toggle('border-l-[#00aa95]');
     this.classList.toggle('bg-neutral-100');
   });
-}); {% endcomment %}
+});
 
 </script>
 
@@ -318,21 +333,33 @@ document.getElementById('layers-show-hide-buttons').addEventListener('click', fu
   }
 </script>
 
-<!--Slider-->
-<script>
-  let isSlidDown = false;
+<!--Map-->    
+<div id="map" class="overflow-hidden absolute top-0 bottom-0 w-full"></div>
+    <script type="text/javascript">
+    var map = new maplibregl.Map({
+    container: 'map',
+    center: [144.7631, -37.9536],  // Initial focus coordinate
+    zoom: 10,
+	style: "json/map_style.json"
+    });
+ 
+        maplibregl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.1/mapbox-gl-rtl-text.js');
+        map.addControl(new maplibregl.NavigationControl());
+    </script>
+    
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLYGDfskhxGs3WyJrHZLT-2-3R1CcA6a8&libraries=places&region=AU"></script>
+    
+    <script>    
+    google.maps.event.addDomListener(window, 'load', initialize);
+    function initialize() {
+    var input = document.getElementById('autocomplete_search');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', function () {
+    var place = autocomplete.getPlace();          
+    });
+  }
 
-  document.getElementById('slideBtn').addEventListener('click', () => {
-    const slidingDiv = document.getElementById('slidingDiv');
-    if (!isSlidDown) {
-      slidingDiv.style.transform = 'translateY(90%)';
-    } else {
-      slidingDiv.style.transform = 'translateY(0)';
-    }
-    isSlidDown = !isSlidDown;
-  });
 </script>
-
     
     <script> 
 // Select the overlay element and the open/close button element
@@ -340,9 +367,9 @@ const overlay = document.querySelector('.overlay');
 const button = document.querySelector('#open-overlay-button');
 
 // Add a click event listener to the button element to toggle the overlay
-{% comment %} button.addEventListener('click', function() {
+button.addEventListener('click', function() {
   overlay.classList.toggle('show');
-}); {% endcomment %}
+});
 
      </script>   
     
