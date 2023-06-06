@@ -14,18 +14,17 @@
 <body>
 
   <!--Side Bar Container - Logo/Home button-->
-<div class="font-titillium p-1 min-h-screen flex flex-col">
+<div class="font-titillium p-1 min-h-screen flex flex-col overflow-x-visible">
   
   <div id="wrapper" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out relative">
-    <div class="flex items-center">
-      {% comment %} <button type="button" id="slideY" class="pt-2 mx-auto sm:hidden"> {% endcomment %}
+    {% comment %} <div class="flex items-center">
       <button type="button" id="slideY" class="pt-2 mx-auto">
         <img id="btnFlipY" src="{% static 'world/map_Sidebar/images/btn_Yslide.svg'%}" alt="Hide" class="h-3"/>
     </button>
-    <button type="button" id="SlideX" class="top-1/2 transform hidden sm:block absolute -right-4">
+    <button type="button" id="SlideX" class="top-1/2 transform translate-y-1/2 hidden sm:block absolute -right-4">
       <img id="btnFlipX" src="{% static 'world/map_Sidebar/images/btn_Xslide.svg'%}" alt="Hide" class="w-5"/>
     </button>
-    </div>
+    </div> {% endcomment %}
     <div class="flex items-center justify-between pb-5 pl-4 sm:pt-5">
       <img src="{% static 'world/map_Sidebar/images/tinybox_Logo.svg'%}" class="w-36">      
       <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg'%}" alt="Profile" class="h-12 pr-4"/>
