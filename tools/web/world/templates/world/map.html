@@ -70,9 +70,25 @@
     />
 
     <!-- Sidebar  -->
-    <div id="slidingDiv" class="absolute z-40 sm:w-96 h-full bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] overflow-auto duration-500 ease-in-out">
+    {% comment %} <div id="slidingDiv" class="absolute z-40 sm:w-96 h-screen bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out overflow-x-visible overflow-y-scroll">
+      <button type="button" style="color:green; border:solid 1px black" class="absolute -right-10 z-50">THIS IS MY BUTTON</button> {% endcomment %}
+
+    {% comment %} <div id="slidingDiv" class="absolute z-40 sm:w-96 h-full bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] overflow-auto duration-500 ease-in-out"> {% endcomment %}
+      {% comment %} {% include 'world/map_Sidebar.html'%}
+    </div> {% endcomment %}
+
+    {% comment %} <div class="relative">
+      <div id="slidingDiv" class="absolute z-40 sm:w-96 h-screen bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out overflow-y-scroll">
+        {% include 'world/map_Sidebar.html'%}
+      </div>
+      <button type="button" style="color:green; border:solid 1px black" class="relative right z-50">THIS IS MY BUTTON</button>
+    </div>  {% endcomment %}
+
+    <div id="slidingDiv" class="relative z-40 sm:w-96 h-screen bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out overflow-x-hidden">
+      <button type="button" style="color:green; border:solid 1px black" class="absolute left-full w-auto z-50">THIS IS MY BUTTON</button>
       {% include 'world/map_Sidebar.html'%}
-    </div>
+    </div> 
+    
 
     <div id="tailwind-main-container" class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div id="image-container">

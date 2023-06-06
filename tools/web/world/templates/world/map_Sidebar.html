@@ -12,17 +12,27 @@
 
 </head>
 <body>
-<!--Side Bar Container - Logo/Home button-->
-<div class="font-titillium p-1 min-h-screen flex flex-col overflow-auto">
-  <div id="slidingDiv" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out">
+
+  <!--Side Bar Container - Logo/Home button-->
+<div class="font-titillium p-1 min-h-screen flex flex-col">
+  
+  <div id="wrapper" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out relative">
     <div class="flex items-center">
-      <button type="button" id="slideBtn" class="pt-2 mx-auto">
-        <img id="btnImg" src="{% static 'world/map_Sidebar/images/btn_Down.svg' %}" alt="Down" class="h-3"/>
+      {% comment %} <button type="button" id="slideY" class="pt-2 mx-auto sm:hidden"> {% endcomment %}
+      <button type="button" id="slideY" class="pt-2 mx-auto">
+        <img id="btnFlipY" src="{% static 'world/map_Sidebar/images/btn_Yslide.svg'%}" alt="Hide" class="h-3"/>
+    </button>
+    <button type="button" id="SlideX" class="top-1/2 transform hidden sm:block absolute -right-4">
+      <img id="btnFlipX" src="{% static 'world/map_Sidebar/images/btn_Xslide.svg'%}" alt="Hide" class="w-5"/>
     </button>
     </div>
-    <div class="flex items-center justify-between pb-5 pl-4">
+    <div class="flex items-center justify-between pb-5 pl-4 sm:pt-5">
       <img src="{% static 'world/map_Sidebar/images/tinybox_Logo.svg'%}" class="w-36">      
       <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg'%}" alt="Profile" class="h-12 pr-4"/>
+
+
+ <!--Side Bar Container - Logo/Home button-->
+
     </div>
 <!--Search bar-->
 <div class="mb-3">
@@ -73,10 +83,10 @@
         
         
         <div class="mt-auto flex justify-between">
-          <div id="accordion">
+          <div id="accordionabc">
             <div class="accordion-item">
-              <button type="button" id="twistieBtn" class="accordion-button pt-2 mx-auto">
-                <img id="btnTwistie" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3"/>
+              <button type="button" id="twistieBtn123" class="accordion-button pt-2 mx-auto twistieBtn">
+                <img id="btnTwistie" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3 inline pr-2"/><span class="text-xs text-neutral-400">Display Options.</span>
             </button>
               <div class="accordion-content hidden pb-36 max-w-sm">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -162,33 +172,26 @@
 
 
 <!--Accordion Twistie-->
+
+
 <script>
-  document.getElementById('twistieBtn').addEventListener('click', function() {
-      const imgElement = document.getElementById('btnTwistie');
-      if (imgElement.classList.contains('rotate-90')) {
-          imgElement.classList.remove('rotate-90');
-      } else {
-          imgElement.classList.add('rotate-90');
-      }
-  });
+
+  function rotateImage(button) {
+    // Find the image element relative to the button
+    const imgElement = button.querySelector('.btnTwistie');
+    if (imgElement.classList.contains('rotate-90')) {
+        imgElement.classList.remove('rotate-90');
+    } else {
+        imgElement.classList.add('rotate-90');
+    }
+}
+
+
 </script>
 
 <!--Accordion-->
 <script>
-{% comment %} const accordionButtons = Array.from(document.querySelectorAll('.accordion-button'));
-accordionButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const content = button.nextElementSibling;
 
-    if(content.style.maxHeight){
-      content.style.maxHeight = null;
-      content.classList.add('hidden');
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-      content.classList.remove('hidden');
-    }
-  });
-}); {% endcomment %}
 document.getElementById('layers-show-hide-buttons').addEventListener('click', function(event) {
   console.log("event.target!", event.target)
 
@@ -205,6 +208,10 @@ document.getElementById('layers-show-hide-buttons').addEventListener('click', fu
       content.style.maxHeight = content.scrollHeight + "px";
       content.classList.remove('hidden');
     }
+
+    
+    rotateImage(button);
+
   } else if(button.matches('.key')){
     console.log("key matched")
     const popover = button.nextElementSibling;
@@ -220,43 +227,51 @@ document.getElementById('layers-show-hide-buttons').addEventListener('click', fu
 });
 </script>
 
-<!--Flip slide button-->
+<!--Slider-->
 <script>
-  document.getElementById('slideBtn').addEventListener('click', function() {
-      const imgElement = document.getElementById('btnImg');
-      if (imgElement.classList.contains('rotate-180')) {
-          imgElement.classList.remove('rotate-180');
-      } else {
-          imgElement.classList.add('rotate-180');
-      }
-  });
+  document.getElementById('SlideX').addEventListener('click', function() {
+  var wrapper = document.getElementById('slidingDiv');
+  if (wrapper.style.transform === "translateX(-100%)") {
+    wrapper.style.transform = "";
+  } else {
+    wrapper.style.transform = "translateX(-100%)";
+  }
+});
+document.getElementById('slideY').addEventListener('click', function() {
+  var wrapper = document.getElementById('slidingDiv');
+  if (wrapper.style.transform === "translateY(90%)") {
+    wrapper.style.transform = "";
+  } else {
+    wrapper.style.transform = "translateY(90%)";
+  }
+});
 </script>
 
-<!--Popover-->
-{% comment %} <script>
-  document.getElementById('key').addEventListener('click', function() {
-    var popover = document.getElementById('popover');
-    if (popover.classList.contains('hidden')) {
-      popover.classList.remove('hidden');
-    } else {
-      popover.classList.add('hidden');
-    }
+<!--Flip slide buttons-->
+
+<script>
+  let rotateY = false;
+  let rotateX = false;
+  
+  document.getElementById('slideY').addEventListener('click', function() {
+      var button = document.getElementById('btnFlipY');
+      rotateY = !rotateY; // toggles the rotation state
+      button.style.transform = rotateY ? "rotate(180deg)" : ""; // apply rotation
   });
   
-  </script> {% endcomment %}
+  document.getElementById('SlideX').addEventListener('click', function() {
+      var button = document.getElementById('btnFlipX');
+      rotateX = !rotateX; // toggles the rotation state
+      button.style.transform = rotateX ? "rotate(180deg)" : ""; // apply rotation
+  });
+  </script>
+
+
+<!--Flip slide button-->
+
+<!--Popover-->
 
 <!--Layers Toggle-->
-<script>
-{% comment %} document.querySelectorAll('.layer-button').forEach(button => {
-  button.addEventListener('click', function() {
-    this.classList.toggle('border-[#00ffda]');
-    this.classList.toggle('border-t-[#00aa95]');
-    this.classList.toggle('border-l-[#00aa95]');
-    this.classList.toggle('bg-neutral-100');
-  });
-}); {% endcomment %}
-
-</script>
 
 <!--Tabs-->
 <script>
@@ -319,19 +334,6 @@ document.getElementById('layers-show-hide-buttons').addEventListener('click', fu
 </script>
 
 <!--Slider-->
-<script>
-  let isSlidDown = false;
-
-  document.getElementById('slideBtn').addEventListener('click', () => {
-    const slidingDiv = document.getElementById('slidingDiv');
-    if (!isSlidDown) {
-      slidingDiv.style.transform = 'translateY(90%)';
-    } else {
-      slidingDiv.style.transform = 'translateY(0)';
-    }
-    isSlidDown = !isSlidDown;
-  });
-</script>
 
     
     <script> 
@@ -340,9 +342,6 @@ const overlay = document.querySelector('.overlay');
 const button = document.querySelector('#open-overlay-button');
 
 // Add a click event listener to the button element to toggle the overlay
-{% comment %} button.addEventListener('click', function() {
-  overlay.classList.toggle('show');
-}); {% endcomment %}
 
      </script>   
     
