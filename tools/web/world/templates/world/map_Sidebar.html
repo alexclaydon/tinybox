@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
 </head>
 <body>
@@ -17,14 +18,7 @@
 <div class="font-titillium p-1 min-h-screen flex flex-col overflow-x-clip">
   
   <div id="wrapper" class="z-40 sm:w-96 bg-white rounded-lg flex-grow flex flex-col shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out relative">
-    {% comment %} <div class="flex items-center">
-      <button type="button" id="slideY" class="pt-2 mx-auto">
-        <img id="btnFlipY" src="{% static 'world/map_Sidebar/images/btn_Yslide.svg'%}" alt="Hide" class="h-3"/>
-    </button>
-    <button type="button" id="SlideX" class="top-1/2 transform translate-y-1/2 hidden sm:block absolute -right-4">
-      <img id="btnFlipX" src="{% static 'world/map_Sidebar/images/btn_Xslide.svg'%}" alt="Hide" class="w-5"/>
-    </button>
-    </div> {% endcomment %}
+
     <div class="flex items-center justify-between pb-5 pl-4 sm:pt-5">
       <img src="{% static 'world/map_Sidebar/images/tinybox_Logo.svg'%}" class="w-36">      
       <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg'%}" alt="Profile" class="h-12 pr-4"/>
@@ -55,7 +49,7 @@
 
 <!--Tab 1 Content-->
 
-<div id="tab1-content" class="">
+<div id="tab1-content" class="h-screen overflow-y-scroll">
     <h1 class="pt-4 px-4 font-semibold">Here you'll find all your custom map layers.</h1>
     <p class="px-4 pb-6 text-sm">Add more from the Add Layers tab above, toggle them on and off, or remove them from your list with the x.</p>
 
@@ -139,7 +133,7 @@
 </div>
 
 <!--Tab 2 Content-->
-<div id="tab2-content" class="hidden">
+<div id="tab2-content" class="hidden h-screen overflow-y-scroll">
     <h1 class="pt-4 px-4 font-semibold">Here you can add layers.</h1>
     <p class="px-4 pb-6 text-sm">Add layers from different categories. They will apear in the Your Layers tab above.</p>
     <!--Dropdown Menu-->
