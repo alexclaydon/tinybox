@@ -16,16 +16,7 @@ if (!maplibregl.supported()) {
   alert("Your browser does not support MapLibre GL");
 }
 
-// function createLayerItem(link3, layerName, layerDescription) {
-//   // Create necessary elements
-//   const listItem = document.createElement("li");
-  
-//   listItem.appendChild(link3);
-
-//   return listItem;
-// }
-
-// Temporary variable to store layer names
+// This is a temporary object to set up the initial map layers to display on the "Your Layers" section.  Not strictly necessary but may be useful for demos.
 let defaultDisplayedLayers = [
   "Average annual traffic volume",
   // "Average annual traffic volume_ALT",
@@ -42,6 +33,7 @@ let defaultDisplayedLayers = [
   "School locations"
 ]
 
+// This will be replaced once integrated into map_layers.json
 const layerMetaData = {
   "Average annual traffic volume": {
       "category": "Traffic",
@@ -110,9 +102,12 @@ const layerMetaData = {
   },
 };
 
+// Remember which layers are displayed in "Your Layers" section
 let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
 
 function toggleButton(button) {
+  console.log("toggle clicked")
+  
   if (button.dataset.state === 'off') {
     button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
     DisplayedLayers.push(button.dataset.layerId);
@@ -125,18 +120,7 @@ function toggleButton(button) {
   localStorage.setItem('DisplayedLayers', JSON.stringify(DisplayedLayers)); // Save DisplayedLayers to localStorage
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-  // document.getElementById('layer-addremove-buttons').addEventListener('click', function(e) {
-  //   var buttonElement = e.target.closest('.layer-button');
-  //   if (buttonElement) {
-  //     console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
-  //     toggleButton(buttonElement);
-  //   } else {
-  //     console.log ("no match", e.target)
-  //   }
-  //   updateToggleButtons(); 
-  // });
-});
+
 
 // Initialize buttons on page load
 function initialiseLayerButtons(){

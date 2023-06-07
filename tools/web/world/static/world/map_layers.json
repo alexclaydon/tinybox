@@ -10,7 +10,9 @@
       "paint-variable-min-max": [2, 119000],
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Average annual traffic volume.",
+      "full_description": "This is the full description of Average annual traffic volume.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     }
   },
   "Average annual traffic volume_ALT": {
@@ -21,7 +23,9 @@
       "category": "Traffic",
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Average annual traffic volume_ALT.",
+      "full_description": "This is the full description of Average annual traffic volume_ALT.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "line-color": "#007cbf",
@@ -37,7 +41,9 @@
       "category": "Development",
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Future land development.",
+      "full_description": "This is the full description of Future land development.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "fill-color": [
@@ -74,7 +80,9 @@
       "category": "Lifestyle",
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Public Amenities.",
+      "full_description": "This is the full description of Public Amenities.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "fill-color": "#007cbf",
@@ -89,7 +97,9 @@
       "category": "Lifestyle",
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Areas within walking distance (400m) of public space.",
+      "full_description": "This is the full description of Areas within walking distance (400m) of public space.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "fill-color": "#007cbf",
@@ -104,7 +114,9 @@
       "category": "Lifestyle",
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of CBD bike routes.",
+      "full_description": "This is the full description of CBD bike routes.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "line-color": "#007cbf",
@@ -120,7 +132,9 @@
       "category": "Lifestyle",
       "mousemove_properties": [],
       "popup_properties": ["name", "capacity", "rental_method"],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of CBD bike-share docks.",
+      "full_description": "This is the full description of CBD bike-share docks.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "circle-radius": 5,
@@ -140,7 +154,9 @@
       "paint-variable-min-max": [15, 26],
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Average solar radiation in Summer.",
+      "full_description": "This is the full description of Average solar radiation in Summer.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     }
   },
   "Unemployment rate (%)": {
@@ -154,7 +170,9 @@
       "paint-variable-min-max": [3.0, 7.0],
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Unemployment rate (%).",
+      "full_description": "This is the full description of Unemployment rate (%).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     }
   },
   "Median population age": {
@@ -168,7 +186,9 @@
       "paint-variable-min-max": [29, 62.4],
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Medium population age.",
+      "full_description": "This is the full description of Medium population age.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     }
   },
   "Crime rate (per 100k ppl)": {
@@ -182,7 +202,9 @@
       "paint-variable-min-max": [2361.9, 22235.9],
       "mousemove_properties": [],
       "popup_properties": [],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of Crime rate (per 100k ppl).",
+      "full_description": "This is the full description of Crime rate (per 100k ppl).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     }
   },
   "CBD building information": {
@@ -199,7 +221,9 @@
         "number_of_floors_above_ground",
         "bicycle_spaces"
       ],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of CBD Building information.",
+      "full_description": "This is the full description of CBD Building information.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "circle-radius": 5,
@@ -223,7 +247,9 @@
         "Address_Line_1",
         "Address_Line_2"
       ],
-      "notes": ""
+      "notes": "",
+      "summary_description": "This is a short snappy description of School location.",
+      "full_description": "This is the full description of School location.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
     },
     "paint": {
       "circle-radius": 5,
