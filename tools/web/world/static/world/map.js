@@ -102,7 +102,7 @@ const layerMetaData = {
   },
 };
 
-async function createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map) {
+async function create_yourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map) {
   let element = document.getElementById("yourLayers_container");
   let dataUrl = element.getAttribute('data-url');
   console.log(dataUrl); // Prints the value of data-url
@@ -113,6 +113,7 @@ async function createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLay
     // Create URL object
     let url = new URL(window.location.origin + dataUrl);
     url.searchParams.append('id', id);
+    url.searchParams.append('type','yourLayers')
   
     // Make the request
     return fetch(url)
@@ -181,6 +182,155 @@ async function createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLay
   };
 };
 
+async function update_yourLayerButtons(DisplayedLayers, layerMetaData, mapLayers, map) {
+  // Get container of yourLayers
+  const yourLayers = document.getElementById('yourLayers_container');
+
+  // Clear all current toggles
+  yourLayers.innerHTML = '';
+
+  // Enumerate ids of the layers.
+  const toggleableLayerIds = Object.keys(mapLayers).sort();
+  console.log("map layers object", toggleableLayerIds)
+
+  // Set up the corresponding your layer button for each layer.
+  const promises = toggleableLayerIds.map(id => create_yourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map));
+
+  // Await all the promises to be resolved. This ensures all buttons are created before moving forward.
+  await Promise.all(promises);
+}
+
+function sort_yourLayerButtons() {
+  const container = document.getElementById('yourLayers_container');
+  Array.from(container.children)
+    .sort((a, b) => a.textContent.localeCompare(b.textContent))
+    .forEach(button => container.appendChild(button));
+}
+
+function create_addLayerButtons_old(id, layerMetaData, categories) {
+  // Create filter buttons for adding and removing layers
+  const layer_button = document.createElement("button");
+  const layer_div = document.createElement("div");
+  const layer_h1 = document.createElement("h1");
+  const layer_p = document.createElement("p");
+
+  // Add necessary classes
+  layer_button.classList.add("layer-button", "border-[#00aa95]", "border-2", "border-t-[#00ffda]", "border-l-[#00ffda]", "bg-white", "text-left", "px-4", "w-full");
+  layer_button.setAttribute("data-layer-id", id);
+  layer_div.classList.add("flex", "flex-col", "h-full");
+
+  // Add content
+  layer_h1.classList.add("pt-4", "font-semibold");
+  layer_h1.textContent = id;
+  layer_p.classList.add("pb-4", "text-sm");
+  layer_p.textContent = `this is a placeholder for the description of ${id} layer`;
+
+  // Combine the elements
+  layer_div.appendChild(layer_h1);
+  layer_div.appendChild(layer_p);
+  layer_button.appendChild(layer_div);
+
+  // Get correct category div (or create it if it does not yet exist)
+
+  const addLayerButtonDiv = document.getElementById("addLayers-container");
+
+  let category = layerMetaData[id]["category"];
+
+  console.log("category", layerMetaData[id]["category"], "same answer", category)
+
+  // add the category to the Set
+  categories.add(category);
+
+  // let idWithoutSpaces = layerMetaData[id]["category"].replace(/\s+/g, '');
+  let idWithoutSpaces = category.replace(/\s+/g, '');
+  let category_div = document.getElementById(idWithoutSpaces);
+
+  // if category div does not exist, create it
+  if (!category_div) {
+      category_div = document.createElement("div");
+
+      // add ids
+      category_div.id = idWithoutSpaces;
+      category_div.setAttribute("data-category-id", idWithoutSpaces);
+
+      // Create category div and add button
+      let category_p = document.createElement("p");
+      category_p.className = "px-4 pb-4 font-semibold";
+      category_p.textContent = layerMetaData[id]["category"];
+      category_div.appendChild(category_p);
+
+      let br = document.createElement("br");
+
+      // Append it to the addLayerButtonDiv element
+      addLayerButtonDiv.appendChild(category_div);
+      addLayerButtonDiv.appendChild(br);
+  }
+
+  category_div.appendChild(layer_button);
+}
+
+async function create_addLayerButtons(id, layerMetaData, categories) {
+  let element = document.getElementById("addLayers-container");
+  console.log("element", element)
+  let dataUrl = element.getAttribute('data-url');
+  console.log(dataUrl); 
+  console.log("this id", id);
+
+  // Create URL object
+  let url = new URL(window.location.origin + dataUrl);
+  url.searchParams.append('id', id);
+  url.searchParams.append('type','addLayers')
+
+
+  // Make the request
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const addLayers = document.getElementById("addLayers-container");
+      
+      // Create a temporary container and append the HTML to it
+      let tempContainer = document.createElement('div');
+      tempContainer.innerHTML = data.html;
+
+      // Get the first (and only) child node of the container (this is your new HTML)
+      let newElement = tempContainer.firstElementChild;
+
+      // Select the layer-description p tag and replace its content
+      let summaryParagraph = newElement.querySelector('.layer-description-summary');
+
+      summaryParagraph.innerText= layerMetaData[id]["summary_description"];
+
+      // Append the new HTML to the DOM
+      addLayers.appendChild(newElement);
+
+    })
+    .catch(err => {
+      console.error('Error:', err);
+    });
+
+};
+
+function addCategoryToDropdown(category) {
+  let dropdownMenu = document.getElementById("menuItems");
+
+  let dropdownItem = document.createElement("a");
+  dropdownItem.href = "#";
+  dropdownItem.id = "link" + category.replace(/\s+/g, '');
+  dropdownItem.className = "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100";
+  dropdownItem.textContent = category;
+
+  dropdownItem.onclick = function(event) {
+    event.preventDefault();
+    // Scroll to the category in the sidebar
+    let category_div = document.getElementById(category.replace(/\s+/g, ''));
+    console.log("category_div clicked", category_div)
+    category_div.scrollIntoView({behavior: "smooth"});
+  };
+
+  dropdownMenu.appendChild(dropdownItem);
+}
+
+
 // Remember which layers are displayed in "Your Layers" section
 let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
 
@@ -200,18 +350,18 @@ function toggle_add_layers_btn(addlayers_btn) {
 
 // Initialize buttons on page load
 function initialiseLayerButtons(){
-document.querySelectorAll('.layer-button').forEach(button => {
-  // Check if button's layerId is in DisplayedLayers
-  if (DisplayedLayers.includes(button.dataset.layerId)) {
-    // If it is, set the button to 'on' state
-    button.dataset.state = 'on';
-    button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-  } else {
-    // If it's not, set the button to 'off' state
-    button.dataset.state = 'off';
-    button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-  }
-});
+  document.querySelectorAll('.layer-button').forEach(button => {
+    // Check if button's layerId is in DisplayedLayers
+    if (DisplayedLayers.includes(button.dataset.layerId)) {
+      // If it is, set the button to 'on' state
+      button.dataset.state = 'on';
+      button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    } else {
+      // If it's not, set the button to 'off' state
+      button.dataset.state = 'off';
+      button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    }
+  });
 };
 
 // Initialize tiling protocol
@@ -242,13 +392,6 @@ const initialMapLayers = [];
   function getStyleByMode(mode) {
     return mode == "dark" ? lightStyle : lightStyle;
   }
-    
-  function sortButtons() {
-    const container = document.getElementById('yourLayers_container');
-    Array.from(container.children)
-      .sort((a, b) => a.textContent.localeCompare(b.textContent))
-      .forEach(button => container.appendChild(button));
-  }
 
   const mapSources = await fetchMapSources();
   console.log(mapSources);
@@ -264,44 +407,7 @@ const initialMapLayers = [];
     attributionControl: false,
   });
 
-  async function update_yourLayers() {
-    // Get container of yourLayers
-    const yourLayers = document.getElementById('yourLayers_container');
-
-    // Clear all current toggles
-    yourLayers.innerHTML = '';
-
-    // Enumerate ids of the layers.
-    const toggleableLayerIds = Object.keys(mapLayers).sort();
-    console.log("map layers object", toggleableLayerIds)
-
-    // Set up the corresponding your layer button for each layer.
-      const promises = toggleableLayerIds.map(id => createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map));
-
-      // Await all the promises to be resolved. This ensures all buttons are created before moving forward.
-      await Promise.all(promises);
-  }
-
-  function addCategoryToDropdown(category) {
-    let dropdownMenu = document.getElementById("menuItems");
-
-    let dropdownItem = document.createElement("a");
-    dropdownItem.href = "#";
-    dropdownItem.id = "link" + category.replace(/\s+/g, '');
-    dropdownItem.className = "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100";
-    dropdownItem.textContent = category;
-
-    dropdownItem.onclick = function(event) {
-      event.preventDefault();
-      // Scroll to the category in the sidebar
-      let category_div = document.getElementById(category.replace(/\s+/g, ''));
-      console.log("category_div clicked", category_div)
-      category_div.scrollIntoView({behavior: "smooth"});
-    };
-
-    dropdownMenu.appendChild(dropdownItem);
-}
-  
+  // Create Add Layers buttons and add event listeners (to add/remove Your Layer buttons)
 
   document.getElementById('addLayers-container').addEventListener('click', function(e) {
     var buttonElement = e.target.closest('.layer-button');
@@ -311,12 +417,10 @@ const initialMapLayers = [];
     } else {
       console.log ("no match", e.target)
     }
-    update_yourLayers().then(() => {
-      sortButtons();
+    update_yourLayerButtons(DisplayedLayers, layerMetaData, mapLayers, map).then(() => {
+      sort_yourLayerButtons();
     }).catch(error => console.error('Error:', error)); 
   });
-
-
 
   map.on("load", () => {
     try {
@@ -404,78 +508,17 @@ const initialMapLayers = [];
 
       // >>>END OLD LAYER CONTROL CODE<<<
 
-       // Create Add Layer
+      // Create the Add Layers buttons
 
-      // Create each "Add Layers" buttons
-
-      // Create filter buttons for adding and removing layers
-      const layer_button = document.createElement("button");
-      const layer_div = document.createElement("div");
-      const layer_h1 = document.createElement("h1");
-      const layer_p = document.createElement("p");
-
-      // Add necessary classes
-      layer_button.classList.add("layer-button", "border-[#00aa95]", "border-2", "border-t-[#00ffda]", "border-l-[#00ffda]", "bg-white", "text-left", "px-4", "w-full");
-      layer_button.setAttribute("data-layer-id", id);
-      layer_div.classList.add("flex", "flex-col", "h-full");
-
-      // Add content
-      layer_h1.classList.add("pt-4", "font-semibold");
-      layer_h1.textContent = id;
-      layer_p.classList.add("pb-4", "text-sm");
-      layer_p.textContent = `this is a placeholder for the description of ${id} layer`;
-
-      // Combine the elements
-      layer_div.appendChild(layer_h1);
-      layer_div.appendChild(layer_p);
-      layer_button.appendChild(layer_div);
-
-      // Get correct category div (or create it if it does not yet exist)
-   
-      const addLayerButtonDiv = document.getElementById("addLayers-container");
-
-      let category = layerMetaData[id]["category"];
-
-      console.log("category", layerMetaData[id]["category"], "same answer", category)
-
-      // add the category to the Set
-      categories.add(category);
-
-      // let idWithoutSpaces = layerMetaData[id]["category"].replace(/\s+/g, '');
-      let idWithoutSpaces = category.replace(/\s+/g, '');
-      let category_div = document.getElementById(idWithoutSpaces);
-
-      // if category div does not exist, create it
-      if (!category_div) {
-          category_div = document.createElement("div");
-
-          // add ids
-          category_div.id = idWithoutSpaces;
-          category_div.setAttribute("data-category-id", idWithoutSpaces);
-
-          // Create category div and add button
-          let category_p = document.createElement("p");
-          category_p.className = "px-4 pb-4 font-semibold";
-          category_p.textContent = layerMetaData[id]["category"];
-          category_div.appendChild(category_p);
-
-          let br = document.createElement("br");
-
-          // Append it to the addLayerButtonDiv element
-          addLayerButtonDiv.appendChild(category_div);
-          addLayerButtonDiv.appendChild(br);
-      }
-
-      category_div.appendChild(layer_button);
+      create_addLayerButtons(id, layerMetaData, categories)
 
       // Create the "Your Layers" filter buttons
 
-      promises.push(createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map));
-
+      promises.push(create_yourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map));
     }
 
     Promise.all(promises).then(() => {
-      sortButtons();
+      sort_yourLayerButtons();
     });
 
     async function switchMode(mode) {

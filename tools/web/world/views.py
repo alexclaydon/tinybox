@@ -59,9 +59,16 @@ def linefeature_geojson(request):
 
 #     return JsonResponse({'html': html})
 
-class ajax_get_map_layer(View):
+class ajax_get_map_layer_button(View):
     def get(self, request, *args, **kwargs):
         layer_id = request.GET.get('id')
+        buttonType = request.GET.get('type')
+
+        print ("buttonType", buttonType)
         print ("layer_id", layer_id)
-        html = render_to_string('world/map_layer_button.html', {'id': layer_id})
+        context = {
+            "id": layer_id,
+            "buttonType": buttonType,
+        }
+        html = render_to_string('world/map_layer_button.html', context)
         return JsonResponse({'html': html})
