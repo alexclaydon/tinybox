@@ -53,7 +53,7 @@
     <h1 class="pt-4 px-4 font-semibold">Here you'll find all your custom map layers.</h1>
     <p class="px-4 pb-6 text-sm">Add more from the Add Layers tab above, toggle them on and off, or remove them from your list with the x.</p>
 
-    <ul class="" id="layers-show-hide-buttons" data-url="{% url 'get_map_layer_button' %}" ></ul>
+    <ul class="" id="yourLayers_container" data-url="{% url 'get_map_layer_button' %}" ></ul>
 
 </div>
 
@@ -77,7 +77,7 @@
  
   
   <div id="buttonContainer-addRemove-layers" data-url="{% url 'get_map_layer_button' %}">
-    <div id="layer-addremove-buttons" class=""></div>
+    <div id="addLayers-container" class=""></div>
    
   </div>
 </div>
@@ -110,7 +110,7 @@
 <!--Accordion-->
 <script>
 
-document.getElementById('layers-show-hide-buttons').addEventListener('click', function(event) {
+document.getElementById('yourLayers_container').addEventListener('click', function(event) {
   console.log("event.target!", event.target)
 
   let button = event.target.closest('button') || event.target.previousElementSibling || event.target.closest('.popover').previousElementSibling;

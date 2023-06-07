@@ -102,40 +102,116 @@ const layerMetaData = {
   },
 };
 
+async function createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map) {
+  let element = document.getElementById("yourLayers_container");
+  let dataUrl = element.getAttribute('data-url');
+  console.log(dataUrl); // Prints the value of data-url
+  console.log("this id", id); // Prints the value of data-url
+
+  if (DisplayedLayers.includes(id)) {
+    
+    // Create URL object
+    let url = new URL(window.location.origin + dataUrl);
+    url.searchParams.append('id', id);
+  
+    // Make the request
+    return fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const yourLayers = document.getElementById("yourLayers_container");
+        
+        // Create a temporary container and append the HTML to it
+        let tempContainer = document.createElement('div');
+        tempContainer.innerHTML = data.html;
+  
+        // Get the first (and only) child node of the container (this is your new HTML)
+        let newElement = tempContainer.firstElementChild;
+
+        // Select the layer-description p tag and replace its content
+        let summaryParagraph = newElement.querySelector('.layer-description-summary');
+        let detailedParagraph = newElement.querySelector('.layer-description-detail');
+        summaryParagraph.innerText= layerMetaData[id]["summary_description"];
+        detailedParagraph.innerText= layerMetaData[id]["full_description"];
+  
+        // Append the new HTML to the DOM
+        yourLayers.appendChild(newElement);
+  
+        // Extract the ID from the new element's data-id attribute
+        const elementId = newElement.getAttribute('data-id');
+  
+        // Attach event listeners.
+
+        const activateLayers = newElement.querySelectorAll('.activateLayer');
+        activateLayers.forEach(function(element) {
+            element.addEventListener('click', function(e) {
+                const clickedLayer = elementId;
+                console.log("clickedLayer", clickedLayer)
+                e.preventDefault();
+                e.stopPropagation();
+                console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
+
+                if (!map.getLayer(clickedLayer)) {
+                  // Display layer on the map if not currently visible
+                  mapLayers[clickedLayer].id = clickedLayer;
+                  map.addLayer(mapLayers[clickedLayer]);
+                }
+
+                let parentListElement = this.closest('li');
+                let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
+
+                const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+                // Toggle layer visibility by changing the layout object's visibility property.
+                if (visibility === "visible") {
+                  map.setLayoutProperty(clickedLayer, "visibility", "none");
+                  this.classList.remove("active");
+                  switchBtn.checked = false;
+
+                } else {
+                  this.classList.add("active");
+                  map.setLayoutProperty(clickedLayer, "visibility", "visible");
+                  switchBtn.checked = true;
+                }
+            });
+        });
+      })
+      .catch(err => {
+        console.error('Error:', err);
+      });
+  };
+};
+
 // Remember which layers are displayed in "Your Layers" section
 let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
 
-function toggleButton(button) {
-  console.log("toggle clicked")
-  
-  if (button.dataset.state === 'off') {
-    button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-    DisplayedLayers.push(button.dataset.layerId);
-    button.dataset.state = 'on';
+function toggle_add_layers_btn(addlayers_btn) {
+  if (addlayers_btn.dataset.state === 'off') {
+    addlayers_btn.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    DisplayedLayers.push(addlayers_btn.dataset.layerId);
+    addlayers_btn.dataset.state = 'on';
   } else {
-    button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-    DisplayedLayers = DisplayedLayers.filter(id => id !== button.dataset.layerId);
-    button.dataset.state = 'off';
+    addlayers_btn.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+    DisplayedLayers = DisplayedLayers.filter(id => id !== addlayers_btn.dataset.layerId);
+    addlayers_btn.dataset.state = 'off';
   }
   localStorage.setItem('DisplayedLayers', JSON.stringify(DisplayedLayers)); // Save DisplayedLayers to localStorage
 }
 
 
-
 // Initialize buttons on page load
 function initialiseLayerButtons(){
-  document.querySelectorAll('.layer-button').forEach(button => {
-    // Check if button's layerId is in DisplayedLayers
-    if (DisplayedLayers.includes(button.dataset.layerId)) {
-      // If it is, set the button to 'on' state
-      button.dataset.state = 'on';
-      button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-    } else {
-      // If it's not, set the button to 'off' state
-      button.dataset.state = 'off';
-      button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-    }
-  });
+document.querySelectorAll('.layer-button').forEach(button => {
+  // Check if button's layerId is in DisplayedLayers
+  if (DisplayedLayers.includes(button.dataset.layerId)) {
+    // If it is, set the button to 'on' state
+    button.dataset.state = 'on';
+    button.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+  } else {
+    // If it's not, set the button to 'off' state
+    button.dataset.state = 'off';
+    button.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
+  }
+});
 };
 
 // Initialize tiling protocol
@@ -166,96 +242,9 @@ const initialMapLayers = [];
   function getStyleByMode(mode) {
     return mode == "dark" ? lightStyle : lightStyle;
   }
-  
-  let createYourLayerButtons = async (id) => {
-    let element = document.getElementById("layers-show-hide-buttons");
-    let dataUrl = element.getAttribute('data-url');
-    console.log(dataUrl); // Prints the value of data-url
-    console.log("this id", id); // Prints the value of data-url
-
-    if (DisplayedLayers.includes(id)) {
-    
-      // let url = new URL(window.location.origin + '/get_map_layer_button/');
-      let url = new URL(window.location.origin + dataUrl);
-    
-      // Add data to the query string
-      url.searchParams.append('id', id);
-    
-      // Make the request
-      return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          const layerControls = document.getElementById("layers-show-hide-buttons");
-          
-          // Create a temporary container and append the HTML to it
-          let tempContainer = document.createElement('div');
-          tempContainer.innerHTML = data.html;
-    
-          // Get the first (and only) child node of the container (this is your new HTML)
-          let newElement = tempContainer.firstElementChild;
-
-          // Select the layer-description p tag and replace its content
-          let summaryParagraph = newElement.querySelector('.layer-description-summary');
-          let detailedParagraph = newElement.querySelector('.layer-description-detail');
-          summaryParagraph.innerText= layerMetaData[id]["summary_description"];
-          detailedParagraph.innerText= layerMetaData[id]["full_description"];
-    
-          // Append the new HTML to the DOM
-          layerControls.appendChild(newElement);
-    
-          // Extract the ID from the new element's data-id attribute
-          const elementId = newElement.getAttribute('data-id');
-    
-          // The new HTML is now in the DOM, so we can attach event listeners.
-
-          const activateLayers = newElement.querySelectorAll('.activateLayer');
-          activateLayers.forEach(function(element) {
-              element.addEventListener('click', function(e) {
-                  console.log("this", this)
-                  console.log("this.textContent", this.textContent)
-                  const clickedLayer = elementId;
-                  console.log("clickedLayer", clickedLayer)
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
-
-                  if (!map.getLayer(clickedLayer)) {
-                    // Add the layer if it's not on the map yet
-                    mapLayers[clickedLayer].id = clickedLayer;
-                    map.addLayer(mapLayers[clickedLayer]);
-                  }
-
-                  let parentListElement = this.closest('li');
-                  let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
-
-                  console.log("Swith", switchBtn)
-
-                  const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-                  // Toggle layer visibility by changing the layout object's visibility property.
-                  if (visibility === "visible") {
-                    map.setLayoutProperty(clickedLayer, "visibility", "none");
-                    this.classList.remove("active");
-                    switchBtn.checked = false;
-
-                  } else {
-                    this.classList.add("active");
-                    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-                    switchBtn.checked = true;
-                  }
-              });
-          });
-    
-        })
-        .catch(err => {
-          console.error('Error:', err);
-        });
-      };
-    
-    };
     
   function sortButtons() {
-    const container = document.getElementById('layers-show-hide-buttons');
+    const container = document.getElementById('yourLayers_container');
     Array.from(container.children)
       .sort((a, b) => a.textContent.localeCompare(b.textContent))
       .forEach(button => container.appendChild(button));
@@ -275,9 +264,9 @@ const initialMapLayers = [];
     attributionControl: false,
   });
 
-  async function updateToggleButtons() {
+  async function update_yourLayers() {
     // Get container of yourLayers
-    const yourLayers = document.getElementById('layers-show-hide-buttons');
+    const yourLayers = document.getElementById('yourLayers_container');
 
     // Clear all current toggles
     yourLayers.innerHTML = '';
@@ -286,11 +275,8 @@ const initialMapLayers = [];
     const toggleableLayerIds = Object.keys(mapLayers).sort();
     console.log("map layers object", toggleableLayerIds)
 
-    // Set up the corresponding toggle button for each layer.
-    // for (const id of toggleableLayerIds) {
-    //   // Create layer toggles
-    //   createYourLayerButtons(id);
-      const promises = toggleableLayerIds.map(id => createYourLayerButtons(id));
+    // Set up the corresponding your layer button for each layer.
+      const promises = toggleableLayerIds.map(id => createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map));
 
       // Await all the promises to be resolved. This ensures all buttons are created before moving forward.
       await Promise.all(promises);
@@ -317,15 +303,15 @@ const initialMapLayers = [];
 }
   
 
-  document.getElementById('layer-addremove-buttons').addEventListener('click', function(e) {
+  document.getElementById('addLayers-container').addEventListener('click', function(e) {
     var buttonElement = e.target.closest('.layer-button');
     if (buttonElement) {
       console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
-      toggleButton(buttonElement);
+      toggle_add_layers_btn(buttonElement);
     } else {
       console.log ("no match", e.target)
     }
-    updateToggleButtons().then(() => {
+    update_yourLayers().then(() => {
       sortButtons();
     }).catch(error => console.error('Error:', error)); 
   });
@@ -372,7 +358,7 @@ const initialMapLayers = [];
         continue;
       }
 
-      // >>>OLD LAYER CONTROL CODE<<<
+      // >>>OLD LAYER CONTROL CODE TO DELETE<<<
 
       // Create a link.
       const link = document.createElement("a");
@@ -416,7 +402,9 @@ const initialMapLayers = [];
       layerControls.appendChild(listItem);
       console.log("listItem", listItem)
 
-       // >>>NEW LAYER CONTROL CODE<<<
+      // >>>END OLD LAYER CONTROL CODE<<<
+
+       // Create Add Layer
 
       // Create each "Add Layers" buttons
 
@@ -444,7 +432,7 @@ const initialMapLayers = [];
 
       // Get correct category div (or create it if it does not yet exist)
    
-      const addLayerButtonDiv = document.getElementById("layer-addremove-buttons");
+      const addLayerButtonDiv = document.getElementById("addLayers-container");
 
       let category = layerMetaData[id]["category"];
 
@@ -481,8 +469,8 @@ const initialMapLayers = [];
       category_div.appendChild(layer_button);
 
       // Create the "Your Layers" filter buttons
-      // createYourLayerButtons(id);
-      promises.push(createYourLayerButtons(id));
+
+      promises.push(createYourLayerButtons(id, DisplayedLayers, layerMetaData, mapLayers, map));
 
     }
 
