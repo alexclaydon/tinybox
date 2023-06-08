@@ -33,6 +33,31 @@ let defaultDisplayedLayers = [
   "School locations"
 ]
 
+// Remember which layers are displayed in "Your Layers" section
+let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
+
+function getCategories(layerMetaData) {
+  let categories = new Set();
+  for (const layer in layerMetaData) {
+    categories.add(layerMetaData[layer]["category"]);
+  }
+  return categories;
+}
+
+//When button clicked to delete layers:
+// - get addLayers btn from YourLayerBtn ID
+// - toggle_add_layers_btn(addlayers_btn)
+// ----Get Variables
+// - DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
+// - get mapLayers =  await fetchMapLayers();
+// - map OK
+// - layerMeteaData OK
+// - DisplayedLayers OK
+
+// - update_yourLayerButtons(DisplayedLayers, layerMetaData, mapLayers, map).then(() => {
+//   sort_yourLayerButtons();
+// }).catch(error => console.error('Error:', error));
+
 // This will be replaced once integrated into map_layers.json
 const layerMetaData = {
   "Average annual traffic volume": {
@@ -131,8 +156,8 @@ async function create_yourLayerButtons(id, DisplayedLayers, layerMetaData, mapLa
         // Select the layer-description p tag and replace its content
         let summaryParagraph = newElement.querySelector('.layer-description-summary');
         let detailedParagraph = newElement.querySelector('.layer-description-detail');
-        summaryParagraph.innerText= layerMetaData[id]["summary_description"];
-        detailedParagraph.innerText= layerMetaData[id]["full_description"];
+        summaryParagraph.innerText= mapLayers[id]["metadata"]["summary_description"];
+        detailedParagraph.innerText= mapLayers[id]["metadata"]["full_description"];
   
         // Append the new HTML to the DOM
         yourLayers.appendChild(newElement);
@@ -207,107 +232,96 @@ function sort_yourLayerButtons() {
     .forEach(button => container.appendChild(button));
 }
 
-function create_addLayerButtons_old(id, layerMetaData, categories) {
-  // Create filter buttons for adding and removing layers
-  const layer_button = document.createElement("button");
-  const layer_div = document.createElement("div");
-  const layer_h1 = document.createElement("h1");
-  const layer_p = document.createElement("p");
+async function create_addLayerCategories(layerCategories) {
+  
+  let addLayer_container = document.getElementById("addLayers-container");
+  let dataUrl = addLayer_container.getAttribute('data-url');
 
-  // Add necessary classes
-  layer_button.classList.add("layer-button", "border-[#00aa95]", "border-2", "border-t-[#00ffda]", "border-l-[#00ffda]", "bg-white", "text-left", "px-4", "w-full");
-  layer_button.setAttribute("data-layer-id", id);
-  layer_div.classList.add("flex", "flex-col", "h-full");
+  for (let category of layerCategories) {
+    let categoryID_withoutSpaces = category.replace(/\s+/g, '');
 
-  // Add content
-  layer_h1.classList.add("pt-4", "font-semibold");
-  layer_h1.textContent = id;
-  layer_p.classList.add("pb-4", "text-sm");
-  layer_p.textContent = `this is a placeholder for the description of ${id} layer`;
+    // Create URL objects for  category
+    let urlCategory = new URL(window.location.origin + dataUrl);
+    urlCategory.searchParams.append('type', 'addLayers-Category');
+    urlCategory.searchParams.append('categoryID', categoryID_withoutSpaces);
+    urlCategory.searchParams.append('category', category);
 
-  // Combine the elements
-  layer_div.appendChild(layer_h1);
-  layer_div.appendChild(layer_p);
-  layer_button.appendChild(layer_div);
+    try {
+      let categoryResponse = await fetch(urlCategory);
+      let categoryData = await categoryResponse.json();
 
-  // Get correct category div (or create it if it does not yet exist)
-
-  const addLayerButtonDiv = document.getElementById("addLayers-container");
-
-  let category = layerMetaData[id]["category"];
-
-  console.log("category", layerMetaData[id]["category"], "same answer", category)
-
-  // add the category to the Set
-  categories.add(category);
-
-  // let idWithoutSpaces = layerMetaData[id]["category"].replace(/\s+/g, '');
-  let idWithoutSpaces = category.replace(/\s+/g, '');
-  let category_div = document.getElementById(idWithoutSpaces);
-
-  // if category div does not exist, create it
-  if (!category_div) {
-      category_div = document.createElement("div");
-
-      // add ids
-      category_div.id = idWithoutSpaces;
-      category_div.setAttribute("data-category-id", idWithoutSpaces);
-
-      // Create category div and add button
-      let category_p = document.createElement("p");
-      category_p.className = "px-4 pb-4 font-semibold";
-      category_p.textContent = layerMetaData[id]["category"];
-      category_div.appendChild(category_p);
-
-      let br = document.createElement("br");
-
-      // Append it to the addLayerButtonDiv element
-      addLayerButtonDiv.appendChild(category_div);
-      addLayerButtonDiv.appendChild(br);
-  }
-
-  category_div.appendChild(layer_button);
-}
-
-async function create_addLayerButtons(id, layerMetaData, categories) {
-  let element = document.getElementById("addLayers-container");
-  console.log("element", element)
-  let dataUrl = element.getAttribute('data-url');
-  console.log(dataUrl); 
-  console.log("this id", id);
-
-  // Create URL object
-  let url = new URL(window.location.origin + dataUrl);
-  url.searchParams.append('id', id);
-  url.searchParams.append('type','addLayers')
-
-
-  // Make the request
-  return fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      const addLayers = document.getElementById("addLayers-container");
-      
       // Create a temporary container and append the HTML to it
       let tempContainer = document.createElement('div');
-      tempContainer.innerHTML = data.html;
+      tempContainer.innerHTML = categoryData.html;
 
       // Get the first (and only) child node of the container (this is your new HTML)
-      let newElement = tempContainer.firstElementChild;
-
-      // Select the layer-description p tag and replace its content
-      let summaryParagraph = newElement.querySelector('.layer-description-summary');
-
-      summaryParagraph.innerText= layerMetaData[id]["summary_description"];
+      let newCategory_Button = tempContainer.firstElementChild;
 
       // Append the new HTML to the DOM
-      addLayers.appendChild(newElement);
+      addLayer_container.appendChild(newCategory_Button);
 
-    })
-    .catch(err => {
-      console.error('Error:', err);
-    });
+    } catch (err) {
+      console.error('Error in create_addLayersButtons:', err);
+    }
+  };
+  // categories.add(category);
+};
 
+
+async function create_addLayerButtons(id, layerMetaData, DisplayedLayers) {
+  
+  let addLayer_container = document.getElementById("addLayers-container");
+  let dataUrl = addLayer_container.getAttribute('data-url');
+
+  // Get category and add it to the set
+  let category = layerMetaData[id]["category"];
+  let categoryID_withoutSpaces = category.replace(/\s+/g, '');
+  // categories.add(category);
+
+  // Create URL objects for button and category
+  let urlButton = new URL(window.location.origin + dataUrl);
+  urlButton.searchParams.append('type', 'addLayers');
+  urlButton.searchParams.append('id', id);
+
+  try {
+    // Fetch the Add Layer Button html
+    let buttonResponse = await fetch(urlButton);
+    let buttonData = await buttonResponse.json();
+
+    console.log("buttonData", buttonData)
+
+    // Create a temporary container and append the HTML to it
+    let tempContainer = document.createElement('div');
+    tempContainer.innerHTML = buttonData.html;
+
+    // Get the first (and only) child node of the container
+    let addLayer_button = tempContainer.firstElementChild;
+
+    console.log("addLayer_button", addLayer_button)
+
+    // Select the layer-description p tag and replace its content
+    let summaryParagraph = addLayer_button.querySelector('.layer-description-summary');
+    summaryParagraph.innerText= layerMetaData[id]["summary_description"];
+
+    if (DisplayedLayers.includes(id)) {
+      // If it is, set the button to 'on' state
+      addLayer_button.dataset.state = 'on';
+    } else {
+      // If it's not, set the button to 'off' state
+      addLayer_button.dataset.state = 'off';
+    }
+
+    // // Get correct category div (or create it if it does not yet exist)
+    let categoryButton = document.getElementById(categoryID_withoutSpaces);
+
+    categoryButton.appendChild(addLayer_button);
+
+    // Set CSS to indicate whether layer is currently in Your Layers
+    set_add_layers_btn(addLayer_button);
+
+  } catch (err) {
+    console.error('Error in create_addLayersButtons:', err);
+  }
 };
 
 function addCategoryToDropdown(category) {
@@ -330,23 +344,28 @@ function addCategoryToDropdown(category) {
   dropdownMenu.appendChild(dropdownItem);
 }
 
-
-// Remember which layers are displayed in "Your Layers" section
-let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
-
-function toggle_add_layers_btn(addlayers_btn) {
-  if (addlayers_btn.dataset.state === 'off') {
-    addlayers_btn.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-    DisplayedLayers.push(addlayers_btn.dataset.layerId);
-    addlayers_btn.dataset.state = 'on';
+function set_add_layers_btn(addLayers_btn){
+  if (addLayers_btn.dataset.state === 'on') {
+    addLayers_btn.classList.add('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
   } else {
-    addlayers_btn.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
-    DisplayedLayers = DisplayedLayers.filter(id => id !== addlayers_btn.dataset.layerId);
-    addlayers_btn.dataset.state = 'off';
+    addLayers_btn.classList.remove('border-[#00ffda]', 'border-t-[#00aa95]', 'border-l-[#00aa95]', 'bg-neutral-100');
   }
   localStorage.setItem('DisplayedLayers', JSON.stringify(DisplayedLayers)); // Save DisplayedLayers to localStorage
 }
 
+function toggle_add_layers_btn(addlayers_btn) {
+  if (addlayers_btn.dataset.state === 'off') {
+    DisplayedLayers.push(addlayers_btn.dataset.layerId);
+    addlayers_btn.dataset.state = 'on';
+    set_add_layers_btn(addlayers_btn);
+
+  } else {
+    DisplayedLayers = DisplayedLayers.filter(id => id !== addlayers_btn.dataset.layerId);
+    addlayers_btn.dataset.state = 'off';
+    set_add_layers_btn(addlayers_btn);
+  }
+  localStorage.setItem('DisplayedLayers', JSON.stringify(DisplayedLayers)); // Save DisplayedLayers to localStorage
+}
 
 // Initialize buttons on page load
 function initialiseLayerButtons(){
@@ -407,16 +426,43 @@ const initialMapLayers = [];
     attributionControl: false,
   });
 
+  let layerCategories = getCategories(layerMetaData);
+  // let categories = getCategories(layerMetaData);
+  console.log("layerCategories", layerCategories)
+  create_addLayerCategories(layerCategories);
+
   // Create Add Layers buttons and add event listeners (to add/remove Your Layer buttons)
 
   document.getElementById('addLayers-container').addEventListener('click', function(e) {
     var buttonElement = e.target.closest('.layer-button');
+    var categoryElement = e.target.closest('.accordion-button');
+
     if (buttonElement) {
       console.log("clicked to add/remove layer:", buttonElement.dataset.layerId)
       toggle_add_layers_btn(buttonElement);
-    } else {
+    } if (categoryElement) {
+      console.log("clicked to expand/collapse category:", categoryElement.dataset.categoryId)
+
+      // CREATE ROTATE FUNCTION
+      const content = categoryElement.nextElementSibling;
+      console.log("content", content)
+      console.log("content.scrollHeight", content.scrollHeight)
+  
+      if(content.style.maxHeight){
+        content.style.maxHeight = null;
+        content.classList.add('hidden');
+      } else {
+        content.classList.remove('hidden');
+        content.style.maxHeight = content.scrollHeight + "px";
+        
+      }
+      rotateImage(categoryElement);
+
+
+    }  else {
       console.log ("no match", e.target)
     }
+
     update_yourLayerButtons(DisplayedLayers, layerMetaData, mapLayers, map).then(() => {
       sort_yourLayerButtons();
     }).catch(error => console.error('Error:', error)); 
@@ -446,7 +492,6 @@ const initialMapLayers = [];
     }
   });
 
-  const categories = new Set();
 
   map.on("idle", () => {
     // Enumerate ids of the layers.
@@ -510,7 +555,7 @@ const initialMapLayers = [];
 
       // Create the Add Layers buttons
 
-      create_addLayerButtons(id, layerMetaData, categories)
+      create_addLayerButtons(id, layerMetaData, DisplayedLayers)
 
       // Create the "Your Layers" filter buttons
 
@@ -570,7 +615,7 @@ const initialMapLayers = [];
     dropdownMenu.innerHTML = '';
 
     // After the "idle" event, populate the dropdown menu with the categories
-      categories.forEach(category => addCategoryToDropdown(category));
+      layerCategories.forEach(category => addCategoryToDropdown(category));
 
   });
 
@@ -727,3 +772,63 @@ async function fetchMapStyle(url) {
     console.error("Error fetching map_style.json:", error);
   }
 }
+
+
+
+// YourLayers Accordion Button
+
+document.getElementById('yourLayers_container').addEventListener('click', function(event) {
+  console.log("event.target!", event.target)
+
+  let button = event.target.closest('button') || event.target.previousElementSibling || event.target.closest('.popover').previousElementSibling;
+
+  if (button.matches('.accordion-button')) {
+    console.log("accordion matched")
+    const content = button.nextElementSibling;
+
+    if(content.style.maxHeight){
+      content.style.maxHeight = null;
+      content.classList.add('hidden');
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.classList.remove('hidden');
+    }
+
+    rotateImage(button);
+
+  } else if(button.matches('.key')){
+    console.log("key matched")
+    const popover = button.nextElementSibling;
+  
+    if (popover.classList.contains('hidden')) {
+      popover.classList.remove('hidden');
+    } else {
+      popover.classList.add('hidden');
+    }
+  } else if (button.matches('.remove-yourLayerButton')) {
+    console.log("remove button clicked")
+
+    let yourLayerButton = button.closest('li');
+
+    let matchingAddLayerButton = document.querySelector(`#addLayers-container [data-layer-id="${yourLayerButton.dataset.id}"]`);
+
+    console.log("matchingAddLayerButton", matchingAddLayerButton)
+    console.log("yourLayerButton", yourLayerButton)
+
+    removeYourLayerButton(matchingAddLayerButton, yourLayerButton);
+
+  } else {
+    console.log ("accordion not matched")
+    console.log("button", button)
+  }
+});
+
+async function removeYourLayerButton(matchingAddLayerButton, yourLayerButton){
+  toggle_add_layers_btn(matchingAddLayerButton);
+    let mapLayers =  await fetchMapLayers();
+
+    update_yourLayerButtons(DisplayedLayers, layerMetaData, mapLayers, map).then(() => {
+      sort_yourLayerButtons();
+    }).catch(error => console.error('Error:', error));
+}
+

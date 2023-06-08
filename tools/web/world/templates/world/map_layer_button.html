@@ -26,15 +26,17 @@
             <div class="accordion-item">
                 <button type="button" class="accordion-button category-button pt-2 mx-auto twistieBtn">
                     <img src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3 inline pr-2 btnTwistie"/><span class="text-xs text-neutral-400">Display Options.</span>
-            </button>
-            <div class="accordion-content hidden pb-36 max-w-sm">
-                <p class="text-sm pt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </button>
+                <div class="accordion-content hidden pb-36 max-w-sm">
+                    <p class="text-sm pt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                    <button class="float-right remove-yourLayerButton">
+                        <img src="{% static 'world/map_Sidebar/images/btn_X.svg'%}" alt="X" class="w-6"/>
+                    </button>
                 </div>
             </div>
             </div>
-            <button class="float-right">
-            <img src="{% static 'world/map_Sidebar/images/btn_X.svg'%}" alt="X" class="w-6"/>
-            </button>
+
         </div>
         </div>
     </li>
@@ -73,23 +75,23 @@
             </div>
         </button>
 
-{% elif buttonType == "category" %}
+{% elif buttonType == "addLayers-Category" %}
 
 <li class="border-y border-neutral-100">
     <div class="flex flex-col h-full">  
-    <div class="mt-auto flex justify-between">
-        <div class="accordion">
-        <div class="accordion-item">
-            <button type="button" class="accordion-button category-button p-4 mx-auto">
-            <img class="btnTwistie h-3 inline pr-2" src="images/btn_Twistie.svg" alt="Down" /><span class="font-semibold">Category 1</span>
-            </button>
+        <div class="mt-auto flex justify-between">
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button type="button" class="accordion-button category-button p-4 mx-auto">
+                    <img class="btnTwistie h-3 inline pr-2" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" /><span class="font-semibold">{{category}}</span>
+                    </button>
 
-            <div class="accordion-content hidden max-w-sm pt-2">
-                {% comment %} addLayer button goes here {% endcomment %}
+                    <div id="{{categoryID}}" class="accordion-content hidden max-w-sm pt-2" data-category-id="{{categoryID}}">
+                        {% comment %} addLayer button goes here {% endcomment %}
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
-    </div>
     </div>
 </li>
 
