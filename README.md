@@ -4,6 +4,22 @@
 
 Monorepo for an as-yet-unnamed renter data platform, working title "tinybox".
 
+![Melbourne - Annual Average Traffic Volume](docs/dev/static/Melbourne%20-%20Average%20Annual%20Traffic%20Volume.jpeg "Melbourne - Annual Average Traffic Volume")
+
+_Melbourne - Annual Average Traffic Volume_
+
+![CBD - Bike Paths and Docks](docs/dev/static/CBD%20-%20Bike%20Paths%20and%20Docks.jpeg "CBD - Bike Paths and Docks")
+
+_CBD - Bike Paths and Docks_
+
+![Victoria - Median Population Age by Local Government Area](docs/dev/static/Victoria%20-%20Median%20Pop%20Age%20by%20LGA.jpeg "Victoria - Median Population Age by Local Government Area")
+
+_Victoria - Median Population Age by Local Government Area_
+
+![Victoria - Crime Rate by Local Government Area](docs/dev/static/Victoria%20-%20Crime%20Rate%20by%20LGA.jpeg "Victoria - Crime Rate by Local Government Area")
+
+_Victoria - Crime Rate by Local Government Area_
+
 There are two main "applications" in this repo: the ETL pipeline (`tools/etl`), and the web app (`tools/web`).  The ETL pipeline uses the [Dagster](https://dagster.io/) framework; the web app uses the [Django](https://www.djangoproject.com/) framework.
 
 Currently, the purposes of this `README.md` file are to (i) sketch out the structure of the repo at a high level; and (ii) describe how to set up a local development environment, which of necessity includes (iii) some instruction on how to use our Python package manager, Hatch and (iv) establish some development conventions.  Note that it is entirely possible to work on the web app without touching the ETL pipeline, and vice versa - they are independent of each other (although they currently share a single project Python interpreter).
