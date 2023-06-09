@@ -42,7 +42,7 @@
     </li>
 
 
-{% elif buttonType == "addLayersFull"%}
+{% comment %} {% elif buttonType == "addLayersFull"%}
     <li class="border-y border-neutral-100">
         <div class="flex flex-col h-full">  
         <div class="mt-auto flex justify-between">
@@ -65,7 +65,7 @@
             </div>
         </div>
         </div>
-    </li>
+    </li> {% endcomment %}
 
 {% elif buttonType == "addLayers"%}
         <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full" data-layer-id="{{id}}">

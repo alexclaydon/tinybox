@@ -90,6 +90,7 @@ async function create_yourLayerButtons(id, DisplayedLayers, mapLayers, map) {
         activateLayers.forEach(function(element) {
             element.addEventListener('click', function(e) {
                 const clickedLayer = elementId;
+                console.log("e", e)
                 console.log("clickedLayer", clickedLayer)
                 e.preventDefault();
                 e.stopPropagation();
@@ -125,6 +126,8 @@ async function create_yourLayerButtons(id, DisplayedLayers, mapLayers, map) {
       });
   };
 };
+
+
 
 async function update_yourLayerButtons(DisplayedLayers, mapLayers, map) {
   // Get container of yourLayers
@@ -349,6 +352,8 @@ const initialMapLayers = [];
   create_addLayerCategories(layerCategories);
 
   // Create Add Layers buttons and add event listeners (to add/remove Your Layer buttons)
+
+  
 
   document.getElementById('addLayers-container').addEventListener('click', function(e) {
     var buttonElement = e.target.closest('.layer-button');
@@ -696,8 +701,12 @@ async function fetchMapStyle(url) {
 
 document.getElementById('yourLayers_container').addEventListener('click', function(event) {
   console.log("event.target!", event.target)
+  console.log("map", map)
+  
 
   let button = event.target.closest('button') || event.target.previousElementSibling;
+
+  let yourLayerButton =  event.target.closest('li');
 
   if (!button) {
       let popover = event.target.closest('.popover');
@@ -735,7 +744,7 @@ document.getElementById('yourLayers_container').addEventListener('click', functi
     } else if (button.matches('.remove-yourLayerButton')) {
       console.log("remove button clicked")
 
-      let yourLayerButton = button.closest('li');
+      // let yourLayerButton = button.closest('li');
 
       let matchingAddLayerButton = document.querySelector(`#addLayers-container [data-layer-id="${yourLayerButton.dataset.id}"]`);
 
@@ -749,8 +758,42 @@ document.getElementById('yourLayers_container').addEventListener('click', functi
       console.log("button", button)
     }
   } else {
+    //any other element clicked should show or hide layers on map
 
     console.log ("no match", event.target)
+    const elementId = yourLayerButton.getAttribute('data-id');
+    console.log("elementId", elementId)
+
+    const clickedLayer = elementId;
+    let e = event
+
+    console.log("clickedLayer", clickedLayer)
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
+
+    if (!map.getLayer(clickedLayer)) {
+      // Display layer on the map if not currently visible
+      mapLayers[clickedLayer].id = clickedLayer;
+      map.addLayer(mapLayers[clickedLayer]);
+    }
+
+    let parentListElement = this.closest('li');
+    let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
+
+    const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+    // Toggle layer visibility by changing the layout object's visibility property.
+    if (visibility === "visible") {
+      map.setLayoutProperty(clickedLayer, "visibility", "none");
+      this.classList.remove("active");
+      switchBtn.checked = false;
+
+    } else {
+      this.classList.add("active");
+      map.setLayoutProperty(clickedLayer, "visibility", "visible");
+      switchBtn.checked = true;
+    }
     
   }
 });
@@ -775,33 +818,33 @@ async function removeYourLayerButton(matchingAddLayerButton, yourLayerButton){
         // const activateLayers = newElement.querySelectorAll('.activateLayer');
         // activateLayers.forEach(function(element) {
         //     element.addEventListener('click', function(e) {
-        //         const clickedLayer = elementId;
-        //         console.log("clickedLayer", clickedLayer)
-        //         e.preventDefault();
-        //         e.stopPropagation();
-        //         console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
+                // const clickedLayer = elementId;
+                // console.log("clickedLayer", clickedLayer)
+                // e.preventDefault();
+                // e.stopPropagation();
+                // console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
 
-        //         if (!map.getLayer(clickedLayer)) {
-        //           // Display layer on the map if not currently visible
-        //           mapLayers[clickedLayer].id = clickedLayer;
-        //           map.addLayer(mapLayers[clickedLayer]);
-        //         }
+                // if (!map.getLayer(clickedLayer)) {
+                //   // Display layer on the map if not currently visible
+                //   mapLayers[clickedLayer].id = clickedLayer;
+                //   map.addLayer(mapLayers[clickedLayer]);
+                // }
 
-        //         let parentListElement = this.closest('li');
-        //         let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
+                // let parentListElement = this.closest('li');
+                // let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
 
-        //         const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+                // const visibility = map.getLayoutProperty(clickedLayer, "visibility");
 
-        //         // Toggle layer visibility by changing the layout object's visibility property.
-        //         if (visibility === "visible") {
-        //           map.setLayoutProperty(clickedLayer, "visibility", "none");
-        //           this.classList.remove("active");
-        //           switchBtn.checked = false;
+                // // Toggle layer visibility by changing the layout object's visibility property.
+                // if (visibility === "visible") {
+                //   map.setLayoutProperty(clickedLayer, "visibility", "none");
+                //   this.classList.remove("active");
+                //   switchBtn.checked = false;
 
-        //         } else {
-        //           this.classList.add("active");
-        //           map.setLayoutProperty(clickedLayer, "visibility", "visible");
-        //           switchBtn.checked = true;
-        //         }
+                // } else {
+                //   this.classList.add("active");
+                //   map.setLayoutProperty(clickedLayer, "visibility", "visible");
+                //   switchBtn.checked = true;
+                // }
         //     });
         // });
