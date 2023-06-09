@@ -16,35 +16,28 @@ if (!maplibregl.supported()) {
   alert("Your browser does not support MapLibre GL");
 }
 
-// This is a temporary object to set up the initial map layers to display on the "Your Layers" section.  Not strictly necessary but may be useful for demos.
+// <========== Code for the "Your Layers" Sidebar PAnel ==========>
+
+// <!--Set Your Layers-->
+
+// This is a temporary object to set up the initial map layers to display on the "Your Layers" section.  Not strictly necessary but may be useful for demos. It is overridden by local storage.
 let defaultDisplayedLayers = [
   "Average annual traffic volume",
-  // "Average annual traffic volume_ALT",
   "Future land development",
   "Open spaces",
-  // "Areas within walking distance (400m) of public space",
   "CBD bike routes",
-  // "CBD bike-share docks",
-  // "Average solar radiation in Summer",
-  // "Unemployment rate (%)",
-  // "Median population age",
   "Crime rate (per 100k ppl)",
-  // "CBD building information",
   "School locations"
 ]
 
 // Remember which layers are displayed in "Your Layers" section
 let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
 
-function getCategories(mapLayers) {
-  let categories = new Set();
-  for (const layer in mapLayers) {
-    console.log("layer", layer)
-    console.log("mapLayers[layer]", mapLayers[layer])
-    categories.add(mapLayers[layer]["metadata"]["category"]);
-  }
-  return categories;
-}
+// <!--Create layer categories-->
+
+
+
+// <!--Create "Your Layer" buttons-->
 
 async function create_yourLayerButtons(id, DisplayedLayers, mapLayers, map) {
   let element = document.getElementById("yourLayers_container");
@@ -135,7 +128,6 @@ function attachYourLayerEventListeners(newElement, map, mapLayers) {
 function setLayerVisibilityButton(switchBtn, clickedLayer, map, mapLayers){
   const visibility = map.getLayoutProperty(clickedLayer, "visibility");
 
-  // Set button properties
   if (visibility === "visible") {
       switchBtn.checked = true;
 
@@ -197,16 +189,10 @@ function togglePopover(button) {
 }
 
 function removeYourLayerButton(id, mapLayers, map) {
-  console.log("removing layer", id)
-  console.log("mapLayers", mapLayers)
-  console.log("map", map)
-  let matchingAddLayerButton = document.querySelector(`#addLayers-container [data-layer-id="${id}"]`);
-  removeYourLayerButton2(matchingAddLayerButton, mapLayers, map); // assuming this function is already defined in your existing code
-}
 
-function removeYourLayerButton2(matchingAddLayerButton, mapLayers, map){
+  let matchingAddLayerButton = document.querySelector(`#addLayers-container [data-layer-id="${id}"]`);
+
   toggle_add_layers_btn(matchingAddLayerButton);
-    // let mapLayers =  await fetchMapLayers();
     console.log("mapLayers", mapLayers)
 
     update_yourLayerButtons(DisplayedLayers, mapLayers, map).then(() => {
@@ -233,12 +219,25 @@ function sort_yourLayerButtons() {
     .forEach(button => container.appendChild(button));
 }
 
+// <========== Code for the "Add Layers" Sidebar Panel ==========>
+
+function getCategories(mapLayers) {
+  let categories = new Set();
+  for (const layer in mapLayers) {
+    console.log("layer", layer)
+    console.log("mapLayers[layer]", mapLayers[layer])
+    categories.add(mapLayers[layer]["metadata"]["category"]);
+  }
+  return categories;
+}
+
 async function create_addLayerCategories(layerCategories) {
   
   let addLayer_container = document.getElementById("addLayers-container");
   let dataUrl = addLayer_container.getAttribute('data-url');
 
   for (let category of layerCategories) {
+    console.log("category here", category)
     let categoryID_withoutSpaces = category.replace(/\s+/g, '');
 
     // Create URL objects for  category
@@ -255,19 +254,14 @@ async function create_addLayerCategories(layerCategories) {
       let tempContainer = document.createElement('div');
       tempContainer.innerHTML = categoryData.html;
 
-      // Get the first (and only) child node of the container (this is your new HTML)
       let newCategory_Button = tempContainer.firstElementChild;
-
-      // Append the new HTML to the DOM
       addLayer_container.appendChild(newCategory_Button);
 
     } catch (err) {
       console.error('Error in create_addLayersButtons:', err);
     }
   };
-  // categories.add(category);
 };
-
 
 async function create_addLayerButtons(id, mapLayers, DisplayedLayers) {
   
@@ -325,6 +319,23 @@ async function create_addLayerButtons(id, mapLayers, DisplayedLayers) {
   }
 };
 
+// <!--Categoryt Drop Down-->
+
+let isDropdownOpen = false;
+
+document.getElementById("menuButton").addEventListener("click", function (event) {
+  event.stopPropagation(); // Prevent this click event from bubbling up to the document
+  document.getElementById("menuItems").classList.toggle("hidden");
+  isDropdownOpen = !isDropdownOpen;
+});
+
+document.addEventListener('click', function() {
+  if (isDropdownOpen) {
+    document.getElementById("menuItems").classList.add("hidden");
+    isDropdownOpen = false;
+  }
+});
+
 function addCategoryToDropdown(category) {
   let dropdownMenu = document.getElementById("menuItems");
 
@@ -336,6 +347,13 @@ function addCategoryToDropdown(category) {
 
   dropdownItem.onclick = function(event) {
     event.preventDefault();
+    document.getElementById("menuItems").classList.add("hidden");
+    isDropdownOpen = false;
+
+  // dropdownItem.onclick = function(event) {
+  //   event.stopPropagation(); // Prevent this click event from bubbling up to the document
+
+  //   event.preventDefault();
     // Scroll to the category in the sidebar
     let category_div = document.getElementById(category.replace(/\s+/g, ''));
     console.log("category_div clicked", category_div)
@@ -343,6 +361,8 @@ function addCategoryToDropdown(category) {
   };
   dropdownMenu.appendChild(dropdownItem);
 }
+
+
 
 function set_add_layers_btn(addLayers_btn){
   if (addLayers_btn.dataset.state === 'on') {
@@ -366,6 +386,8 @@ function toggle_add_layers_btn(addlayers_btn) {
   }
   localStorage.setItem('DisplayedLayers', JSON.stringify(DisplayedLayers)); // Save DisplayedLayers to localStorage
 }
+
+// <========== Existing Code ==========>
 
 // Initialize buttons on page load
 function initialiseLayerButtons(){
@@ -432,8 +454,6 @@ const initialMapLayers = [];
 
   // Create Add Layers buttons and add event listeners (to add/remove Your Layer buttons)
 
-
-
   document.getElementById('addLayers-container').addEventListener('click', function(e) {
     var buttonElement = e.target.closest('.layer-button');
     var categoryElement = e.target.closest('.accordion-button');
@@ -444,7 +464,6 @@ const initialMapLayers = [];
     } if (categoryElement) {
       console.log("clicked to expand/collapse category:", categoryElement.dataset.categoryId)
 
-      // CREATE ROTATE FUNCTION
       const content = categoryElement.nextElementSibling;
       console.log("content", content)
       console.log("content.scrollHeight", content.scrollHeight)
@@ -497,8 +516,6 @@ const initialMapLayers = [];
   map.on("idle", () => {
     // Enumerate ids of the layers.
     const toggleableLayerIds = Object.keys(mapLayers);
-
-    // Create array of promises
     let promises = [];
 
     // Set up the corresponding toggle button for each layer.
@@ -757,6 +774,87 @@ async function fetchMapStyle(url) {
   }
 }
 
+// <!--Accordion Twistie-->
 
+function rotateImage(button) {
+  // Find the image element relative to the button
+  const imgElement = button.querySelector('.btnTwistie');
+  if (imgElement.classList.contains('rotate-90')) {
+      imgElement.classList.remove('rotate-90');
+  } else {
+      imgElement.classList.add('rotate-90');
+  }
+}
+
+// <!--Slider-->
+
+document.getElementById('SlideX').addEventListener('click', function() {
+  var wrapper = document.getElementById('slidingDiv');
+  if (wrapper.style.transform === "translateX(-100%)") {
+    wrapper.style.transform = "";
+  } else {
+    wrapper.style.transform = "translateX(-100%)";
+  }
+});
+document.getElementById('slideY').addEventListener('click', function() {
+  var wrapper = document.getElementById('slidingDiv');
+  if (wrapper.style.transform === "translateY(90%)") {
+    wrapper.style.transform = "";
+  } else {
+    wrapper.style.transform = "translateY(90%)";
+  }
+});
+
+// <!--Flip slide buttons-->
+
+  let rotateY = false;
+  let rotateX = false;
+  
+  document.getElementById('slideY').addEventListener('click', function() {
+      var button = document.getElementById('btnFlipY');
+      rotateY = !rotateY; // toggles the rotation state
+      button.style.transform = rotateY ? "rotate(180deg)" : ""; // apply rotation
+      let container = document.getElementById('sidebar-container');
+      if (container.classList.contains('overflow-y-scroll')) {
+        container.classList.remove('overflow-y-scroll');
+      } else {
+        container.classList.add('overflow-y-scroll');
+      }
+  });
+  
+  document.getElementById('SlideX').addEventListener('click', function() {
+      var button = document.getElementById('btnFlipX');
+      rotateX = !rotateX; // toggles the rotation state
+      button.style.transform = rotateX ? "rotate(180deg)" : ""; // apply rotation
+  });
+
+  
+  const tab1Button = document.getElementById("tab1-button");
+  const tab2Button = document.getElementById("tab2-button");
+  const tab1Content = document.getElementById("tab1-content");
+  const tab2Content = document.getElementById("tab2-content");
+  function switchTab(activeButton, inactiveButton, activeContent, inactiveContent) {
+      activeButton.classList.add("border-b-2", "border-[#00aa95]", "text-[#00aa95]");
+      inactiveButton.classList.remove("border-b-2", "border-[#00aa95]", "text-[#00aa95]");
+  
+      activeContent.classList.remove("hidden");
+      inactiveContent.classList.add("hidden");
+  }
+  tab1Button.addEventListener("click", () => {
+      switchTab(tab1Button, tab2Button, tab1Content, tab2Content);
+  });
+  tab2Button.addEventListener("click", () => {
+      switchTab(tab2Button, tab1Button, tab2Content, tab1Content);
+  });
+
+  function switchTabs(tab) {
+    document.getElementById('tab1-button').classList.remove('border-[#00aa95]', 'text-[#00aa95]', 'font-semibold');
+    document.getElementById('tab1-button').classList.add('border-transparent', 'text-neutral-400', 'hover:text-neutral-600', 'hover:border-neutral-600');
+    document.getElementById('tab2-button').classList.remove('border-[#00aa95]', 'text-[#00aa95]', 'font-semibold');
+    document.getElementById('tab2-button').classList.add('border-transparent', 'text-neutral-400', 'hover:text-neutral-600', 'hover:border-neutral-600');
+
+    document.getElementById(tab + '-button').classList.add('border-[#00aa95]', 'text-[#00aa95]', 'font-semibold');
+    document.getElementById(tab + '-button').classList.remove('border-transparent', 'text-neutral-400', 'hover:text-neutral-600', 'hover:border-neutral-600');
+  }
 
 
