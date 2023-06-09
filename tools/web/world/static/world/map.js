@@ -49,101 +49,180 @@ function getCategories(mapLayers) {
 async function create_yourLayerButtons(id, DisplayedLayers, mapLayers, map) {
   let element = document.getElementById("yourLayers_container");
   let dataUrl = element.getAttribute('data-url');
-  console.log(dataUrl); // Prints the value of data-url
-  console.log("this id", id); // Prints the value of data-url
 
   if (DisplayedLayers.includes(id)) {
-    
-    // Create URL object
-    let url = new URL(window.location.origin + dataUrl);
-    url.searchParams.append('id', id);
-    url.searchParams.append('type','yourLayers')
-  
-    // Make the request
-    return fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        const yourLayers = document.getElementById("yourLayers_container");
-        
-        // Create a temporary container and append the HTML to it
-        let tempContainer = document.createElement('div');
-        tempContainer.innerHTML = data.html;
-  
-        // Get the first (and only) child node of the container (this is your new HTML)
-        let newElement = tempContainer.firstElementChild;
 
-        // Select the layer-description p tag and replace its content
-        let summaryParagraph = newElement.querySelector('.layer-description-summary');
-        let detailedParagraph = newElement.querySelector('.layer-description-detail');
-        summaryParagraph.innerText= mapLayers[id]["metadata"]["summary_description"];
-        detailedParagraph.innerText= mapLayers[id]["metadata"]["full_description"];
-  
-        // Append the new HTML to the DOM
-        yourLayers.appendChild(newElement);
-  
-        // Extract the ID from the new element's data-id attribute
-        const elementId = newElement.getAttribute('data-id');
-  
-        // Attach event listeners.
+      // Create URL object
+      let url = new URL(window.location.origin + dataUrl);
+      url.searchParams.append('id', id);
+      url.searchParams.append('type', 'yourLayers');
 
-        const activateLayers = newElement.querySelectorAll('.activateLayer');
-        activateLayers.forEach(function(element) {
-            element.addEventListener('click', function(e) {
-                const clickedLayer = elementId;
-                console.log("e", e)
-                console.log("clickedLayer", clickedLayer)
-                e.preventDefault();
-                e.stopPropagation();
-                console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
+      // Make the request
+      return fetch(url)
+          .then(response => response.json())
+          .then(data => {
+              const yourLayers = document.getElementById("yourLayers_container");
 
-                if (!map.getLayer(clickedLayer)) {
-                  // Display layer on the map if not currently visible
-                  mapLayers[clickedLayer].id = clickedLayer;
-                  map.addLayer(mapLayers[clickedLayer]);
-                }
+              // Create a temporary container and append the HTML to it
+              let tempContainer = document.createElement('div');
+              tempContainer.innerHTML = data.html;
 
-                let parentListElement = this.closest('li');
-                let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
+              // Get the first (and only) child node of the container (this is your new HTML)
+              let newElement = tempContainer.firstElementChild;
 
-                const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+              // Select the layer-description p tag and replace its content
+              let summaryParagraph = newElement.querySelector('.layer-description-summary');
+              let detailedParagraph = newElement.querySelector('.layer-description-detail');
+              summaryParagraph.innerText = mapLayers[id]["metadata"]["summary_description"];
+              detailedParagraph.innerText = mapLayers[id]["metadata"]["full_description"];
 
-                // Toggle layer visibility by changing the layout object's visibility property.
-                if (visibility === "visible") {
-                  map.setLayoutProperty(clickedLayer, "visibility", "none");
-                  this.classList.remove("active");
-                  switchBtn.checked = false;
+              yourLayers.appendChild(newElement);
+              attachYourLayerEventListeners(newElement, map, mapLayers);
 
-                } else {
-                  this.classList.add("active");
-                  map.setLayoutProperty(clickedLayer, "visibility", "visible");
-                  switchBtn.checked = true;
-                }
-            });
-        });
-      })
-      .catch(err => {
-        console.error('Error:', err);
-      });
-  };
+              //set button visibility
+              setLayerVisibilityButton(newElement.querySelector('input[type="checkbox"]'), id, map, mapLayers)
+
+          })
+          .catch(err => {
+              console.error('Error:', err);
+          });
+  }
 };
 
+function attachYourLayerEventListeners(newElement, map, mapLayers) {
+  const accordionButton = newElement.querySelector('.accordion-button');
+  const keyButton = newElement.querySelector('.key');
+  const popOver = newElement.querySelector('.layer-description-detail');
+  const removeButton = newElement.querySelector('.remove-yourLayerButton');
+  const switchBtn = newElement.querySelector('input[type="checkbox"]');
 
+  const elementId = newElement.getAttribute('data-id');
+
+  accordionButton.addEventListener('click', function(e) {
+      toggleAccordion(accordionButton);
+  });
+
+  keyButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      togglePopover(keyButton);
+  });
+
+  popOver.addEventListener('click', function(e) {
+
+    console.log("clicked popover")
+    togglePopover(keyButton);
+  });
+
+  removeButton.addEventListener('click', function(e) {
+    console.log("removing element")
+    console.log("mapLayers", mapLayers)
+    console.log("map", map)
+      removeYourLayerButton(elementId, mapLayers, map);
+  });
+
+  switchBtn.addEventListener('click', function(e) {
+      toggleLayerVisibility(switchBtn, elementId, map, mapLayers);
+  });
+
+  newElement.addEventListener('click', function(e) {
+      // If clicked target is not any of the buttons
+      if (!e.target.closest('.key') && !e.target.closest('.remove-yourLayerButton') && !e.target.closest('.accordion-button') && !e.target.closest('.layer-description-detail')) {
+          toggleLayerVisibility(switchBtn, elementId, map, mapLayers);
+      }
+  });
+}
+
+function setLayerVisibilityButton(switchBtn, clickedLayer, map, mapLayers){
+  const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+  // Set button properties
+  if (visibility === "visible") {
+      switchBtn.checked = true;
+
+  } else {
+      switchBtn.checked = false;
+  }
+}
+
+function toggleLayerVisibility(switchBtn, clickedLayer, map, mapLayers) {
+  // Prevent action if layer does not exist in the map.
+  if (!map.getLayer(clickedLayer)) {
+      // Display layer on the map if not currently visible
+      mapLayers[clickedLayer].id = clickedLayer;
+      map.addLayer(mapLayers[clickedLayer]);
+  }
+
+  const visibility = map.getLayoutProperty(clickedLayer, "visibility");
+
+  // Toggle layer visibility by changing the layout object's visibility property.
+  if (visibility === "visible") {
+      map.setLayoutProperty(clickedLayer, "visibility", "none");
+      switchBtn.checked = false;
+
+  } else {
+      map.setLayoutProperty(clickedLayer, "visibility", "visible");
+      switchBtn.checked = true;
+  }
+}
+
+function toggleAccordion(button) {
+  const content = button.nextElementSibling;
+  if(content.style.maxHeight){
+      content.style.maxHeight = null;
+      content.classList.add('hidden');
+  } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.classList.remove('hidden');
+  }
+  rotateImage(button); // assuming this function is already defined in your existing code
+}
+
+function togglePopover(button) {
+  const popover = button.nextElementSibling;
+  // Stop propagation so that document-level click handler doesn't immediately hide the popover
+  // e.stopPropagation();
+
+  if (popover.classList.contains('hidden')) {
+      popover.classList.remove('hidden');
+      // Add an event listener to the document which will hide the popover
+      // on the next click anywhere in the document
+      document.addEventListener('click', function hidePopover(event) {
+          // Remove the event listener itself to avoid stacking up event listeners
+          document.removeEventListener('click', hidePopover);
+          // Hide the popover
+          popover.classList.add('hidden');
+          event.stopPropagation();
+      });
+  }
+}
+
+function removeYourLayerButton(id, mapLayers, map) {
+  console.log("removing layer", id)
+  console.log("mapLayers", mapLayers)
+  console.log("map", map)
+  let matchingAddLayerButton = document.querySelector(`#addLayers-container [data-layer-id="${id}"]`);
+  removeYourLayerButton2(matchingAddLayerButton, mapLayers, map); // assuming this function is already defined in your existing code
+}
+
+function removeYourLayerButton2(matchingAddLayerButton, mapLayers, map){
+  toggle_add_layers_btn(matchingAddLayerButton);
+    // let mapLayers =  await fetchMapLayers();
+    console.log("mapLayers", mapLayers)
+
+    update_yourLayerButtons(DisplayedLayers, mapLayers, map).then(() => {
+      sort_yourLayerButtons();
+    }).catch(error => console.error('Error:', error));
+}
 
 async function update_yourLayerButtons(DisplayedLayers, mapLayers, map) {
-  // Get container of yourLayers
   const yourLayers = document.getElementById('yourLayers_container');
-
-  // Clear all current toggles
   yourLayers.innerHTML = '';
-
-  // Enumerate ids of the layers.
   const toggleableLayerIds = Object.keys(mapLayers).sort();
   console.log("map layers object", toggleableLayerIds)
 
   // Set up the corresponding your layer button for each layer.
   const promises = toggleableLayerIds.map(id => create_yourLayerButtons(id, DisplayedLayers, mapLayers, map));
-
-  // Await all the promises to be resolved. This ensures all buttons are created before moving forward.
+  
   await Promise.all(promises);
 }
 
@@ -353,7 +432,7 @@ const initialMapLayers = [];
 
   // Create Add Layers buttons and add event listeners (to add/remove Your Layer buttons)
 
-  
+
 
   document.getElementById('addLayers-container').addEventListener('click', function(e) {
     var buttonElement = e.target.closest('.layer-button');
@@ -657,25 +736,8 @@ const initialMapLayers = [];
 
   const legendLayers = {};
 
-  // map.addControl(
-  //   new MaplibreLegendControl(legendLayers, {
-  //     showDefault: false,
-  //     showCheckbox: true,
-  //     onlyRendered: true,
-  //     reverseOrder: true,
-  //   }),
-  //   "bottom-right"
-  // );
-
   map.addControl(new ModeSwitchControl(), "bottom-left");
 
-  // // Add fullscreen control to the map.
-  // map.addControl(
-  //   new maplibregl.FullscreenControl({
-  //     container: document.querySelector("body"),
-  //   }),
-  //   "top-right"
-  // );
 })();
 
 // Fetch custom map stylesheet
@@ -697,154 +759,4 @@ async function fetchMapStyle(url) {
 
 
 
-// YourLayers Accordion Button
 
-document.getElementById('yourLayers_container').addEventListener('click', function(event) {
-  console.log("event.target!", event.target)
-  console.log("map", map)
-  
-
-  let button = event.target.closest('button') || event.target.previousElementSibling;
-
-  let yourLayerButton =  event.target.closest('li');
-
-  if (!button) {
-      let popover = event.target.closest('.popover');
-      if (popover) {
-          button = popover.previousElementSibling;
-      }
-  }
-
-  // let button = event.target.closest('button') || event.target.previousElementSibling || event.target.closest('.popover').previousElementSibling;
-
-  if (button) {
-    if (button.matches('.accordion-button')) {
-      console.log("accordion matched")
-      const content = button.nextElementSibling;
-
-      if(content.style.maxHeight){
-        content.style.maxHeight = null;
-        content.classList.add('hidden');
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-        content.classList.remove('hidden');
-      }
-
-      rotateImage(button);
-
-    } else if(button.matches('.key')){
-      console.log("key matched")
-      const popover = button.nextElementSibling;
-    
-      if (popover.classList.contains('hidden')) {
-        popover.classList.remove('hidden');
-      } else {
-        popover.classList.add('hidden');
-      }
-    } else if (button.matches('.remove-yourLayerButton')) {
-      console.log("remove button clicked")
-
-      // let yourLayerButton = button.closest('li');
-
-      let matchingAddLayerButton = document.querySelector(`#addLayers-container [data-layer-id="${yourLayerButton.dataset.id}"]`);
-
-      console.log("matchingAddLayerButton", matchingAddLayerButton)
-      console.log("yourLayerButton", yourLayerButton)
-
-      removeYourLayerButton(matchingAddLayerButton, yourLayerButton);
-
-    } else {
-      console.log ("accordion not matched")
-      console.log("button", button)
-    }
-  } else {
-    //any other element clicked should show or hide layers on map
-
-    console.log ("no match", event.target)
-    const elementId = yourLayerButton.getAttribute('data-id');
-    console.log("elementId", elementId)
-
-    const clickedLayer = elementId;
-    let e = event
-
-    console.log("clickedLayer", clickedLayer)
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
-
-    if (!map.getLayer(clickedLayer)) {
-      // Display layer on the map if not currently visible
-      mapLayers[clickedLayer].id = clickedLayer;
-      map.addLayer(mapLayers[clickedLayer]);
-    }
-
-    let parentListElement = this.closest('li');
-    let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
-
-    const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-    // Toggle layer visibility by changing the layout object's visibility property.
-    if (visibility === "visible") {
-      map.setLayoutProperty(clickedLayer, "visibility", "none");
-      this.classList.remove("active");
-      switchBtn.checked = false;
-
-    } else {
-      this.classList.add("active");
-      map.setLayoutProperty(clickedLayer, "visibility", "visible");
-      switchBtn.checked = true;
-    }
-    
-  }
-});
-
-async function removeYourLayerButton(matchingAddLayerButton, yourLayerButton){
-  toggle_add_layers_btn(matchingAddLayerButton);
-    let mapLayers =  await fetchMapLayers();
-
-    update_yourLayerButtons(DisplayedLayers, mapLayers, map).then(() => {
-      sort_yourLayerButtons();
-    }).catch(error => console.error('Error:', error));
-}
-
-
-
-
-
-        // const elementId = newElement.getAttribute('data-id');
-  
-        // // Attach event listeners.
-
-        // const activateLayers = newElement.querySelectorAll('.activateLayer');
-        // activateLayers.forEach(function(element) {
-        //     element.addEventListener('click', function(e) {
-                // const clickedLayer = elementId;
-                // console.log("clickedLayer", clickedLayer)
-                // e.preventDefault();
-                // e.stopPropagation();
-                // console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
-
-                // if (!map.getLayer(clickedLayer)) {
-                //   // Display layer on the map if not currently visible
-                //   mapLayers[clickedLayer].id = clickedLayer;
-                //   map.addLayer(mapLayers[clickedLayer]);
-                // }
-
-                // let parentListElement = this.closest('li');
-                // let switchBtn = parentListElement.querySelector('input[type="checkbox"]');
-
-                // const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-                // // Toggle layer visibility by changing the layout object's visibility property.
-                // if (visibility === "visible") {
-                //   map.setLayoutProperty(clickedLayer, "visibility", "none");
-                //   this.classList.remove("active");
-                //   switchBtn.checked = false;
-
-                // } else {
-                //   this.classList.add("active");
-                //   map.setLayoutProperty(clickedLayer, "visibility", "visible");
-                //   switchBtn.checked = true;
-                // }
-        //     });
-        // });
