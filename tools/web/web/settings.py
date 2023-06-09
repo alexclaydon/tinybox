@@ -34,8 +34,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost"
-).split(",") + ["b4e1-220-233-4-4.ngrok-free.app"]
-
+).split(",")
 
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
