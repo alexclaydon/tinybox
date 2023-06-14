@@ -1,4 +1,5 @@
 {% load static tailwind_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -38,7 +39,7 @@
       rel="stylesheet"
     />
     <script src="https://watergis.github.io/maplibre-gl-legend/maplibre-gl-legend.js"></script>
-    <script type="module" src="{% static 'world/map.js' %}"></script>
+    <script type="module" src="{% static 'world/map.js' %}?{% now 'U'%}"></script>
     {% tailwind_css %}
   </head>
 
@@ -68,12 +69,32 @@
       href="{% static 'world/styles.css' %}?{% now 'U'%}"
     />
 
+    <!-- Sidebar  -->
+
+  <div class="overflow-y-hidden">
+    <div id="slidingDiv" class="relative z-40 sm:w-96 h-screen bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out overflow-y-none">
+
+      <div class=" h-screen">
+        <div class="flex items-center">
+          <button type="button" id="slideY" class="pt-2 mx-auto sm:hidden">
+            <img id="btnFlipY" src="{% static 'world/map_Sidebar/images/btn_Yslide.svg'%}" alt="Hide" class="h-3"/>
+          </button>
+          <button type="button" id="SlideX" class="top-1/2 transform translate-y-1/2 hidden sm:block absolute -right-4">
+            <img id="btnFlipX" src="{% static 'world/map_Sidebar/images/btn_Xslide.svg'%}" alt="Hide" class="w-5"/>
+          </button>
+        </div>
+        {% include 'world/map_Sidebar.html'%}
+      </div>
+    </div> 
+  </div>
+    
+
     <div id="tailwind-main-container" class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div id="image-container">
         <img
           src="{% static 'world/tb_Logo-Logotype.svg' %}"
           alt="tinybox logo"
-        />
+        />ƒ
       </div>
 
       <pre id="info" class="hidden"></pre>
