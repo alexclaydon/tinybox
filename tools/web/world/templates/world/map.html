@@ -72,7 +72,9 @@
     <!-- Sidebar  -->
 
   <div class="overflow-y-hidden">
-    <div id="slidingDiv" class="relative z-40 sm:w-96 h-screen bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out overflow-y-none">
+    {% comment %} <div id="slidingDiv" class="relative z-40 sm:w-96 h-screen bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] duration-500 ease-in-out overflow-y-none"> {% endcomment %}
+
+      <div id="slidingDiv" class="absolute z-40 sm:w-96 h-full bg-white rounded-lg shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] overflow-auto duration-500 ease-in-out">
 
       <div class=" h-screen">
         <div class="flex items-center">
