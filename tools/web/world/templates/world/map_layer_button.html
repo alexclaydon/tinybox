@@ -27,7 +27,8 @@
                 <button type="button" class="accordion-button category-button pt-2 mx-auto twistieBtn">
                     <img src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" class="h-3 inline pr-2 btnTwistie"/><span class="text-xs text-neutral-400">Display Options.</span>
                 </button>
-                <div class="accordion-content hidden pb-36 max-w-sm">
+                {% comment %} <div class="accordion-content hidden pb-36 max-w-sm"> {% endcomment %}
+                <div class="accordion-content hidden pb-36">
                     <p class="text-sm pt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                     </p>
                     <button class="float-right remove-yourLayerButton">
@@ -42,30 +43,6 @@
     </li>
 
 
-{% comment %} {% elif buttonType == "addLayersFull"%}
-    <li class="border-y border-neutral-100">
-        <div class="flex flex-col h-full">  
-        <div class="mt-auto flex justify-between">
-            <div class="accordion">
-            <div class="accordion-item">
-
-                <button type="button" class="accordion-button category-button p-4 mx-auto">
-                <img class="btnTwistie h-3 inline pr-2" src="images/btn_Twistie.svg" alt="Down" /><span class="font-semibold">Category 1</span>
-                </button>
-
-                <div class="accordion-content hidden max-w-sm pt-2">
-                    <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full" data-layer-id="{{id}}">
-                        <div class="flex flex-col h-full">
-                        <h1 class="pt-2 font-semibold">{{id}}</h1>
-                        <p class="pb-4 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
-                    </button>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    </li> {% endcomment %}
 
 {% elif buttonType == "addLayers"%}
         <button class="layer-button border-[#00aa95] border-2 border-t-[#00ffda] border-l-[#00ffda] bg-white text-left px-4 w-full" data-layer-id="{{id}}">
@@ -79,14 +56,16 @@
 
 <li class="border-y border-neutral-100">
     <div class="flex flex-col h-full">  
-        <div class="mt-auto flex justify-between">
+        {% comment %} <div class="mt-auto flex justify-between"> {% endcomment %}
+        <div class="">
             <div class="accordion">
                 <div class="accordion-item">
                     <button type="button" class="accordion-button category-button p-4 mx-auto">
                     <img class="btnTwistie h-3 inline pr-2" src="{% static 'world/map_Sidebar/images/btn_Twistie.svg'%}" alt="Down" /><span class="font-semibold">{{category}}</span>
                     </button>
 
-                    <div id="{{categoryID}}" class="accordion-content hidden max-w-sm pt-2" data-category-id="{{categoryID}}">
+                    {% comment %} <div id="{{categoryID}}" class="accordion-content hidden max-w-sm pt-2" data-category-id="{{categoryID}}"> {% endcomment %}
+                    <div id="{{categoryID}}" class="accordion-content hidden pt-2" data-category-id="{{categoryID}}">
                         {% comment %} addLayer button goes here {% endcomment %}
                     </div>
                 </div>

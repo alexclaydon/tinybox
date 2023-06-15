@@ -14,11 +14,11 @@ export class LayerToggleControl {
     this._icon.className = "w-8 sm:w-6 h-8 sm:h-6";
 
     this._button.appendChild(this._icon);
-    this._button.addEventListener("click", () => {
-      this._button.classList.toggle("bg-gray-600");
-      this._button.classList.toggle("clicked");
-      document.getElementById("layers-panel").classList.toggle("hidden");
-    });
+    // this._button.addEventListener("click", () => {
+    //   this._button.classList.toggle("bg-gray-600");
+    //   this._button.classList.toggle("clicked");
+    //   document.getElementById("layers-panel").classList.toggle("hidden");
+    // });
     this._container.appendChild(this._button);
     return this._container;
   }
