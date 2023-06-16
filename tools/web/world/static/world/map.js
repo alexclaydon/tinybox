@@ -33,9 +33,6 @@ let defaultDisplayedLayers = [
 // Remember which layers are displayed in "Your Layers" section
 let DisplayedLayers = JSON.parse(localStorage.getItem('DisplayedLayers')) || defaultDisplayedLayers; // Retrieve DisplayedLayers from localStorage
 
-// <!--Create layer categories-->
-
-
 
 // <!--Create "Your Layer" buttons-->
 
@@ -510,68 +507,16 @@ const initialMapLayers = [];
         error
       );
     }
-  });
 
-
-  map.on("idle", () => {
-    // Enumerate ids of the layers.
     const toggleableLayerIds = Object.keys(mapLayers);
     let promises = [];
 
-    // Set up the corresponding toggle button for each layer.
     for (const id of toggleableLayerIds) {
       // Skip layers that already have a button set up.
       if (document.getElementById(id)) {
         continue;
       }
 
-      // >>>OLD LAYER CONTROL CODE TO DELETE<<<
-
-      // Create a link.
-      const link = document.createElement("a");
-      link.id = id;
-      link.href = "#";
-      link.textContent = id;
-      link.className = initialMapLayers.includes(id) ? "active" : "";
-
-      // Show or hide layer when the toggle is clicked.
-      link.onclick = function (e) {
-        const clickedLayer = this.textContent;
-        console.log("clickedLayer", clickedLayer)
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("map.getLayer(clickedLayer)", map.getLayer(clickedLayer))
-
-        if (!map.getLayer(clickedLayer)) {
-          // Add the layer if it's not on the map yet
-          mapLayers[clickedLayer].id = clickedLayer;
-          map.addLayer(mapLayers[clickedLayer]);
-        }
-
-        const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-        // Toggle layer visibility by changing the layout object's visibility property.
-        if (visibility === "visible") {
-          map.setLayoutProperty(clickedLayer, "visibility", "none");
-          this.className = "";
-        } else {
-          this.className = "active";
-          map.setLayoutProperty(clickedLayer, "visibility", "visible");
-        }
-      };
-
-      const layerControls = document.getElementById("layers-contents");
-
-      const listItem = document.createElement("li");
-      // const newItem = createLayerItem(link, "Layer 1 description.")
-      listItem.classList.add("px-6", "py-4");
-      listItem.appendChild(link);
-      layerControls.appendChild(listItem);
-      console.log("listItem", listItem)
-
-      // >>>END OLD LAYER CONTROL CODE<<<
-
-      // Create the Add Layers buttons
 
       create_addLayerButtons(id, mapLayers, DisplayedLayers)
 
@@ -583,6 +528,14 @@ const initialMapLayers = [];
     Promise.all(promises).then(() => {
       sort_yourLayerButtons();
     });
+
+  });
+
+
+  map.on("idle", () => {
+    // Enumerate ids of the layers.
+    const toggleableLayerIds = Object.keys(mapLayers);
+    let promises = [];
 
     async function switchMode(mode) {
       activeMode = mode;
