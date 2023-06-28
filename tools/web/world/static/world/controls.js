@@ -14,11 +14,12 @@ export class LayerToggleControl {
     this._icon.className = "w-8 sm:w-6 h-8 sm:h-6";
 
     this._button.appendChild(this._icon);
-    // this._button.addEventListener("click", () => {
-    //   this._button.classList.toggle("bg-gray-600");
-    //   this._button.classList.toggle("clicked");
-    //   document.getElementById("layers-panel").classList.toggle("hidden");
-    // });
+    this._button.addEventListener("click", () => {
+      const slide = isMobile()
+        ? document.getElementById("SlideY")
+        : document.getElementById("SlideX");
+      slide.dispatchEvent(new Event("click"));
+    });
     this._container.appendChild(this._button);
     return this._container;
   }
@@ -27,6 +28,12 @@ export class LayerToggleControl {
     this._container.parentNode.removeChild(this._container);
     this._map = undefined;
   }
+}
+
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 }
 
 // Control for switching between dark and light map modes
