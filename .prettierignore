@@ -1,0 +1,2 @@
+# Prettier does not support Django template tags and will break the HTML file (see [issue](https://github.com/prettier/prettier/issues/5581); accordingly, we include this standard Prettier config file in the repo root to ensure that, regardless of developer environment, Pretter will not be applied to any HTML files.
+**/*.html

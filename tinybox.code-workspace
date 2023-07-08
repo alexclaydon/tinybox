@@ -46,6 +46,10 @@
       "**/*.geojson": true,
       "**/*.zip": true,
       "**/*.csv": true
+    },
+    "prettier.singleAttributePerLine": true,
+    "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+      "editor.defaultFormatter": "monosans.djlint"
     }
   }
 }

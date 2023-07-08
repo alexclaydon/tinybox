@@ -24,7 +24,7 @@ dependencies = ["typer[all]", "python-dotenv>=1.0.0", "python-dateutil>=2.8.2"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-dev = ["black", "isort", "pip-tools", "pytest", "pytest-cov"]
+dev = ["black", "isort", "pip-tools", "pytest", "pytest-cov", "djlint"]
 
 [project.urls]
 Documentation = "https://github.com/alexclaydon/tinybox#readme"
@@ -67,7 +67,7 @@ webdev-srv = "python tools/web/manage.py runserver 0.0.0.0:8080"
 # For use when you want to run the Django dev server on its own, or when you want to run it in a separate process to Tailwind hot reload for troubleshooting purposes
 webdev-tailwind = "python tools/web/manage.py tailwind start"
 # For use when you want to run Tailwind hot reload on its own, or when you want to run it in a separate process to the Django dev server for troubleshooting purposes
-webngrok = "./bin/ngrok http 8080 --domain=tinybox.ngrok.dev --oauth google --oauth-allow-email mattielangton@gmail.com --oauth-allow-email alexclaydon@gmail.com --oauth-allow-email liamgilchrist@gmail.com"
+webngrok = "./bin/ngrok http 8080 --domain=tinybox.ngrok.dev --oauth google --oauth-allow-email mattielangton@gmail.com --oauth-allow-email alexclaydon@gmail.com --oauth-allow-email liamgilchrist@gmail.com --oauth-allow-email patt.langton@gmail.com"
 webmakemigrate = "python tools/web/manage.py makemigrations"
 webmigrate = "python tools/web/manage.py migrate"
 webshell = "python tools/web/manage.py shell"
