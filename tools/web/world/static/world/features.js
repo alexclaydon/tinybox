@@ -10,6 +10,23 @@ const spaces_cdn_endpoint = JSON.parse(
   document.getElementById("spaces_cdn_endpoint").textContent
 );
 
+// Fetch custom map stylesheet
+export async function fetchMapStyle(url) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+    }
+
+    const mapStyle = await response.json();
+    return mapStyle;
+  } catch (error) {
+    console.error("Error fetching map_style.json:", error);
+  }
+}
+
 export async function fetchMapSources() {
   try {
     const response = await fetch("/static/world/map_sources.json");
