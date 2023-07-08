@@ -1,253 +1,253 @@
 {
-  "Average annual traffic volume": {
-    "type": "line",
-    "source": "vic_vechicle_traffic",
-    "source-layer": "Traffic_Volume",
-    "metadata": {
-      "category": "Traffic",
-      "paint-style": "sunrise",
-      "paint-variable": "ALLVEHS_AADT",
-      "paint-variable-min-max": [2, 119000],
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Average annual vehicle traffic volume.",
-      "full_description": "This is the full description of Average annual traffic volume.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
-    }
-  },
-  "Future land development": {
-    "type": "fill",
-    "source": "future_land_development",
-    "source-layer": "Land_Use",
-    "metadata": {
-      "category": "Development",
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Blocks of land subject to issued land development permits.",
-      "full_description": "This is the full description of Future land development.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "Average annual traffic volume": {
+        "type": "line",
+        "source": "vic_vechicle_traffic",
+        "source-layer": "Traffic_Volume",
+        "metadata": {
+            "category": "Traffic",
+            "paint-style": "sunrise",
+            "paint-variable": "ALLVEHS_AADT",
+            "paint-variable-min-max": [2, 119000],
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Average annual vehicle traffic volume.",
+            "full_description": "This is the full description of Average annual traffic volume.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        }
     },
-    "paint": {
-      "fill-color": [
-        "match",
-        ["get", "LU_CLASS"],
-        "Credited Open Space",
-        "#9E559C",
-        "Developable Area - Employment",
-        "#A7C636",
-        "Developable Area - Residential",
-        "#149ECE",
-        "Education/Community/Government",
-        "#ED5151",
-        "Other",
-        "#FBB03B",
-        "Other Non-Developable Land",
-        "#FBB03B",
-        "Regional Open Space",
-        "#9E559C",
-        "Transport",
-        "#007cbf",
-        "Uncredited Open Space",
-        "#9E559C",
-        "black"
-      ],
-      "fill-opacity": 0.8
-    }
-  },
-  "Open spaces": {
-    "type": "fill",
-    "source": "vpa_open_space",
-    "source-layer": "VPA_Open_Space",
-    "metadata": {
-      "category": "Lifestyle",
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Open public spaces by type.",
-      "full_description": "This is the full description of Public Amenities.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "Future land development": {
+        "type": "fill",
+        "source": "future_land_development",
+        "source-layer": "Land_Use",
+        "metadata": {
+            "category": "Development",
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Blocks of land subject to issued land development permits.",
+            "full_description": "This is the full description of Future land development.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "fill-color": [
+                "match",
+                ["get", "LU_CLASS"],
+                "Credited Open Space",
+                "#9E559C",
+                "Developable Area - Employment",
+                "#A7C636",
+                "Developable Area - Residential",
+                "#149ECE",
+                "Education/Community/Government",
+                "#ED5151",
+                "Other",
+                "#FBB03B",
+                "Other Non-Developable Land",
+                "#FBB03B",
+                "Regional Open Space",
+                "#9E559C",
+                "Transport",
+                "#007cbf",
+                "Uncredited Open Space",
+                "#9E559C",
+                "black"
+            ],
+            "fill-opacity": 0.8
+        }
     },
-    "paint": {
-      "fill-color": "#007cbf",
-      "fill-opacity": 0.6
-    }
-  },
-  "Areas within walking distance (400m) of public space": {
-    "type": "fill",
-    "source": "walkable_catchment_400m",
-    "source-layer": "Public_Open_Space__400m_Walkable_Catchment",
-    "metadata": {
-      "category": "Lifestyle",
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "All areas within walking distance (400m) of a public space.",
-      "full_description": "This is the full description of Areas within walking distance (400m) of public space.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "Open spaces": {
+        "type": "fill",
+        "source": "vpa_open_space",
+        "source-layer": "VPA_Open_Space",
+        "metadata": {
+            "category": "Lifestyle",
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Open public spaces by type.",
+            "full_description": "This is the full description of Public Amenities.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "fill-color": "#007cbf",
+            "fill-opacity": 0.6
+        }
     },
-    "paint": {
-      "fill-color": "#007cbf",
-      "fill-opacity": 0.6
-    }
-  },
-  "CBD bike routes": {
-    "type": "line",
-    "source": "cbd_bike_facilities",
-    "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
-    "metadata": {
-      "category": "Lifestyle",
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Bike routes in the CBD.",
-      "full_description": "This is the full description of CBD bike routes.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "Areas within walking distance (400m) of public space": {
+        "type": "fill",
+        "source": "walkable_catchment_400m",
+        "source-layer": "Public_Open_Space__400m_Walkable_Catchment",
+        "metadata": {
+            "category": "Lifestyle",
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "All areas within walking distance (400m) of a public space.",
+            "full_description": "This is the full description of Areas within walking distance (400m) of public space.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "fill-color": "#007cbf",
+            "fill-opacity": 0.6
+        }
     },
-    "paint": {
-      "line-color": "#007cbf",
-      "line-opacity": 0.8,
-      "line-width": 2
-    }
-  },
-  "CBD bike-share docks": {
-    "type": "circle",
-    "source": "cbd_bike_facilities",
-    "source-layer": "bikesharedocklocations",
-    "metadata": {
-      "category": "Lifestyle",
-      "mousemove_properties": [],
-      "popup_properties": ["name", "capacity", "rental_method"],
-      "notes": "",
-      "summary_description": "Bike-share facilities in the CBD.",
-      "full_description": "This is the full description of CBD bike-share docks.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "CBD bike routes": {
+        "type": "line",
+        "source": "cbd_bike_facilities",
+        "source-layer": "bicycleroutesincludinginformalonroadandoffroadroutes",
+        "metadata": {
+            "category": "Lifestyle",
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Bike routes in the CBD.",
+            "full_description": "This is the full description of CBD bike routes.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "line-color": "#007cbf",
+            "line-opacity": 0.8,
+            "line-width": 2
+        }
     },
-    "paint": {
-      "circle-radius": 5,
-      "circle-color": "#007cbf",
-      "circle-opacity": 0.8,
-      "circle-stroke-width": 1
-    }
-  },
-  "Average solar radiation in Summer": {
-    "type": "fill",
-    "source": "bom_solar_rad_summer",
-    "source-layer": "solarwet",
-    "metadata": {
-      "category": "Environment",
-      "paint-style": "red-light-to-dark",
-      "paint-variable": "DN",
-      "paint-variable-min-max": [15, 26],
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Average solar radiation in the Summer months.",
-      "full_description": "This is the full description of Average solar radiation in Summer.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
-    }
-  },
-  "Unemployment rate (%)": {
-    "type": "fill",
-    "source": "lga_unemployment",
-    "source-layer": "lga_unemployment",
-    "metadata": {
-      "category": "Social",
-      "paint-style": "good-to-bad",
-      "paint-variable": "Unemployment rate (%)",
-      "paint-variable-min-max": [3.0, 7.0],
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Unemployment rate (%) by Local Government Area.",
-      "full_description": "This is the full description of Unemployment rate (%).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
-    }
-  },
-  "Median population age": {
-    "type": "fill",
-    "source": "lga_demographics",
-    "source-layer": "lga_demographics",
-    "metadata": {
-      "category": "Social",
-      "paint-style": "purple-light-to-dark",
-      "paint-variable": "Median age - persons (years)",
-      "paint-variable-min-max": [29, 62.4],
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Median population age by Local Government Area.",
-      "full_description": "This is the full description of Medium population age.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
-    }
-  },
-  "Crime rate (per 100k ppl)": {
-    "type": "fill",
-    "source": "lga_crime",
-    "source-layer": "lga_crime",
-    "metadata": {
-      "category": "Social",
-      "paint-style": "red-light-to-dark",
-      "paint-variable": "Rate per 100,000 population",
-      "paint-variable-min-max": [2361.9, 22235.9],
-      "mousemove_properties": [],
-      "popup_properties": [],
-      "notes": "",
-      "summary_description": "Crime rate (per 100k people) by Local Government Area.",
-      "full_description": "This is the full description of Crime rate (per 100k ppl).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
-    }
-  },
-  "CBD building information": {
-    "type": "circle",
-    "source": "cbd_building_data",
-    "source-layer": "buildingswithnameagesizeaccessibilityandbicyclefacilities",
-    "metadata": {
-      "category": "Construction",
-      "mousemove_properties": [],
-      "popup_properties": [
-        "street_address",
-        "building_name",
-        "construction_year",
-        "number_of_floors_above_ground",
-        "bicycle_spaces"
-      ],
-      "notes": "",
-      "summary_description": "Construction and amenities information on Buildings in the CBD.",
-      "full_description": "This is the full description of CBD Building information.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "CBD bike-share docks": {
+        "type": "circle",
+        "source": "cbd_bike_facilities",
+        "source-layer": "bikesharedocklocations",
+        "metadata": {
+            "category": "Lifestyle",
+            "mousemove_properties": [],
+            "popup_properties": ["name", "capacity", "rental_method"],
+            "notes": "",
+            "summary_description": "Bike-share facilities in the CBD.",
+            "full_description": "This is the full description of CBD bike-share docks.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "circle-radius": 5,
+            "circle-color": "#007cbf",
+            "circle-opacity": 0.8,
+            "circle-stroke-width": 1
+        }
     },
-    "paint": {
-      "circle-radius": 5,
-      "circle-color": "#007cbf",
-      "circle-opacity": 0.8,
-      "circle-stroke-width": 1
-    }
-  },
-  "School locations": {
-    "type": "circle",
-    "source": "education",
-    "source-layer": "school_locations",
-    "metadata": {
-      "category": "Education",
-      "mousemove_properties": [],
-      "popup_properties": [
-        "School_Name",
-        "School_Type",
-        "Education_Sector",
-        "Full_Phone_No",
-        "Address_Line_1",
-        "Address_Line_2"
-      ],
-      "notes": "",
-      "summary_description": "School locations and sector (private, government, other).",
-      "full_description": "This is the full description of School location.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+    "Average solar radiation in Summer": {
+        "type": "fill",
+        "source": "bom_solar_rad_summer",
+        "source-layer": "solarwet",
+        "metadata": {
+            "category": "Environment",
+            "paint-style": "red-light-to-dark",
+            "paint-variable": "DN",
+            "paint-variable-min-max": [15, 26],
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Average solar radiation in the Summer months.",
+            "full_description": "This is the full description of Average solar radiation in Summer.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        }
     },
-    "paint": {
-      "circle-radius": 5,
-      "circle-color": [
-        "match",
-        ["get", "Education_Sector"],
-        "Catholic",
-        "#3CB371",
-        "Government",
-        "#6495ED",
-        "Independent",
-        "#CD5C5C",
-        "black"
-      ],
-      "circle-opacity": 0.8,
-      "circle-stroke-width": 1
+    "Unemployment rate (%)": {
+        "type": "fill",
+        "source": "lga_unemployment",
+        "source-layer": "lga_unemployment",
+        "metadata": {
+            "category": "Social",
+            "paint-style": "good-to-bad",
+            "paint-variable": "Unemployment rate (%)",
+            "paint-variable-min-max": [3.0, 7.0],
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Unemployment rate (%) by Local Government Area.",
+            "full_description": "This is the full description of Unemployment rate (%).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        }
+    },
+    "Median population age": {
+        "type": "fill",
+        "source": "lga_demographics",
+        "source-layer": "lga_demographics",
+        "metadata": {
+            "category": "Social",
+            "paint-style": "purple-light-to-dark",
+            "paint-variable": "Median age - persons (years)",
+            "paint-variable-min-max": [29, 62.4],
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Median population age by Local Government Area.",
+            "full_description": "This is the full description of Medium population age.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        }
+    },
+    "Crime rate (per 100k ppl)": {
+        "type": "fill",
+        "source": "lga_crime",
+        "source-layer": "lga_crime",
+        "metadata": {
+            "category": "Social",
+            "paint-style": "red-light-to-dark",
+            "paint-variable": "Rate per 100,000 population",
+            "paint-variable-min-max": [2361.9, 22235.9],
+            "mousemove_properties": [],
+            "popup_properties": [],
+            "notes": "",
+            "summary_description": "Crime rate (per 100k people) by Local Government Area.",
+            "full_description": "This is the full description of Crime rate (per 100k ppl).  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        }
+    },
+    "CBD building information": {
+        "type": "circle",
+        "source": "cbd_building_data",
+        "source-layer": "buildingswithnameagesizeaccessibilityandbicyclefacilities",
+        "metadata": {
+            "category": "Construction",
+            "mousemove_properties": [],
+            "popup_properties": [
+                "street_address",
+                "building_name",
+                "construction_year",
+                "number_of_floors_above_ground",
+                "bicycle_spaces"
+            ],
+            "notes": "",
+            "summary_description": "Construction and amenities information on Buildings in the CBD.",
+            "full_description": "This is the full description of CBD Building information.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "circle-radius": 5,
+            "circle-color": "#007cbf",
+            "circle-opacity": 0.8,
+            "circle-stroke-width": 1
+        }
+    },
+    "School locations": {
+        "type": "circle",
+        "source": "education",
+        "source-layer": "school_locations",
+        "metadata": {
+            "category": "Education",
+            "mousemove_properties": [],
+            "popup_properties": [
+                "School_Name",
+                "School_Type",
+                "Education_Sector",
+                "Full_Phone_No",
+                "Address_Line_1",
+                "Address_Line_2"
+            ],
+            "notes": "",
+            "summary_description": "School locations and sector (private, government, other).",
+            "full_description": "This is the full description of School location.  It is quite long and it is what you will see on hover.  This will explain what the layer is, where it comes from, and some useful ways to use it. It can really be as long as you want it to be."
+        },
+        "paint": {
+            "circle-radius": 5,
+            "circle-color": [
+                "match",
+                ["get", "Education_Sector"],
+                "Catholic",
+                "#3CB371",
+                "Government",
+                "#6495ED",
+                "Independent",
+                "#CD5C5C",
+                "black"
+            ],
+            "circle-opacity": 0.8,
+            "circle-stroke-width": 1
+        }
     }
-  }
 }
