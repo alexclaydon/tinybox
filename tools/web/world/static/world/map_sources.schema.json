@@ -1,52 +1,52 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "patternProperties": {
-    "^[a-zA-Z0-9_]+$": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["vector"]
-        },
-        "url": {
-          "type": "string",
-          "pattern": "^pmtiles://__SPACES_CDN_ENDPOINT__/[a-zA-Z0-9_]+\\.pmtiles$"
-        },
-        "description": {
-          "type": "string"
-        },
-        "metadata": {
-          "type": "object",
-          "properties": {
-            "source_org": {
-              "type": "string"
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "patternProperties": {
+        "^[a-zA-Z0-9_]+$": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": ["vector"]
+                },
+                "url": {
+                    "type": "string",
+                    "pattern": "^pmtiles://__SPACES_CDN_ENDPOINT__/[a-zA-Z0-9_]+\\.pmtiles$"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "source_org": {
+                            "type": "string"
+                        },
+                        "source_url": {
+                            "type": "string"
+                        },
+                        "study_date": {
+                            "type": "string",
+                            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                        },
+                        "tippecanoe_command": {
+                            "type": "string"
+                        },
+                        "analyst_comment": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "source_org",
+                        "source_url",
+                        "study_date",
+                        "tippecanoe_command",
+                        "analyst_comment"
+                    ]
+                }
             },
-            "source_url": {
-              "type": "string"
-            },
-            "study_date": {
-              "type": "string",
-              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-            },
-            "tippecanoe_command": {
-              "type": "string"
-            },
-            "analyst_comment": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "source_org",
-            "source_url",
-            "study_date",
-            "tippecanoe_command",
-            "analyst_comment"
-          ]
+            "required": ["type", "url", "description", "metadata"]
         }
-      },
-      "required": ["type", "url", "description", "metadata"]
-    }
-  },
-  "additionalProperties": false
+    },
+    "additionalProperties": false
 }
