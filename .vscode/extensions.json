@@ -1,0 +1,21 @@
+{
+    "recommendations": [
+        "rangav.vscode-thunder-client",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "batisteo.vscode-django",
+        "monosans.djlint",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint",
+        "tamasfe.even-better-toml",
+        "ms-toolsai.jupyter",
+        "esbenp.prettier-vscode",
+        "timonwong.shellcheck",
+        "bradlc.vscode-tailwindcss",
+        "webhint.vscode-webhint",
+        "semgrep.semgrep"
+    ]
+}
