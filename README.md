@@ -75,6 +75,10 @@ virtual = ".hatch"
 
 Then, in your repo root directory, create a `.env` file and ensure that the following env is present: `HATCH_CONFIG="/Users/<username>/Library/Preferences/hatch/config.toml"`
 
+### Install Node development dependencies
+
+All Node development dependencies (as opposed to the build dependencies that would need to ship with our web app) are specified in `package.json`.  To install them, run `npm install` from the repo root.  This will enable IDE tooling such as ESLint.
+
 ### Setup PostgreSQL for use with Django
 
 You now need to setup a project database.  Use whatever interface you like to spin up a new database, recommended called `tinybox`.  The following instructions are for Postgres.app.

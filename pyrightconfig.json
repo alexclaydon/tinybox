@@ -1,0 +1,15 @@
+{
+    "verboseOutput": true,
+    "exclude": [
+        "**/working",
+        "**/.git",
+        "**/.venv",
+        "**/.hatch",
+        "**/.stfolder",
+        "**/.stignore",
+        "**/node_modules",
+        "**/__pycache__",
+        ".pytest_cache",
+        ".pytest_cache/*"
+    ]
+}

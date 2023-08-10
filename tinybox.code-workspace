@@ -1,55 +1,75 @@
 {
-  "folders": [
-    {
-      "path": "."
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": ".hatch/tinybox/bin/python3.9",
+        "python.analysis.typeCheckingMode": "off",
+        "[python]": {
+            "editor.defaultFormatter": "ms-python.black-formatter",
+            "editor.formatOnSave": true,
+            "editor.codeActionsOnSave": {
+                "source.organizeImports": true
+            }
+        },
+        "isort.args": ["--profile", "black"],
+        "[git-commit]": {
+            "rewrap.autoWrap.enabled": true,
+            "rewrap.wrappingColumn": 72
+        },
+        "git.useEditorAsCommitInput": true,
+        // Completely obscure from file explorer
+        "files.exclude": {
+            "**/__pycache__": true,
+            "**/*.egg-info": true,
+            "**/*.ipynb_checkpoints": true,
+            "**/.git": false
+        },
+        // Exclude from searches within the repo
+        "search.exclude": {
+            "**/.venv": true,
+            "**/.hatch": true,
+            "**/.git": true,
+            "**/*.geojson": true,
+            "**/*.zip": true,
+            "**/*.csv": true
+        },
+        // Exclude from file watcher processes
+        "files.watcherExclude": {
+            "**/.venv": true,
+            "**/.hatch": true,
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/*/**": true,
+            "**/*.geojson": true,
+            "**/*.zip": true,
+            "**/*.csv": true
+        },
+        "prettier.singleAttributePerLine": true,
+        "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
+            "editor.defaultFormatter": "monosans.djlint"
+        },
+        "eslint.validate": ["javascript", "json"],
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        },
+        "json.schemas": [
+            {
+                "fileMatch": ["/tools/web/world/static/world/map_layers.json"],
+                "url": "./tools/web/world/static/world/map_layers.schema.json"
+            },
+            {
+                "fileMatch": ["/tools/web/world/static/world/map_sources.json"],
+                "url": "./tools/web/world/static/world/map_sources.schema.json"
+            },
+            {
+                "fileMatch": [
+                    "/tools/web/world/static/world/paint_styles.json"
+                ],
+                "url": "./tools/web/world/static/world/paint_styles.schema.json"
+            }
+        ]
     }
-  ],
-  "settings": {
-    "python.defaultInterpreterPath": ".hatch/tinybox/bin/python3.9",
-    "python.analysis.typeCheckingMode": "off",
-    "[python]": {
-      "editor.defaultFormatter": "ms-python.black-formatter",
-      "editor.formatOnSave": true,
-      "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-      }
-    },
-    "isort.args": ["--profile", "black"],
-    "[git-commit]": {
-      "rewrap.autoWrap.enabled": true,
-      "rewrap.wrappingColumn": 72
-    },
-    "git.useEditorAsCommitInput": true,
-    // Completely obscure from file explorer
-    "files.exclude": {
-      "**/__pycache__": true,
-      "**/*.egg-info": true,
-      "**/*.ipynb_checkpoints": true,
-      "**/.git": false
-    },
-    // Exclude from searches within the repo
-    "search.exclude": {
-      "**/.venv": true,
-      "**/.hatch": true,
-      "**/.git": true,
-      "**/*.geojson": true,
-      "**/*.zip": true,
-      "**/*.csv": true
-    },
-    // Exclude from file watcher processes
-    "files.watcherExclude": {
-      "**/.venv": true,
-      "**/.hatch": true,
-      "**/.git/objects/**": true,
-      "**/.git/subtree-cache/**": true,
-      "**/node_modules/*/**": true,
-      "**/*.geojson": true,
-      "**/*.zip": true,
-      "**/*.csv": true
-    },
-    "prettier.singleAttributePerLine": true,
-    "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
-      "editor.defaultFormatter": "monosans.djlint"
-    }
-  }
 }

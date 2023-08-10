@@ -41,7 +41,7 @@ dependencies = [
   "gunicorn",
   "psycopg2-binary",
   "dj-database-url",
-  "Django==4.2.4",
+  "Django>=4.2.5",
   # "psycopg2>=2.9.6",
   "django-tailwind>=3.5.0",
   "django-storages",
