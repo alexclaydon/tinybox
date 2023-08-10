@@ -61,6 +61,7 @@ Ensure that the following required dependencies are installed and on path.
 - [Tippecanoe](https://github.com/felt/tippecanoe) fork, maintained by "Felt", for generating custom vector tilesets: `brew install tippecanoe`.
   - Note that as of today, the `brew` formula for Tippecanoe is current (v2.24.0).  Should that change, you can install from source using the instructions on the repo.
 - [Maputnik](https://github.com/maputnik/editor) for styling tilesets: `brew install kevinschaul/homebrew-core/maputnik`
+- Ngrok: `brew install ngrok/ngrok/ngrok`
 
 Optionally, we also recommend installing [Direnv](https://direnv.net/) (`brew install direnv`) to handle auto-loading of environment variables.  Don't forget to [hook Direnv into your (zsh) shell](https://direnv.net/docs/hook.html).  Once install, call `direnv allow` from the repo root to enable automatic sourcing of environment variables from the `.envrc` file.
 
