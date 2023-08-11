@@ -7,7 +7,6 @@ import {
     sort_yourLayerButtons,
     create_addLayerCategories,
     create_addLayerButtons,
-    addCategoryToDropdown,
     toggle_add_layers_btn,
     initialiseLayerButtons,
     rotateImage,
@@ -29,43 +28,28 @@ if (!maplibregl.supported()) {
 // Temporary object to set up initial display layers.  Production would fetch this from the database.
 let defaultDisplayedLayers = [
     "Average annual traffic volume",
-    "Future land development",
     "Areas within walking distance (400m) of public space",
-    "Open spaces",
     "CBD bike routes",
-    "Crime rate (per 100k ppl)",
     "School locations",
+    "Unemployment rate (%)",
+    "Median population age",
 ];
 
-// Retrieve DisplayedLayers from localStorage, or use defaultDisplayedLayers if it doesn't exist
-let DisplayedLayers =
-    JSON.parse(localStorage.getItem("DisplayedLayers")) ||
-    defaultDisplayedLayers;
-console.log("Displayed Layers: ", DisplayedLayers);
+// Check if "DisplayedLayers" exists in localStorage
+if (!localStorage.getItem("DisplayedLayers")) {
+    // If it doesn't exist, set it to defaultDisplayedLayers
+    localStorage.setItem(
+        "DisplayedLayers",
+        JSON.stringify(defaultDisplayedLayers)
+    );
+}
 
-// <!--Category Drop Down-->
-
-let isDropdownOpen = false;
-
-document
-    .getElementById("menuButton")
-    .addEventListener("click", function (event) {
-        event.stopPropagation(); // Prevent this click event from bubbling up to the document
-        document.getElementById("menuItems").classList.toggle("hidden");
-        isDropdownOpen = !isDropdownOpen;
-    });
-
-document.addEventListener("click", function () {
-    if (isDropdownOpen) {
-        document.getElementById("menuItems").classList.add("hidden");
-        isDropdownOpen = false;
-    }
-});
+// Shouldn't currently be used to set initial visibility since it fails to set the corresponding visibility toggle in the "Your Layers" panel to its on state.
+const initialMapLayers = [];
 
 // Initialize tiling protocol
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
-console.log("Initialized PMTiles protocol:", protocol);
 
 let mediaQueryObj = window.matchMedia("(prefers-color-scheme: dark)");
 let isDarkMode = mediaQueryObj.matches;
@@ -76,24 +60,25 @@ const lightStyleUrl = "/static/world/map_style.json";
 const darkStyleUrl =
     "https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json";
 
-const initialMapLayers = [];
+const mapSources = await fetchMapSources();
+console.log("Parsed map sources JSON object: ", mapSources);
+
+const mapLayers = await fetchMapLayers();
+console.log("Parsed map layers JSON object: ", mapLayers);
+
+let layerCategories = getLayerCategories(mapLayers);
+console.log("Parsed layer categories: ", layerCategories);
+
+const [lightStyle, darkStyle] = await Promise.all([
+    fetchMapStyle(lightStyleUrl),
+    fetchMapStyle(darkStyleUrl),
+]);
+
+function getStyleByMode(mode) {
+    return mode == "dark" ? lightStyle : lightStyle;
+}
 
 (async () => {
-    const [lightStyle, darkStyle] = await Promise.all([
-        fetchMapStyle(lightStyleUrl),
-        fetchMapStyle(darkStyleUrl),
-    ]);
-
-    function getStyleByMode(mode) {
-        return mode == "dark" ? lightStyle : lightStyle;
-    }
-
-    const mapSources = await fetchMapSources();
-    console.log("Map Sources: ", mapSources);
-
-    const mapLayers = await fetchMapLayers();
-    console.log("Map Layers: ", mapLayers);
-
     const map = new maplibregl.Map({
         container: "map",
         center: [144.946457, -37.840935], // Initial focus coordinate (long, lat)
@@ -101,61 +86,21 @@ const initialMapLayers = [];
         style: getStyleByMode(activeMode),
         attributionControl: false,
     });
-    console.log("Map: ", map);
-
-    let layerCategories = getLayerCategories(mapLayers);
-    console.log("Layer Categories: ", layerCategories);
-    create_addLayerCategories(layerCategories);
-
-    document
-        .getElementById("addLayers-container")
-        .addEventListener("click", function (e) {
-            var buttonElement = e.target.closest(".layer-button");
-            var categoryElement = e.target.closest(".accordion-button");
-
-            if (buttonElement) {
-                console.log(
-                    "clicked to add/remove layer:",
-                    buttonElement.dataset.layerId
-                );
-                toggle_add_layers_btn(buttonElement);
-            }
-            if (categoryElement) {
-                console.log(
-                    "clicked to expand/collapse category:",
-                    categoryElement.dataset.categoryId
-                );
-
-                const content = categoryElement.nextElementSibling;
-                console.log("content", content);
-                console.log("content.scrollHeight", content.scrollHeight);
-
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                    content.classList.add("hidden");
-                } else {
-                    content.classList.remove("hidden");
-                    content.style.maxHeight = content.scrollHeight + "px";
-                }
-                rotateImage(categoryElement);
-            } else {
-                console.log("no match", e.target);
-            }
-
-            update_yourLayerButtons(DisplayedLayers, mapLayers, map)
-                .then(() => {
-                    sort_yourLayerButtons();
-                })
-                .catch((error) => console.error("Error:", error));
-        });
 
     map.on("load", () => {
         try {
-            // Add sources
             for (const source in mapSources) {
                 map.addSource(source, mapSources[source]);
             }
+        } catch (error) {
+            console.error(
+                "An error occurred while adding vector sources:",
+                error
+            );
+            return; // Return early if there was an error adding sources
+        }
 
+        try {
             for (const layer in mapLayers) {
                 if (initialMapLayers.includes(layer)) {
                     mapLayers[layer].id = layer;
@@ -163,50 +108,91 @@ const initialMapLayers = [];
                     map.setLayoutProperty(layer, "visibility", "visible");
                 }
             }
-
-            console.log(
-                "Successfully added vector source and layer information"
-            );
         } catch (error) {
             console.error(
-                "An error occurred while adding vector source and layers:",
+                "An error occurred while adding vector layers:",
                 error
             );
         }
 
-        const toggleableLayerIds = Object.keys(mapLayers);
-        let promises = [];
+        const allSources = map.getStyle().sources;
 
-        for (const id of toggleableLayerIds) {
-            // Skip layers that already have a button set up.
-            if (document.getElementById(id)) {
-                continue;
+        console.log("All sources registered with Map object:", allSources);
+
+        const allLayers = map.getStyle().layers;
+
+        console.log("All layers registered with Map object:", allLayers);
+
+        Promise.all(layerCategories.map(create_addLayerCategories)).then(() => {
+            const toggleableLayerIds = Object.keys(mapLayers);
+            let promises = [];
+
+            for (const id of toggleableLayerIds) {
+                // Skip layers that already have a button set up.
+                if (document.getElementById(id)) {
+                    continue;
+                }
+
+                create_addLayerButtons(id, mapLayers);
+
+                // Create the "Your Layers" filter buttons
+
+                promises.push(create_yourLayerButtons(id, mapLayers, map));
             }
 
-            create_addLayerButtons(id, mapLayers, DisplayedLayers);
-
-            // Create the "Your Layers" filter buttons
-
-            promises.push(
-                create_yourLayerButtons(id, DisplayedLayers, mapLayers, map)
-            );
-        }
-
-        Promise.all(promises).then(() => {
-            sort_yourLayerButtons();
+            Promise.all(promises).then(() => {
+                sort_yourLayerButtons();
+            });
         });
+
+        document
+            .getElementById("addLayers-container")
+            .addEventListener("click", function (e) {
+                var buttonElement = e.target.closest(".layer-button");
+                var categoryElement = e.target.closest(".accordion-button");
+
+                if (buttonElement) {
+                    console.log(
+                        "clicked to add/remove layer:",
+                        buttonElement.dataset.layerId
+                    );
+                    toggle_add_layers_btn(buttonElement);
+                }
+                if (categoryElement) {
+                    console.log(
+                        "clicked to expand/collapse category:",
+                        categoryElement.dataset.categoryId
+                    );
+
+                    const content = categoryElement.nextElementSibling;
+                    console.log("content", content);
+                    console.log("content.scrollHeight", content.scrollHeight);
+
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        content.classList.add("hidden");
+                    } else {
+                        content.classList.remove("hidden");
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                    rotateImage(categoryElement);
+                } else {
+                    console.log("no match", e.target);
+                }
+
+                update_yourLayerButtons(mapLayers, map)
+                    .then(() => {
+                        sort_yourLayerButtons();
+                    })
+                    .catch((error) => console.error("Error:", error));
+            });
     });
 
     map.on("idle", () => {
-        // Enumerate ids of the layers.
-        const toggleableLayerIds = Object.keys(mapLayers);
-        let promises = [];
-
         async function switchMode(mode) {
             activeMode = mode;
             const style = getStyleByMode(mode);
             await map.setStyle(style); // Add "await" here
-
             // Restore the visibility of layers
             map.on("styledata", () => {
                 console.log("Style data changed");
@@ -215,7 +201,6 @@ const initialMapLayers = [];
                     for (const source in mapSources) {
                         map.addSource(source, mapSources[source]);
                     }
-
                     for (const layer in mapLayers) {
                         if (initialMapLayers.includes(layer)) {
                             mapLayers[layer].id = layer;
@@ -227,7 +212,6 @@ const initialMapLayers = [];
                             );
                         }
                     }
-
                     console.log("Added vector source and layer information");
                 } catch (error) {
                     console.error(
@@ -237,7 +221,6 @@ const initialMapLayers = [];
                 }
             });
         }
-
         document
             .getElementById("modeSwitch")
             .addEventListener("click", function () {
@@ -247,15 +230,7 @@ const initialMapLayers = [];
                     switchMode("light");
                 }
             });
-
         initialiseLayerButtons();
-
-        // Clear the dropdown menu once before adding categories
-        let dropdownMenu = document.getElementById("menuItems");
-        dropdownMenu.innerHTML = "";
-
-        // After the "idle" event, populate the dropdown menu with the categories
-        layerCategories.forEach((category) => addCategoryToDropdown(category));
     });
 
     function createPopup(e, propertyKeys) {
@@ -304,25 +279,14 @@ const initialMapLayers = [];
             return displayFeat;
         });
 
-        document.getElementById("info").innerHTML = JSON.stringify(
-            displayFeatures,
-            null,
-            2
-        );
+        // The below was a debug display panel to show info - disabled for now; if you uncomment this code the browser will throw an error because there is no div with id="info"
+
+        // document.getElementById("info").innerHTML = JSON.stringify(
+        //     displayFeatures,
+        //     null,
+        //     2
+        // );
     });
-
-    // // Get references to the search input and button
-    // const searchInput = document.getElementById("search-input");
-    // const searchButton = document.getElementById("search-button");
-
-    // // Add an event listener to the search button
-    // searchButton.addEventListener("click", () => {
-    //   // Get the search query from the input field
-    //   const query = searchInput.value;
-
-    //   // Use the geocoder to search for the query
-    //   geocoder.query(query);
-    // });
 
     // Add Mapbox geocoder to the map
     var geocoder = new MapboxGeocoder({
@@ -385,9 +349,7 @@ const initialMapLayers = [];
         console.log("A trackuserlocationstart event has occurred.");
     });
 
-    const legendLayers = {};
-
-    map.addControl(new ModeSwitchControl(), "bottom-left");
+    map.addControl(new ModeSwitchControl(), "top-right");
 })();
 
 // <!--Slider-->
@@ -469,47 +431,45 @@ tab2Button.addEventListener("click", () => {
 // Select tab1Button on page load
 switchTab(tab1Button, tab2Button, tab1Content, tab2Content);
 
-// `switchTabs` doesn't appear to be used - was refactored into `switchTab`?
+function switchTabs(tab) {
+    tab1Button.classList.remove(
+        "border-[#00aa95]",
+        "text-[#00aa95]",
+        "font-semibold"
+    );
+    tab1Button.classList.add(
+        "border-transparent",
+        "text-neutral-400",
+        "hover:text-neutral-600",
+        "hover:border-neutral-600"
+    );
 
-// function switchTabs(tab) {
-//   tab1Button.classList.remove(
-//     "border-[#00aa95]",
-//     "text-[#00aa95]",
-//     "font-semibold"
-//   );
-//   tab1Button.classList.add(
-//     "border-transparent",
-//     "text-neutral-400",
-//     "hover:text-neutral-600",
-//     "hover:border-neutral-600"
-//   );
+    tab2Button.classList.remove(
+        "border-[#00aa95]",
+        "text-[#00aa95]",
+        "font-semibold"
+    );
+    tab2Button.classList.add(
+        "border-transparent",
+        "text-neutral-400",
+        "hover:text-neutral-600",
+        "hover:border-neutral-600"
+    );
 
-//   tab2Button.classList.remove(
-//     "border-[#00aa95]",
-//     "text-[#00aa95]",
-//     "font-semibold"
-//   );
-//   tab2Button.classList.add(
-//     "border-transparent",
-//     "text-neutral-400",
-//     "hover:text-neutral-600",
-//     "hover:border-neutral-600"
-//   );
-
-//   document
-//     .getElementById(tab + "-button")
-//     .classList.add(
-//       "border-b-2",
-//       "border-[#00aa95]",
-//       "text-[#00aa95]",
-//       "font-semibold"
-//     );
-//   document
-//     .getElementById(tab + "-button")
-//     .classList.remove(
-//       "border-transparent",
-//       "text-neutral-400",
-//       "hover:text-neutral-600",
-//       "hover:border-neutral-600"
-//     );
-// }
+    document
+        .getElementById(tab + "-button")
+        .classList.add(
+            "border-b-2",
+            "border-[#00aa95]",
+            "text-[#00aa95]",
+            "font-semibold"
+        );
+    document
+        .getElementById(tab + "-button")
+        .classList.remove(
+            "border-transparent",
+            "text-neutral-400",
+            "hover:text-neutral-600",
+            "hover:border-neutral-600"
+        );
+}
