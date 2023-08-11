@@ -6,10 +6,6 @@ const spaces_api_secret = JSON.parse(
     document.getElementById("spaces_api_secret").textContent
 );
 
-const spaces_cdn_endpoint = JSON.parse(
-    document.getElementById("spaces_cdn_endpoint").textContent
-);
-
 // Fetch custom map stylesheet
 export async function fetchMapStyle(url) {
     try {
@@ -28,6 +24,10 @@ export async function fetchMapStyle(url) {
 }
 
 export async function fetchMapSources() {
+    const spaces_cdn_endpoint = JSON.parse(
+        document.getElementById("spaces_cdn_endpoint").textContent
+    );
+
     try {
         const response = await fetch("/static/world/map_sources.json");
 
@@ -50,41 +50,9 @@ export async function fetchMapSources() {
 
         return mapSources;
     } catch (error) {
-        console.error("Error fetching mapSources.json:", error);
+        console.error("Error fetching Map Sources:", error);
+        throw error;
     }
-}
-
-async function generatePaintExpression(
-    paintStyle,
-    paintVariableMinMax,
-    paintVariable
-) {
-    const paintStylesResponse = await fetch("/static/world/paint_styles.json");
-    const paintStyles = await paintStylesResponse.json();
-
-    const colors = paintStyles[paintStyle].colors;
-
-    const min = paintVariableMinMax[0];
-    const max = paintVariableMinMax[1];
-    const stepSize = (max - min) / (colors.length - 1);
-    const paintSteps = Array.from(
-        { length: colors.length - 1 },
-        (_, i) => min + (i + 1) * stepSize
-    );
-
-    const colorExpression = ["step", ["to-number", ["get", paintVariable]]];
-    let startIndex = 0;
-
-    if (colors.length > paintSteps.length) {
-        colorExpression.push(colors[0]);
-        startIndex = 1;
-    }
-
-    for (let i = startIndex; i < colors.length; i++) {
-        colorExpression.push(paintSteps[i - startIndex], colors[i]);
-    }
-
-    return colorExpression;
 }
 
 export async function fetchMapLayers() {
@@ -128,8 +96,42 @@ export async function fetchMapLayers() {
 
         return mapLayers;
     } catch (error) {
-        console.error("Error fetching mapSources.json:", error);
+        console.error("Error fetching Map Layers", error);
+        throw error;
     }
+}
+
+async function generatePaintExpression(
+    paintStyle,
+    paintVariableMinMax,
+    paintVariable
+) {
+    const paintStylesResponse = await fetch("/static/world/paint_styles.json");
+    const paintStyles = await paintStylesResponse.json();
+
+    const colors = paintStyles[paintStyle].colors;
+
+    const min = paintVariableMinMax[0];
+    const max = paintVariableMinMax[1];
+    const stepSize = (max - min) / (colors.length - 1);
+    const paintSteps = Array.from(
+        { length: colors.length - 1 },
+        (_, i) => min + (i + 1) * stepSize
+    );
+
+    const colorExpression = ["step", ["to-number", ["get", paintVariable]]];
+    let startIndex = 0;
+
+    if (colors.length > paintSteps.length) {
+        colorExpression.push(colors[0]);
+        startIndex = 1;
+    }
+
+    for (let i = startIndex; i < colors.length; i++) {
+        colorExpression.push(paintSteps[i - startIndex], colors[i]);
+    }
+
+    return colorExpression;
 }
 
 // Fetch GeoJSON data from any Django API endpoint

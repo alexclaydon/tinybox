@@ -1,109 +1,63 @@
 {% load static tailwind_tags %}
 {% load static %}
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>tinybox - Neighbourhood Intelligence</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    {{STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key"}}
-    {{MAPBOX_API_KEY|json_script:"mapbox_api_key"}}
-    {{SPACES_KEY|json_script:"spaces_api_key"}}
-    {{SPACES_SECRET|json_script:"spaces_api_secret"}}
-    {{SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint"}}
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="{% static 'favicon.ico' %}"
-    />
-    <script
-      type="text/javascript"
-      src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"
-    ></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
-      type="text/css"
-    />
-    <script src="https://unpkg.com/pmtiles@2.5.0/dist/index.js"></script>
-    <link
-      href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
-      rel="stylesheet"
-    />
-    <script src="https://watergis.github.io/maplibre-gl-legend/maplibre-gl-legend.js"></script>
-    <script type="module" src="{% static 'world/map.js' %}?{% now 'U'%}"></script>
-    {% tailwind_css %}
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
-
-  </head>
-
-  <body>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'world/styles.css' %}?{% now 'U'%}"
-    />
-
-    <div id="authDetails" class="hidden">
-      {% if user.is_authenticated %} {{user.username}} (<a
-        href="{% url 'home' %}"
-        >Home</a
-      >
-      <a href="{% url 'account_logout' %}">Logout</a>) {% else %}
-      <a href="{% url 'account_login' %}">Login</a>
-      <a href="{% url 'account_signup' %}">Sign Up</a>
-      {% endif %}
-      <br />
-    </div>
-
-    <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'world/styles.css' %}?{% now 'U'%}"
-    />
-
-    <!-- Sidebar  -->
-
-  <div class="">
-
-      <div id="slidingDiv" class="absolute z-40 sm:w-96 bg-opacity-0 shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] overflow-none duration-500 ease-in-out">
-
-      <div class=" h-screen">
-
-        {% include 'world/map_Sidebar.html'%}
-      </div>
-    </div> 
-  </div>
-    
-<!-- 
-    <div id="tailwind-main-container" class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div id="image-container">
-        <img
-          src="{% static 'world/tb_Logo-Logotype.svg' %}"
-          alt="tinybox logo"
-        />ƒ
-      </div>
-
-      <pre id="info" class="hidden"></pre> -->
-
-      <!-- <div
-        id="wide-panel"
-        class="mx-auto overflow-hidden bg-white shadow rounded-md max-w-xl"
-      >
-
-      </div> -->
-    </div>
-  </body>
+<html lang="en">
+    <head>
+        <title>tinybox - Neighbourhood Intelligence</title>
+        <meta charset="utf-8" />
+        <meta name="viewport"
+              content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+        {{ STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key" }}
+        {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
+        {{ SPACES_KEY|json_script:"spaces_api_key" }}
+        {{ SPACES_SECRET|json_script:"spaces_api_secret" }}
+        {{ SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint" }}
+        <link rel="shortcut icon"
+              type="image/png"
+              href="{% static 'favicon.ico' %}" />
+        <script type="text/javascript"
+                src="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+        <script type="text/javascript"
+                src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+        <link rel="stylesheet"
+              href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+              type="text/css" />
+        <script src="https://unpkg.com/pmtiles@2.5.0/dist/index.js"></script>
+        <link href="//unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
+              rel="stylesheet" />
+        {% comment %} <script src="https://watergis.github.io/maplibre-gl-legend/maplibre-gl-legend.js"></script> {% endcomment %}
+        <script type="module" src="{% static 'world/map.js' %}?{% now 'U'%}"></script>
+        {% tailwind_css %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&display=swap"
+              rel="stylesheet">
+    </head>
+    <body>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'world/styles.css' %}?{% now 'U' %}" />
+        <div id="authDetails" class="hidden">
+            {% if user.is_authenticated %}
+                {{ user.username }} (<a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'account_logout' %}">Logout</a>)
+            {% else %}
+                <a href="{% url 'account_login' %}">Login</a>
+                <a href="{% url 'account_signup' %}">Sign Up</a>
+            {% endif %}
+            <br />
+        </div>
+        <div id="map" class="-z-10 top-0 bottom-0 w-full absolute"></div>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'world/styles.css' %}?{% now 'U' %}" />
+        <!-- Sidebar  -->
+        <div class="">
+            <div id="slidingDiv"
+                 class="absolute z-40 sm:w-96 bg-opacity-0 shadow-[rgba(0,_0,_0,_0.25)_0px_20px_20px] overflow-none duration-500 ease-in-out">
+                <div class=" h-screen">{% include 'world/map_Sidebar.html' %}</div>
+            </div>
+        </div>
+    </body>
 </html>

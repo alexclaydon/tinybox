@@ -1,20 +1,13 @@
-from auth_app.decorators import user_is_approved
+from time import sleep
+
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views import View
 
-from .models import (
-    ImageOverlay,
-    LineFeature,
-    MultiPolygonArea,
-    PointOfInterest,
-    PolygonArea,
-    UserLocation,
-)
+from .models import LineFeature, PointOfInterest
 
 
 # Temporarily disabled as we are using Ngrok auth instead
@@ -49,25 +42,17 @@ def linefeature_geojson(request):
     )
     return JsonResponse(linefeature_data, safe=False)
 
-# def ajax_get_map_layer(request):
-#     id = request.GET.get('id', None)
-
-#     # You might want to use the id variable here somehow...
-#     # For now, we're not doing anything with it
-
-#     html = render_to_string('world/map_layer_button.html', {'id': layer_id})
-
-#     return JsonResponse({'html': html})
 
 class ajax_get_map_layer_button(View):
-    def get(self, request, *args, **kwargs):
-        layer_id = request.GET.get('id', None)
-        buttonType = request.GET.get('type', None)
-        categoryID = request.GET.get('categoryID', None)
-        category = request.GET.get('category', None)
+    MAX_RETRIES = 3  # Maximum number of retries
+    INITIAL_DELAY = 1  # Initial delay in seconds
 
-        # print ("buttonType", buttonType)
-        # print ("layer_id", layer_id)
+    def get(self, request, *args, **kwargs):
+        layer_id = request.GET.get("id", None)
+        buttonType = request.GET.get("type", None)
+        categoryID = request.GET.get("categoryID", None)
+        category = request.GET.get("category", None)
+
         context = {
             "id": layer_id,
             "buttonType": buttonType,
@@ -75,7 +60,26 @@ class ajax_get_map_layer_button(View):
             "category": category,
         }
 
-        print ("context", context)
-        
-        html = render_to_string('world/map_layer_button.html', context)
-        return JsonResponse({'html': html})
+        retries = 0
+        delay = self.INITIAL_DELAY
+
+        while retries < self.MAX_RETRIES:
+            try:
+                html = render_to_string(
+                    "world/map_layer_button.html", context
+                )
+                return JsonResponse({"html": html})
+            except Exception as e:
+                # Check for 503 status code in the exception
+                if hasattr(e, "status_code") and e.status_code == 503:
+                    sleep(delay)  # Wait before retrying
+                    delay *= 2  # Double the delay for the next attempt
+                    retries += 1
+                else:
+                    raise  # Rethrow if it's not a 503 error
+
+        # Handle maximum retries reached
+        # Log an error, raise an exception, or return a specific response as needed
+        return JsonResponse(
+            {"error": "Maximum retries reached"}, status=503
+        )

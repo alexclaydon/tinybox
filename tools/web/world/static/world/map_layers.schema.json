@@ -33,20 +33,21 @@
                         "items": { "type": "string" }
                     },
                     "notes": { "type": "string" },
-                    "summary_description": { "type": "string" }
+                    "summary_description": { "type": "string" },
+                    "full_description": { "type": "string" }
                 },
                 "additionalProperties": false
             },
             "paint": {
                 "type": "object",
                 "properties": {
-                    "fill-color": { "type": "string" },
+                    "fill-color": { "type": ["string", "array"] },
                     "fill-opacity": { "type": "number" },
                     "line-color": { "type": "string" },
                     "line-opacity": { "type": "number" },
                     "line-width": { "type": "number" },
                     "circle-radius": { "type": "number" },
-                    "circle-color": { "type": "string" },
+                    "circle-color": { "type": ["string", "array"] },
                     "circle-opacity": { "type": "number" },
                     "circle-stroke-width": { "type": "number" },
                     "circle-stroke-color": { "type": "string" }

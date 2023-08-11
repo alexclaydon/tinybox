@@ -1,99 +1,110 @@
-{% comment %} {% load static tailwind_tags %} {% endcomment %}
+{% load static tailwind_tags %}
 {% load static %}
-
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-
-</head>
-<body>
-
-  <!--Side Bar Container - Logo/Home button-->
-<div id="sidebar-container" class="h-screen flex flex-col no-scrollbar overflow-y-auto overflow-x-none">
-  
-  <div id="wrapper" class="z-40  bg-white rounded-lg flex-grow flex flex-col">
- <!--Slide Buttons-->   
-    <div class="flex items-center">
-      <button type="button" id="SlideY" class="pt-2 mx-auto sm:hidden">
-        <img id="btnFlipY" src="{% static 'world/map_Sidebar/images/btn_Yslide.svg'%}" alt="Hide" class="h-3"/>
-      </button>
-      <button type="button" id="SlideX" class="top-1/2 transform translate-y-1/2 hidden sm:block absolute -right-4">
-        <img id="btnFlipX" src="{% static 'world/map_Sidebar/images/btn_Xslide.svg'%}" alt="Hide" class="w-5"/>
-      </button>
-    </div>
-
-    <div class="flex items-center justify-between pb-5 pl-4 sm:pt-5">
-      <img src="{% static 'world/map_Sidebar/images/tinybox_Logo.svg'%}" class="w-36">      
-      <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg'%}" alt="Profile" class="h-12 pr-4"/>
-
-
- <!--Side Bar Container - Logo/Home button-->
-
-    </div>
-<!--Search bar-->
-{% comment %} <div class="mb-3">
-  <div class="px-4 relative flex w-full flex-wrap items-stretch">
-    <input id="search-input" type="search" class="relative m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-400 bg-transparent bg-clip-padding px-3 text-sm text-neutral-400 focus:outline-none" placeholder="Search address or neighbourhood" aria-label="Search" aria-describedby="button-addon1" />
-    <!--Search button-->
-    <button id="search-button" class="relative z-[2] flex items-center rounded-r bg-[#00aa95] px-4 py-2 text-xs font-medium uppercase leading-tight text-white transition duration-150 ease-in-out" type="button" id="button-addon1" data-te-ripple-init data-te-ripple-color="light">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
-        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-      </svg>
-    </button>
-  </div>
-</div> {% endcomment %}
-
-<!--Tabs-->
-<nav>
-  <div class="flex border-b text-sm" role="tablist">
-    <button id="tab1-button" class="flex-1 px-4 py-2 border-b-2" onclick="switchTabs('tab1')">Your Layers</button>
-    <button id="tab2-button" class="flex-1 px-4 py-2 border-b-2" onclick="switchTabs('tab2')">Add Layers</button>
-  </div>
-</nav>
-
-
-<!--Tab 1 Content-->
-
-<div id="tab1-content" class="">
-    <h1 class="pt-4 px-4 font-semibold">Here you'll find all your custom map layers.</h1>
-    <p class="px-4 pb-6 text-sm">Add more from the Add Layers tab above, toggle them on and off, or remove them from your list with the x.</p>
-
-    <ul class="" id="yourLayers_container" data-url="{% url 'get_map_layer_button' %}" ></ul>
-
-</div>
-
-<!--Tab 2 Content-->
-<div id="tab2-content" class="hidden">
-    <h1 class="pt-4 px-4 font-semibold">Here you can add layers.</h1>
-    <p class="px-4 pb-6 text-sm">Add layers from different categories. They will apear in the Your Layers tab above.</p>
-
-    <!--Dropdown Menu- This is being called somewhere so can't remove-->
-    <div>
-      <button id="menuButton">
-      </button>
-    </div>
- 
-  
-  <div id="buttonContainer-addRemove-layers" data-url="{% url 'get_map_layer_button' %}">
-    <ul id="addLayers-container" class="" data-url="{% url 'get_map_layer_button' %}"></ul>
-   
-  </div>
-</div>
-
-<!--Side Bar Container End-->
-  </div>
-</div>
-
-<!--Side Bar Container End-->
-
-    
-</body>		
-		
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700&display=swap"
+              rel="stylesheet" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <!--Side Bar Container - Logo/Home button-->
+        <div id="sidebar-container"
+             class="h-screen flex flex-col no-scrollbar overflow-y-auto overflow-x-none">
+            <div id="wrapper" class="z-40 bg-white rounded-lg flex-grow flex flex-col">
+                <!--Slide Buttons-->
+                <div class="flex items-center">
+                    <button type="button" id="SlideY" class="pt-2 mx-auto sm:hidden">
+                        <img id="btnFlipY"
+                             src="{% static 'world/map_Sidebar/images/btn_Yslide.svg' %}"
+                             alt="Hide"
+                             class="h-3" />
+                    </button>
+                    <button type="button"
+                            id="SlideX"
+                            class="top-1/2 transform translate-y-1/2 hidden sm:block absolute -right-4">
+                        <img id="btnFlipX"
+                             src="{% static 'world/map_Sidebar/images/btn_Xslide.svg' %}"
+                             alt="Hide"
+                             class="w-5" />
+                    </button>
+                </div>
+                <div class="flex items-center justify-between pb-5 pl-4 sm:pt-5">
+                    <img src="{% static 'world/map_Sidebar/images/tb_Logo-Logotype.svg' %}"
+                         class="w-36" />
+                    <img src="{% static 'world/map_Sidebar/images/btn_Profile.svg' %}"
+                         alt="Profile"
+                         class="h-12 pr-4" />
+                    <!--Side Bar Container - Logo/Home button-->
+                </div>
+                <!--Search bar-->
+                <div class="mb-3">
+                    <div class="px-4 relative flex w-full flex-wrap items-stretch">
+                        <input id="search-input"
+                               type="search"
+                               class="relative m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-400 bg-transparent bg-clip-padding px-3 text-sm text-neutral-400 focus:outline-none"
+                               placeholder="Search address or neighbourhood"
+                               aria-label="Search"
+                               aria-describedby="button-addon1" />
+                        <!--Search button-->
+                        <button id="search-button"
+                                class="relative z-[2] flex items-center rounded-r bg-[#00aa95] px-4 py-2 text-xs font-medium uppercase leading-tight text-white transition duration-150 ease-in-out"
+                                type="button"
+                                id="button-addon1"
+                                data-te-ripple-init
+                                data-te-ripple-color="light">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 20 20"
+                                 fill="currentColor"
+                                 class="h-5 w-5">
+                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <!--Tabs-->
+                <nav>
+                    <div class="flex border-b text-sm" role="tablist">
+                        <button id="tab1-button" class="flex-1 px-4 py-2 border-b-2">Current Layers</button>
+                        <button id="tab2-button" class="flex-1 px-4 py-2 border-b-2">Available Layers</button>
+                    </div>
+                </nav>
+                <!--Tab 1 Content-->
+                <div id="tab1-content" class="">
+                    <h1 class="pt-4 px-4 font-semibold">These are your current map layers.</h1>
+                    <p class="px-4 pb-2 text-sm">
+                        Toggle a layer's visibility, or remove it. Future updates will allow you to customise the way each layer is visualised.
+                    </p>
+                    <ul class=""
+                        id="yourLayers_container"
+                        data-url="{% url 'get_map_layer_button' %}">
+                    </ul>
+                </div>
+                <!--Tab 2 Content-->
+                <div id="tab2-content" class="hidden">
+                    <h1 class="pt-4 px-4 font-semibold">All map layers.</h1>
+                    <p class="px-4 pb-2 text-sm">
+                        Select layers here to make them available for visualisation on your Current Layers tab. De-select to remove them.
+                    </p>
+                    <!--Dropdown Menu- This is being called somewhere so can't remove-->
+                    <div>
+                        <button id="menuButton"></button>
+                    </div>
+                    <div id="buttonContainer-addRemove-layers"
+                         data-url="{% url 'get_map_layer_button' %}">
+                        <ul id="addLayers-container"
+                            class=""
+                            data-url="{% url 'get_map_layer_button' %}">
+                        </ul>
+                    </div>
+                </div>
+                <!--Side Bar Container End-->
+            </div>
+        </div>
+        <!--Side Bar Container End-->
+    </body>
 </html>
-
