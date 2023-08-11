@@ -28,7 +28,6 @@ if (!maplibregl.supported()) {
 // Temporary object to set up initial display layers.  Production would fetch this from the database.
 let defaultDisplayedLayers = [
     "Average annual traffic volume",
-    "Areas within walking distance (400m) of public space",
     "CBD bike routes",
     "School locations",
     "Unemployment rate (%)",
