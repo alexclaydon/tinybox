@@ -20,11 +20,34 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["typer[all]", "python-dotenv>=1.0.0", "python-dateutil>=2.8.2"]
+dependencies = [
+  "python-dotenv>=1.0.0",
+  "python-dateutil>=2.8.2",
+  "django-allauth",
+  "psycopg2-binary",
+  "dj-database-url",
+  "Django>=4.2.4",
+  "django-tailwind>=3.5.0",
+  "django-storages",
+  "requests>=2.28.2",
+  "geojson>=3.0.1",
+  "pandas>=2.0.0",
+]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-dev = ["black", "isort", "pip-tools", "pytest", "pytest-cov", "djlint"]
+dev = [
+  "black",
+  "isort",
+  "pip-tools",
+  "pytest",
+  "pytest-cov",
+  "djlint",
+  "typer[all]",
+  "gunicorn",
+  "Pillow>=9.5.0",
+  "beautifulsoup4>=4.12.1",
+]
 
 [project.urls]
 Documentation = "https://github.com/alexclaydon/tinybox#readme"
@@ -37,21 +60,7 @@ path = "src/tinybox/__about__.py"
 [tool.hatch.envs.default]
 python = "3.9"
 type = "virtual"
-dependencies = [
-  "gunicorn",
-  "psycopg2-binary",
-  "dj-database-url",
-  "Django>=4.2.4",
-  # "psycopg2>=2.9.6",
-  "django-tailwind>=3.5.0",
-  "django-storages",
-  "requests>=2.28.2",
-  "geojson>=3.0.1",
-  "pandas>=2.0.0",
-  "Pillow>=9.5.0",
-  "beautifulsoup4>=4.12.1",
-  "django-allauth",
-]
+dependencies = []
 features = ["dev"]
 
 [tool.hatch.envs.default.env-vars]
