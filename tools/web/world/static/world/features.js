@@ -1,11 +1,3 @@
-const spaces_api_key = JSON.parse(
-    document.getElementById("spaces_api_key").textContent
-);
-
-const spaces_api_secret = JSON.parse(
-    document.getElementById("spaces_api_secret").textContent
-);
-
 // Fetch custom map stylesheet
 export async function fetchMapStyle(url) {
     try {

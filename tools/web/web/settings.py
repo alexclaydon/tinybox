@@ -19,6 +19,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Third party API keys
+# It is not insecure to pass the Mapbox API key to the client side because it is URL scoped
+MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
+SPACES_ENDPOINT = os.getenv("SPACES_ENDPOINT")
+SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -183,18 +190,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TAILWIND_APP_NAME = "theme"
 
-# API keys used in the tinybox "map.js" file
-STADIA_MAPS_API_KEY = os.getenv("STADIA_MAPS_API_KEY")
-MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
-
 GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
 
 GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
 
 LOGIN_REDIRECT_URL = "home"
-SPACES_KEY = os.getenv("SPACES_KEY")
-SPACES_SECRET = os.getenv("SPACES_SECRET")
-SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
 
 GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
 

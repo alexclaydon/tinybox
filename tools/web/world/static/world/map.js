@@ -12,13 +12,9 @@ import {
     rotateImage,
 } from "./layersPanel.js";
 
-// #TODO: Import API keys: To be confirmed whether this is actually secure
+// # It is not insecure to pass the Mapbox API key to the client side because it is URL scoped
 const mapbox_api_key = JSON.parse(
     document.getElementById("mapbox_api_key").textContent
-);
-
-const stadiaMapsApiKey = JSON.parse(
-    document.getElementById("stadia_maps_api_key").textContent
 );
 
 if (!maplibregl.supported()) {

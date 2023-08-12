@@ -10,14 +10,13 @@ from django.views import View
 from .models import LineFeature, PointOfInterest
 
 
-# Temporarily disabled as we are using Ngrok auth instead
+# Django auth is temporarily disabled as we are using Ngrok auth instead
 # @user_is_approved
 def map_view(request):
     context = {
-        "STADIA_MAPS_API_KEY": settings.STADIA_MAPS_API_KEY,
         "MAPBOX_API_KEY": settings.MAPBOX_API_KEY,
-        "SPACES_KEY": settings.SPACES_KEY,
-        "SPACES_SECRET": settings.SPACES_SECRET,
+        # It is not insecure to pass the Mapbox API key to the client side because it is URL scoped
+        "SPACES_ENDPOINT": settings.SPACES_ENDPOINT,
         "SPACES_CDN_ENDPOINT": settings.SPACES_CDN_ENDPOINT,
     }
     return render(request, "world/map.html", context)
@@ -44,8 +43,8 @@ def linefeature_geojson(request):
 
 
 class ajax_get_map_layer_button(View):
-    MAX_RETRIES = 3  # Maximum number of retries
-    INITIAL_DELAY = 1  # Initial delay in seconds
+    MAX_RETRIES = 6  # Maximum number of retries
+    INITIAL_DELAY = 1000  # Initial delay in seconds
 
     def get(self, request, *args, **kwargs):
         layer_id = request.GET.get("id", None)

@@ -1,15 +1,3 @@
-const spaces_api_key = JSON.parse(
-    document.getElementById("spaces_api_key").textContent
-);
-
-const spaces_api_secret = JSON.parse(
-    document.getElementById("spaces_api_secret").textContent
-);
-
-const spaces_cdn_endpoint = JSON.parse(
-    document.getElementById("spaces_cdn_endpoint").textContent
-);
-
 export function getLayerCategories(mapLayers) {
     let categories = new Set();
     for (const layer in mapLayers) {

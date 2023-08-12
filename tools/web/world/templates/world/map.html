@@ -7,10 +7,9 @@
         <meta charset="utf-8" />
         <meta name="viewport"
               content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-        {{ STADIA_MAPS_API_KEY|json_script:"stadia_maps_api_key" }}
+        {% comment %} # It is not insecure to pass the Mapbox API key to the client side because it is URL scoped {% endcomment %}
         {{ MAPBOX_API_KEY|json_script:"mapbox_api_key" }}
-        {{ SPACES_KEY|json_script:"spaces_api_key" }}
-        {{ SPACES_SECRET|json_script:"spaces_api_secret" }}
+        {{ SPACES_ENDPOINT|json_script:"spaces_endpoint" }}
         {{ SPACES_CDN_ENDPOINT|json_script:"spaces_cdn_endpoint" }}
         <link rel="shortcut icon"
               type="image/png"
