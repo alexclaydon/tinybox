@@ -22,6 +22,8 @@ load_dotenv()
 # Third party API keys
 # It is not insecure to pass the Mapbox API key to the client side because it is URL scoped
 MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
+SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
+
 SPACES_ENDPOINT = os.getenv("SPACES_ENDPOINT")
 SPACES_CDN_ENDPOINT = os.getenv("SPACES_CDN_ENDPOINT")
 
