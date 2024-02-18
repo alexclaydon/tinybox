@@ -1,0 +1,93 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "resolver"
+dynamic = ["version"]
+description = ""
+readme = "README.md"
+requires-python = "==3.11.6"
+keywords = []
+authors = [{ name = "Alex Claydon", email = "alexclaydon@gmail.com" }]
+classifiers = []
+dependencies = [
+  "numpy",
+  "scipy",
+  "pandas==2.0.0",
+  "matplotlib",
+  "nbconvert",
+  "nbformat",
+  "ipykernel",
+  "jupytext",
+  "geojson==3.0.1",
+  "dagster==1.3.14",
+  "dagit==1.2.6",
+  "pydantic==1.10.7",
+  "datamodel-code-generator==0.17.2",
+  "rasterio",
+  "geopandas",
+  "pyproj",
+  "boto3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "pip-tools",
+  "pytest",
+  "pytest-cov",
+  "djlint",
+  "typer[all]",
+  "Pillow>=9.5.0",
+  "beautifulsoup4>=4.12.1",
+]
+
+[project.urls]
+Documentation = "https://github.com/alexclaydon/tinybox#readme"
+Issues = "https://github.com/alexclaydon/tinybox/issues"
+Source = "https://github.com/alexclaydon/tinybox"
+
+[tool.hatch.version]
+path = "src/resolver/__about__.py"
+
+[tool.hatch.envs.default]
+python = "3.11.6"
+type = "virtual"
+dependencies = []
+features = ["dev"]
+
+[tool.hatch.envs.default.env-vars]
+PIP_FIND_LINKS = "https://github.com/dagster-io/build-grpcio/wiki/Wheels"
+PIP_VERBOSE = "2"
+DAGSTER_HOME = "/Users/alexclaydon/dev/dev-projects/tinybox/tools/etl/data"
+MallocNanoZone = "1"
+
+[tool.hatch.envs.default.scripts]
+# Tests
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/tinybox --cov=tests {args}"
+no-cov = "cov --no-cov {args}"
+# Dagster
+dd = "dagster dev"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.11"]
+
+[tool.dagster]
+module_name = "tools.etl.general"
+# Add each new pipeline module to this list
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = ["src/resolver/__about__.py"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.black]
+line-length = 71
+
+[tool.ruff]
+# Never enforce `E501` (line length violations).
+ignore = ["E501"]

@@ -1,4 +1,7 @@
+*.env
 # Node
+
+requirements.txt
 
 # Logs
 logs
@@ -134,7 +137,9 @@ dist
 # Note that subfolders also have their own .gitignore files where that makes sense
 
 # Django staticfiles - exclude during development
-tools/web/staticfiles
+app/src/app/staticfiles
+app/src/app/theme/static
+
 
 # Syncthing
 .DS_Store
@@ -151,9 +156,6 @@ tutorial
 
 # tools/web
 geckodriver
-
-# Used for working through pinning of dependencies but `pyproject.toml` is the final source of truth
-dev-requirements.txt
 
 # Other
 git-sim_media

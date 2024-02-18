@@ -2,7 +2,6 @@
     "recommendations": [
         "rangav.vscode-thunder-client",
         "ms-python.black-formatter",
-        "ms-python.isort",
         "ms-python.python",
         "ms-python.vscode-pylance",
         "charliermarsh.ruff",
@@ -16,6 +15,5 @@
         "timonwong.shellcheck",
         "bradlc.vscode-tailwindcss",
         "webhint.vscode-webhint",
-        "semgrep.semgrep"
     ]
 }

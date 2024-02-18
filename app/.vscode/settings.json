@@ -1,0 +1,35 @@
+{
+    "python.defaultInterpreterPath": ".hatch/app/bin/python3.11",
+    "python.testing.pytestArgs": ["tests"],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoFormatStrings": false,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.userFileIndexingLimit": 5000,
+    "python.analysis.exclude": [
+        "**/working",
+        "**/.git",
+        "**/.venv",
+        "**/.hatch",
+        "**/.ruff_cache",
+        "**/.stfolder",
+        "**/.stignore",
+        "**/node_modules",
+        "**/__pycache__",
+        ".pytest_cache",
+        ".pytest_cache/*"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
+        },
+        "editor.formatOnType": true
+    },
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "jupyter.askForKernelRestart": false,
+    "jupyter.interactiveWindow.textEditor.executeSelection": true
+}

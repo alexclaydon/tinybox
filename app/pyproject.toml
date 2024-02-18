@@ -1,0 +1,91 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# [tool.hatch.build]
+# require-runtime-dependencies = true
+
+[project]
+name = "app"
+dynamic = ["version"]
+description = ""
+readme = "README.md"
+requires-python = ">=3.11.6"
+keywords = []
+authors = [{ name = "Alex Claydon", email = "alexclaydon@gmail.com" }]
+classifiers = []
+dependencies = [
+  "python-dotenv==1.0.0",
+  "python-dateutil==2.8.2",
+  "django-allauth",
+  "dj-database-url",
+  "Django==4.2.4",
+  "django-tailwind==3.8.0",
+  "django-storages",
+  "gunicorn",
+  "requests==2.28.2",
+  "geojson==3.0.1",
+  "pandas==2.0.0",
+  "django-browser-reload",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "pip-tools",
+  "pytest",
+  "pytest-cov",
+  "djlint",
+  "typer[all]",
+  "Pillow>=9.5.0",
+  "beautifulsoup4>=4.12.1",
+]
+
+[project.urls]
+Documentation = "https://github.com/alexclaydon/tinybox#readme"
+Issues = "https://github.com/alexclaydon/tinybox/issues"
+Source = "https://github.com/alexclaydon/tinybox"
+
+[tool.hatch.version]
+path = "src/app/__about__.py"
+
+[tool.hatch.envs.default]
+python = "3.11.6"
+type = "virtual"
+dependencies = []
+features = ["dev"]
+
+[tool.hatch.envs.default.env-vars]
+
+[tool.hatch.envs.default.scripts]
+# Utils
+makemigrate = "python ./src/app/manage.py makemigrations"
+migrate = "python ./src/app/manage.py migrate"
+shell = "python ./src/app/manage.py shell"
+# Web app
+webdev = "python ./src/app/manage.py migrate && python ./src/app/manage.py collectstatic -c --noinput && (trap 'kill 0' SIGINT; python ./src/app/manage.py tailwind start & python ./src/app/manage.py runserver 0.0.0.0:8280)"
+# For use when you want to run the Django dev server on its own, or when you want to run it in a separate process to Tailwind hot reload for troubleshooting purposes
+webdev-srv = "python ./src/app/manage.py runserver 0.0.0.0:8280"
+# For use when you want to run Tailwind hot reload on its own, or when you want to run it in a separate process to the Django dev server for troubleshooting purposes
+webdev-tailwind = "python ./src/app/manage.py tailwind start"
+webstatic = "python ./src/app/manage.py collectstatic -c --noinput"
+webngrok = "ngrok http 8280 --domain=tinybox.ngrok.dev --oauth google --oauth-allow-email mattielangton@gmail.com --oauth-allow-email alexclaydon@gmail.com --oauth-allow-email liamgilchrist@gmail.com --oauth-allow-email patt.langton@gmail.com"
+docker_webngrok = "ngrok http 8669 --domain=tinybox.ngrok.dev --oauth google --oauth-allow-email mattielangton@gmail.com --oauth-allow-email alexclaydon@gmail.com --oauth-allow-email liamgilchrist@gmail.com --oauth-allow-email patt.langton@gmail.com"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.11"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = ["src/app/__about__.py"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.black]
+line-length = 71
+
+[tool.ruff]
+# Never enforce `E501` (line length violations).
+ignore = ["E501"]

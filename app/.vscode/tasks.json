@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Hatch: Update app Environment",
+      "type": "shell",
+      "args": [
+        "--verbose",
+        "--config",
+        "/Users/alexclaydon/Library/Preferences/hatch/config.toml",
+        "--env",
+        "${input:hatch_env}",
+        "run",
+        "echo",
+        "Finished syncing ${input:hatch_env} environment dependencies."
+      ],
+      "command": "hatch",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "hatch_env",
+      "type": "pickString",
+      "description": "Select the Hatch environment to sync",
+      "options": ["default"]
+    }
+  ]
+}

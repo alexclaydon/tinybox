@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**/app": true,
+        "**/api": true,
+        "**/resolver": true,
+        "**/libtb": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    }
+}

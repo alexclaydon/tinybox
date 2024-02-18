@@ -2,50 +2,77 @@
     "folders": [
         {
             "path": "."
+        },
+        {
+            "path": "app"
+        },
+        {
+            "path": "api"
+        },
+        {
+            "path": "libtb"
+        },
+        {
+            "path": "resolver"
         }
     ],
     "settings": {
-        "python.defaultInterpreterPath": ".hatch/tinybox/bin/python3.9",
-        "python.analysis.typeCheckingMode": "basic",
-        "[python]": {
-            "editor.defaultFormatter": "ms-python.black-formatter",
-            "editor.formatOnSave": true,
-            "editor.codeActionsOnSave": {
-                "source.organizeImports": true
-            }
-        },
-        "isort.args": ["--profile", "black"],
         "[git-commit]": {
             "rewrap.autoWrap.enabled": true,
             "rewrap.wrappingColumn": 72
         },
         "git.useEditorAsCommitInput": true,
+        "python.testing.pytestArgs": ["--ignore=."],
+        "python.testing.pytestEnabled": false, // Note that if this is set to `true` in a monorepo - where the root directory does not contain its own Python project - you will get test discovery errors (and possibly extension crashes).
         // Completely obscure from file explorer
         "files.exclude": {
+            "**/.git": false,
+            "**/.venv": false,
+            "**/.hatch": false,
+            "**/.ruff_cache": true,
+            "**/.stfolder": true,
+            "**/.stignore": true,
             "**/__pycache__": true,
             "**/*.egg-info": true,
             "**/*.ipynb_checkpoints": true,
-            "**/.git": false
+            "**/*.tmp": true,
+            "**/*.temp": true
         },
         // Exclude from searches within the repo
         "search.exclude": {
-            "**/.venv": true,
-            "**/.hatch": true,
+            "**/working": true,
             "**/.git": true,
-            "**/*.geojson": true,
-            "**/*.zip": true,
-            "**/*.csv": true
-        },
-        // Exclude from file watcher processes
-        "files.watcherExclude": {
             "**/.venv": true,
             "**/.hatch": true,
-            "**/.git/objects/**": true,
-            "**/.git/subtree-cache/**": true,
+            "**/.ruff_cache": true,
+            "**/.stfolder": true,
+            "**/.stignore": true,
             "**/node_modules/*/**": true,
             "**/*.geojson": true,
             "**/*.zip": true,
-            "**/*.csv": true
+            "**/*.csv": true,
+            "**/*.tmp": true,
+            "**/*.temp": true
+        },
+        // Exclude from file watcher processes
+        "files.watcherExclude": {
+            "**/working": true,
+            "**/.venv": true,
+            "**/.hatch": true,
+            "**/.ruff_cache": true,
+            "**/.stfolder": true,
+            "**/.stignore": true,
+            "**/.git/**": true,
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/*/**": true,
+            "**.sqlite": true,
+            "**.sqlite-journal": true,
+            "**/*.geojson": true,
+            "**/*.zip": true,
+            "**/*.csv": true,
+            "**/*.tmp": true,
+            "**/*.temp": true
         },
         "prettier.singleAttributePerLine": true,
         "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
@@ -53,23 +80,23 @@
         },
         "eslint.validate": ["javascript", "json"],
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll.eslint": "explicit"
         },
-        "json.schemas": [
-            {
-                "fileMatch": ["/tools/web/world/static/world/map_layers.json"],
-                "url": "./tools/web/world/static/world/map_layers.schema.json"
-            },
-            {
-                "fileMatch": ["/tools/web/world/static/world/map_sources.json"],
-                "url": "./tools/web/world/static/world/map_sources.schema.json"
-            },
-            {
-                "fileMatch": [
-                    "/tools/web/world/static/world/paint_styles.json"
-                ],
-                "url": "./tools/web/world/static/world/paint_styles.schema.json"
-            }
-        ]
+        // "json.schemas": [
+        //     {
+        //         "fileMatch": ["/tools/web/world/static/world/map_layers.json"],
+        //         "url": "./tools/web/world/static/world/map_layers.schema.json"
+        //     },
+        //     {
+        //         "fileMatch": ["/tools/web/world/static/world/map_sources.json"],
+        //         "url": "./tools/web/world/static/world/map_sources.schema.json"
+        //     },
+        //     {
+        //         "fileMatch": [
+        //             "/tools/web/world/static/world/paint_styles.json"
+        //         ],
+        //         "url": "./tools/web/world/static/world/paint_styles.schema.json"
+        //     }
+        // ]
     }
 }
