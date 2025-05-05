@@ -1,0 +1,60 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: tinybox
+    match:
+      path:
+        prefix: /
+  - component:
+      name: staticfiles
+    match:
+      path:
+        prefix: /static
+name: tinybox
+region: sgp
+services:
+- dockerfile_path: Dockerfile
+  envs:
+  - key: DJANGO_ALLOWED_HOSTS
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:v75PhnHGutZnkIo8L4G00v8BGQPSwjBj:5WiG0h+qzGxyXZyg6UmJYc4NWLirEjJyNPgdbHQ=]
+  - key: DJANGO_SECRET_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:9+IPyQaHUSW4CPl9uXsPsTigDmNOZvj1:Q5d/ZghZ3a8+Ox2jwgZMoAqnQuupwMgKP507gbdsBK19rIRPS3naU4NobqAnUvMJTYd1MUepsYDwrb/rxtWen/Sv8bwAW+98x0CxRdJwuulp2A==]
+  - key: SPACES_CDN_ENDPOINT
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:Na3zcGqXrv6FI5aaRQ0vH3nxPeOip2B/:ivtANi8MLSs1J1xYzsOGUkluWf9JjmfnepqpmExwJ+23vIq5R1TUvizKgbbHqh4yoh2dfS3XfATkP8d+33GiYK3bNY0=]
+  - key: MAPBOX_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:B2qFNPk39stHEVkS/zSlMLbmxGN1EYF4:eVmTXb9zoKzBxXFkxQd2fy4FXlvVZ5gwUWtvw8rnD/KvEJgaMWDiwuczNy6jYWBV4rkoa41XGjzRS5njgHVYX5QCTFgliwwXsuxtyh0PguJ6+YOPbFhQeCvUrmmCfcrKcUNjKS4DqGxIyQ==]
+  - key: DEBUG
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:Dd3TT+z4OW6xvCsYM2gLI3v4tnejNK7R:mpC1kH5KfQQnR90hLIWMDaE/Pd4S]
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: alexclaydon/tinybox
+  http_port: 8000
+  instance_count: 1
+  instance_size_slug: apps-s-1vcpu-0.5gb
+  name: tinybox
+  source_dir: /
+static_sites:
+- dockerfile_path: Dockerfile
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: alexclaydon/tinybox
+  name: staticfiles
+  output_dir: /app/src/app/staticfiles/
+  source_dir: /
